@@ -1,0 +1,11 @@
+@import "@dsfrkit/tokens/theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-marianne bg-background text-foreground;
+  }
+}

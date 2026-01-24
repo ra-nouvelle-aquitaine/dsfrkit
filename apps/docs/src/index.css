@@ -1,0 +1,42 @@
+/* Les @import doivent être en tête de fichier (règle PostCSS) */
+@import '@dsfrkit/tokens/theme.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-marianne antialiased;
+  }
+
+  /* Storybook Docs Mode Dark Theme Overrides */
+  .sbdocs,
+  .sbdocs-wrapper {
+    @apply bg-background text-foreground font-marianne !important;
+  }
+
+  .sbdocs-preview {
+    @apply bg-background border-border !important;
+  }
+
+  .sbdocs-p,
+  .sbdocs-h1,
+  .sbdocs-h2,
+  .sbdocs-h3,
+  .sbdocs-h4,
+  .sbdocs-h5,
+  .sbdocs-h6,
+  .sbdocs-li {
+    @apply font-marianne text-foreground !important;
+  }
+
+  .sbdocs-a {
+    @apply text-primary !important;
+  }
+}

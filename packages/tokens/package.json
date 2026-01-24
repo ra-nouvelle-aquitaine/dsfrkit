@@ -1,0 +1,59 @@
+{
+  "name": "@dsfrkit/tokens",
+  "version": "0.1.1",
+  "description": "Design tokens du Système de Design de l'État français (DSFR)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./colors": {
+      "types": "./dist/colors.d.ts",
+      "import": "./dist/colors.mjs",
+      "require": "./dist/colors.js"
+    },
+    "./typography": {
+      "types": "./dist/typography.d.ts",
+      "import": "./dist/typography.mjs",
+      "require": "./dist/typography.js"
+    },
+    "./spacing": {
+      "types": "./dist/spacing.d.ts",
+      "import": "./dist/spacing.mjs",
+      "require": "./dist/spacing.js"
+    },
+    "./theme.css": "./dist/theme.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup && npx tsx scripts/copy-assets.ts",
+    "dev": "npx tsx scripts/copy-assets.ts && tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "sync:dsfr": "npx tsx scripts/sync-dsfr.ts",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "dsfr",
+    "design-tokens",
+    "design-system",
+    "france"
+  ],
+  "license": "ETALAB-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}

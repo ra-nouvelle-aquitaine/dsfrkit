@@ -1,0 +1,61 @@
+# DSFRKit - Instructions pour les IA (LLMs)
+
+Tu travailles dans un projet qui utilise la librairie React `@dsfrkit/react`.
+
+## 🚨 RÈGLES ABSOLUES
+N'écris JAMAIS de code HTML brut ou de classes Tailwind pour recréer un composant d'interface (Squelette, Flex, Layout, Typographie, Composants UI, etc.). Tu DOIS toujours importer le composant correspondant depuis `@dsfrkit/react`.
+
+- Pour fusionner des classes Tailwind avec des composants existants, utilise toujours l'utilitaire `cn()`.
+
+## 🌐 Routage (Routing)
+DSFRKit s'intègre avec tous les routeurs React (Next.js, React Router, TanStack Router) via le `RouterProvider`. 
+Une fois configuré, utilise le composant `<Link asChild>` de DSFRKit pour la navigation, ou les props `href` natives de DSFRKit (sur Button, Tile, etc.).
+
+## 🎨 Icônes et Artworks (Pictogrammes)
+Le projet contient un système dédié pour l'iconographie :
+- **Icônes** : Utilise le package `@dsfrkit/icons`. Les imports se terminent par `Icon` (ex: `import { MailIcon } from '@dsfrkit/icons'`). Passe les en prop `icon` (ex: `<Button icon={<MailIcon />} />`).
+- **Artworks** : Le composant `Artwork` fournit les pictogrammes officiels DSFR multicolores (ex: `<Artwork name="environment/sun" size={80} />`). En cas d'artworks manquants, conseille la commande `npx @dsfrkit/cli fetch-artworks`.
+
+## 📦 Composants disponibles (UI, Layout, Typographie...)
+
+Voici le catalogue des composants du design system localisés. Consulte leur documentation respective en suivant les liens pour générer le code de l'interface demandée :
+
+- [Footer](/llms/footer.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Header](/llms/header.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [NavLink](/llms/nav-link.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Navigation](/llms/navigation.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [SkipLinks](/llms/skip-links.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Accordion](/llms/accordion.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Alert](/llms/alert.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Artwork](/llms/artwork.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Avatar](/llms/avatar.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Badge](/llms/badge.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Breadcrumb](/llms/breadcrumb.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [ButtonGroup](/llms/button-group.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Button](/llms/button.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Calendar](/llms/calendar.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Callout](/llms/callout.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Card](/llms/card.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Checkbox](/llms/checkbox.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Highlight](/llms/highlight.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Indicator](/llms/indicator.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Input](/llms/input.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Link](/llms/link.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Logo](/llms/logo.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Modal](/llms/modal.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Notice](/llms/notice.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Pagination](/llms/pagination.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Quote](/llms/quote.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Radio](/llms/radio.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Range](/llms/range.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Select](/llms/select.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Stepper](/llms/stepper.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Table](/llms/table.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Tabs](/llms/tabs.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Tag](/llms/tag.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [ThemeToggle](/llms/theme-toggle.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Tile](/llms/tile.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Toggle](/llms/toggle.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Tooltip](/llms/tooltip.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Translate](/llms/translate.md): Documentation technique, interface de Props et exemples d'utilisation.
+- [Upload](/llms/upload.md): Documentation technique, interface de Props et exemples d'utilisation.

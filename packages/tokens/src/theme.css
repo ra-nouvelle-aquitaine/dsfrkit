@@ -1,0 +1,100 @@
+@import './dsfr-variables.css';
+
+/* Polices DSFR (générées par sync-dsfr) */
+
+/* Marianne - Regular */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Regular.woff2') format('woff2'),
+    url('./fonts/Marianne-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Marianne - Regular Italic */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Regular_Italic.woff2') format('woff2'),
+    url('./fonts/Marianne-Regular_Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Marianne - Medium */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Medium.woff2') format('woff2'),
+    url('./fonts/Marianne-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Marianne - Medium Italic */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Medium_Italic.woff2') format('woff2'),
+    url('./fonts/Marianne-Medium_Italic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Marianne - Bold */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Bold.woff2') format('woff2'),
+    url('./fonts/Marianne-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Marianne - Bold Italic */
+@font-face {
+  font-family: 'Marianne';
+  src: url('./fonts/Marianne-Bold_Italic.woff2') format('woff2'),
+    url('./fonts/Marianne-Bold_Italic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Spectral - Regular (pour les titres) */
+@font-face {
+  font-family: 'Spectral';
+  src: url('./fonts/Spectral-Regular.woff2') format('woff2'),
+    url('./fonts/Spectral-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Spectral - ExtraBold */
+@font-face {
+  font-family: 'Spectral';
+  src: url('./fonts/Spectral-ExtraBold.woff2') format('woff2'),
+    url('./fonts/Spectral-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 
+  DSFR Artwork support 
+  These classes are used within DSFR SVG icons via <use className="..."> 
+  to automatically adapt stroke/fill colors to light/dark themes.
+*/
+.fr-artwork-decorative {
+  fill: var(--artwork-decorative);
+}
+
+.fr-artwork-minor {
+  fill: var(--artwork-minor);
+}
+
+.fr-artwork-major {
+  fill: var(--artwork-major);
+}

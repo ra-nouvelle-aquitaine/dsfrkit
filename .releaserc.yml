@@ -1,0 +1,49 @@
+branches:
+  - name: main
+  - name: beta
+    prerelease: true
+
+plugins:
+  - - semantic-release-gitmoji
+    - releaseRules:
+        major:
+          - "💥"   # Breaking changes
+        minor:
+          - "✨"   # New feature
+          - "🎨"   # Improve structure/format
+          - "♿"   # Accessibility
+        patch:
+          - "🐛"   # Bug fix
+          - "🩹"   # Simple fix
+          - "🔒"   # Security fix
+          - "⚡"   # Performance
+          - "💄"   # UI/style
+          - "♻️"   # Refactor
+          - "🔧"   # Configuration
+          - "📝"   # Documentation
+          - "🏗️"   # Architecture
+          - "✅"   # Tests
+          - "🔥"   # Remove code/files
+          - "🚚"   # Move/rename
+          - "📦"   # Dependencies
+          - "🌐"   # i18n
+          - "🍱"   # Assets
+          - "🚀"   # Deploy
+          - "🔖"   # Release/version tag
+
+  - - "@semantic-release/changelog"
+    - changelogFile: "CHANGELOG.md"
+
+  - - "@semantic-release/npm"
+
+  - - "@semantic-release/git"
+    - message: "🔖 release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      assets:
+        - "CHANGELOG.md"
+        - "package.json"
+        - "pnpm-lock.yaml"
+
+  - - "@semantic-release/github"
+    - assets:
+        - path: CHANGELOG.md
+          label: CHANGELOG.md

@@ -1,0 +1,99 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { Box, Heading, Text, Code, DataList } from '@dsfrkit/react';
+
+<Meta title="Introduction" />
+
+<Box className="space-y-12 mt-4">
+  <Box>
+    <Heading as="h1" size="6" className="mb-4">Bienvenue sur DSFRKit</Heading>
+    <Text className="text-foreground-muted block mb-4">
+      <Text as="strong" className="font-bold text-foreground">DSFRKit</Text> est une implémentation React moderne (et non-officielle) du <Text as="strong" className="font-bold text-foreground">Système de Design de l'État Français (DSFR)</Text>.
+      Pensé pour offrir la meilleure expérience de développement possible, ce projet s'appuie sur <Text as="strong" className="font-bold text-foreground">Radix UI</Text> et <Text as="strong" className="font-bold text-foreground">Tailwind CSS</Text>. Son objectif est de garantir une accessibilité irréprochable, le respect rigoureux de la charte graphique de l'État, et d'excellentes performances.
+    </Text>
+    <Text className="text-foreground-muted block mb-4">
+      Contrairement à l'implémentation classique <Code>@gouvfr/dsfr</Code> qui repose sur des scripts globaux et de lourdes surcharges CSS, DSFRKit met à disposition des composants React isolés et prêts à l'emploi. Ils s'intègrent parfaitement dans vos applications fonctionnant côté client (CSR) ou côté serveur (SSR).
+    </Text>
+  </Box>
+
+  <Box className="space-y-6">
+    <Heading as="h2" size="5">Deux approches d'intégration</Heading>
+    <Text className="text-foreground-muted block mb-2">
+      DSFRKit vous laisse totalement libre quant à la méthode d'intégration dans votre projet :
+    </Text>
+    
+    <Box className="bg-background-contrast border border-border p-6 rounded-lg space-y-6">
+      <Box>
+        <Heading as="h3" size="4" className="mb-2 flex items-center gap-2">
+          <Text as="span" className="text-primary font-bold">1.</Text> La méthode CLI / Shadcn UI (Recommandée)
+        </Heading>
+        <Text className="text-foreground-muted block leading-relaxed">
+          Grâce à l'outil en ligne de commande <Code>@dsfrkit/cli</Code>, le code source du composant souhaité est <Text as="strong" className="font-bold text-foreground">copié directement dans votre projet</Text> (par exemple dans <Code>src/components/ui/button.tsx</Code>). Vous devenez ainsi entièrement propriétaire du code, et libre de l'adapter en fonction des règles métiers de votre application !
+        </Text>
+      </Box>
+      <Box className="pt-6 border-t border-border">
+        <Heading as="h3" size="4" className="mb-2 flex items-center gap-2">
+          <Text as="span" className="text-primary font-bold">2.</Text> La méthode Package NPM (Classique)
+        </Heading>
+        <Text className="text-foreground-muted block leading-relaxed">
+          Il est également possible d'installer simplement la librairie <Code>@dsfrkit/react</Code> et d'importer les composants de manière classique (ex: <Code>import {'{ Button }'} from '@dsfrkit/react'</Code>). Cette approche est très pratique pour réaliser des prototypes rapidement ou pour limiter la quantité de code importé dans votre dépôt.
+        </Text>
+      </Box>
+    </Box>
+  </Box>
+
+  <Box className="space-y-6">
+    <Heading as="h2" size="5">Fonctionnalités Clés</Heading>
+    <Box className="grid md:grid-cols-2 gap-4">
+      <Box className="bg-background-contrast border border-border p-4 rounded-lg shadow-sm">
+        <Heading as="h3" size="4" className="mb-2">♿️ Accessibilité (a11y)</Heading>
+        <Text className="text-foreground-muted text-sm leading-relaxed">Prise en charge native de la navigation au clavier, de la capture de focus et de la compatibilité avec les lecteurs d'écran grâce à l'utilisation en interne des primitives de Radix UI.</Text>
+      </Box>
+      <Box className="bg-background-contrast border border-border p-4 rounded-lg shadow-sm">
+        <Heading as="h3" size="4" className="mb-2">🎨 Tailwind CSS Natif</Heading>
+        <Text className="text-foreground-muted text-sm leading-relaxed">Le plugin Tailwind intégré génère automatiquement les classes utilitaires basées sur la charte officielle du DSFR (ex: <Code>text-blue-france-850</Code>).</Text>
+      </Box>
+      <Box className="bg-background-contrast border border-border p-4 rounded-lg shadow-sm">
+        <Heading as="h3" size="4" className="mb-2">🌓 Mode sombre automatisé</Heading>
+        <Text className="text-foreground-muted text-sm leading-relaxed">Prise en compte complète des thèmes de l'État ("clair", "sombre", "système") pilotée par le ThemeProvider.</Text>
+      </Box>
+      <Box className="bg-background-contrast border border-border p-4 rounded-lg shadow-sm">
+        <Heading as="h3" size="4" className="mb-2">🛤️ Indépendant du Routeur</Heading>
+        <Text className="text-foreground-muted text-sm leading-relaxed">Configurez votre propre gestionnaire de navigation (Next.js, React Router...) avec le <Text as="strong" className="font-bold text-foreground">RouterProvider</Text> afin de rendre native toutes les interactions de liens propres à votre environnement.</Text>
+      </Box>
+    </Box>
+  </Box>
+
+  <Box className="space-y-6">
+    <Heading as="h2" size="5">L'Écosystème</Heading>
+    <Text className="text-foreground-muted block mb-4">DSFRKit est construit sur une architecture modulaire en monorepo :</Text>
+    
+    <DataList.Root className="sb-unstyled">
+      <DataList.Item>
+        <DataList.Label><Code>@dsfrkit/react</Code></DataList.Label>
+        <DataList.Value className="text-foreground-muted leading-relaxed">La librairie principale contenant l'ensemble des composants React interactifs.</DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label><Code>@dsfrkit/cli</Code></DataList.Label>
+        <DataList.Value className="text-foreground-muted leading-relaxed">L'interface en ligne de commande pour intégrer des composants dans votre projet ou récupérer des illustrations officielles ("Artworks").</DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label><Code>@dsfrkit/config</Code></DataList.Label>
+        <DataList.Value className="text-foreground-muted leading-relaxed">Le plugin Tailwind contenant la configuration sémantique et la déclaration des règles CSS spécifiques.</DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label><Code>@dsfrkit/tokens</Code></DataList.Label>
+        <DataList.Value className="text-foreground-muted leading-relaxed">L'export des variables d'espacements, de typographies et de couleurs ("Bleu France", "Rouge Marianne").</DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label><Code>@dsfrkit/icons</Code></DataList.Label>
+        <DataList.Value className="text-foreground-muted leading-relaxed">Un catalogue de composants affichant la large gamme d'icônes RemixIcon utilisée par l'État.</DataList.Value>
+      </DataList.Item>
+    </DataList.Root>
+  </Box>
+
+  <Box className="pt-8 border-t border-border flex justify-center">
+    <Text as="em" className="text-foreground-muted">
+      Consultez la page « Installation » dans le menu latéral pour commencer.
+    </Text>
+  </Box>
+</Box>

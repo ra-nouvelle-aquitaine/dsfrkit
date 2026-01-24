@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" fill="none">
+  <style>
+    .bg { fill: rgba(37, 99, 235, 0.05); }
+    .k-stroke { stroke: #0f172a; }
+    .text-dsfr { fill: #0f172a; font-family: "Marianne", system-ui, -apple-system, sans-serif; font-size: 110px; font-weight: 800; letter-spacing: -2px; }
+    .text-kit { fill: #2563eb; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: rgba(255, 255, 255, 0.1); }
+      .k-stroke { stroke: #ffffff; }
+      .text-dsfr { fill: #ffffff; }
+      .text-kit { fill: #60a5fa; }
+    }
+  </style>
+  
+  <rect x="10" y="10" width="180" height="180" rx="48" class="bg" />
+  
+  <mask id="d-mask">
+    <rect width="200" height="200" fill="white" />
+    <circle cx="60" cy="100" r="12" fill="black" />
+    <path d="M60 75H95C115 75 115 125 95 125H60Z" fill="black" />
+  </mask>
+  
+  <path d="M60 45V155C60 155 120 155 140 120C155 90 140 45 60 45Z" fill="#2563eb" mask="url(#d-mask)" />
+  
+  <path d="M95 100L145 45M95 100L145 155" class="k-stroke" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <circle cx="145" cy="100" r="16" fill="#ef4444" />
+
+  <text x="220" y="145" class="text-dsfr">
+    DSFR<tspan class="text-kit">Kit</tspan>
+  </text>
+</svg>

@@ -1,0 +1,79 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Core packages
+        run: pnpm build
+
+      - name: Build Landing Page (Vite)
+        run: pnpm --filter docs build
+        env:
+          VITE_BASE_URL: /dsfrkit/
+
+      - name: Build Storybook
+        run: pnpm --filter docs build-storybook
+
+      - name: Build React Vite Example
+        run: pnpm --filter example-react-vite build
+        env:
+          VITE_BASE_URL: /dsfrkit/example/
+
+      - name: Prepare Deployment Directory
+        run: |
+          mkdir deploy
+          # Landing page (docs) à la racine
+          cp -r apps/docs/dist/* deploy/
+          # Storybook dans /storybook
+          mkdir -p deploy/storybook
+          cp -r apps/docs/storybook-static/* deploy/storybook/
+          # React Vite example dans /example
+          mkdir -p deploy/example
+          cp -r apps/examples/react-vite/dist/* deploy/example/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5

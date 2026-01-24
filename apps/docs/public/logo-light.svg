@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" fill="none">
+  <rect x="10" y="10" width="180" height="180" rx="48" fill="rgba(37, 99, 235, 0.05)" />
+  <mask id="d-mask">
+    <rect width="200" height="200" fill="white" />
+    <circle cx="60" cy="100" r="12" fill="black" />
+    <path d="M60 75H95C115 75 115 125 95 125H60Z" fill="black" />
+  </mask>
+  <path d="M60 45V155C60 155 120 155 140 120C155 90 140 45 60 45Z" fill="#2563eb" mask="url(#d-mask)" />
+  <path d="M95 100L145 45M95 100L145 155" stroke="#161616" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="145" cy="100" r="16" fill="#ef4444" />
+  <text x="220" y="145" fill="#161616" font-family="'Marianne', system-ui, -apple-system, sans-serif" font-size="110px" font-weight="800" letter-spacing="-2px">
+    DSFR<tspan fill="#2563eb">Kit</tspan>
+  </text>
+</svg>

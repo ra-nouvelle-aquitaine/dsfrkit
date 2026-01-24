@@ -1,0 +1,56 @@
+{
+  "name": "dsfrkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Système de Design DSFR pour Tailwind CSS - Monorepo",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:example": "turbo dev --filter=example-react-vite",
+    "dev:docs": "turbo dev --filter=docs",
+    "storybook": "pnpm --filter=docs storybook",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean && rm -rf node_modules",
+    "release": "multi-semantic-release",
+    "release:dry": "multi-semantic-release --dry-run",
+    "generate:llms": "node apps/docs/scripts/generate-llms.cjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.12",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.5",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/coverage-v8": "^4.1.4",
+    "happy-dom": "^20.9.0",
+    "multi-semantic-release": "^3.1.0",
+    "postcss": "^8.5.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "semantic-release": "^25.0.3",
+    "semantic-release-gitmoji": "^1.6.9",
+    "tailwindcss": "^3.4.19",
+    "turbo": "^2.9.6",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
+  },
+  "packageManager": "pnpm@10.5.2",
+  "pnpm": {
+    "overrides": {
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    }
+  },
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=9"
+  }
+}

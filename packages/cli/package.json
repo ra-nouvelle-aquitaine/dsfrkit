@@ -1,0 +1,46 @@
+{
+  "name": "@dsfrkit/cli",
+  "version": "0.1.1",
+  "description": "CLI pour installer et copier les composants DSFR",
+  "bin": {
+    "dsfrkit": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "dsfr",
+    "cli",
+    "components",
+    "tailwindcss"
+  ],
+  "license": "ETALAB-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "execa": "^9.6.1",
+    "fs-extra": "^11.3.4",
+    "ora": "^9.3.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/prompts": "^2.4.9",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,59 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+storybook-static
+.turbo
+.next
+.vite
+out
+build
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.claude/
+.cursor/
+.windsurf/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+.nyc_output
+.test-results
+test-results
+
+# Misc
+*.tsbuildinfo
+.cache
+.sync-report.json
+
+# Deployment artifacts
+deploy
+
+# Assistants IA (générés)
+.cursorrules
+.windsurfrules
+clauderc.md
+llm-instructions.md
+AGENTS.md
+.github/copilot-instructions.md
