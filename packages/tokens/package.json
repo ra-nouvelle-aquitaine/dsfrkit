@@ -1,6 +1,6 @@
 {
   "name": "@dsfrkit/tokens",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Design tokens du Système de Design de l'État français (DSFR)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
