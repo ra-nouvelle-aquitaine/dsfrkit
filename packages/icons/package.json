@@ -1,6 +1,6 @@
 {
   "name": "@dsfrkit/icons",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Icônes React pour le Système de Design de l'État français (DSFR)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
