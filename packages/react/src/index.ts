@@ -60,6 +60,7 @@ export {
   artworks,
   pictogramsByCategory,
 } from './components/ui/artwork'
+export { AspectRatio } from './components/ui/aspect-ratio'
 export type { AvatarBadgeProps, AvatarFallbackProps, AvatarProps } from './components/ui/avatar'
 export {
   Avatar,
@@ -229,6 +230,7 @@ export { RadioGroup, RadioGroupItem, radioVariants } from './components/ui/radio
 export type { RangeProps } from './components/ui/range'
 // Range (Slider)
 export { Range } from './components/ui/range'
+export { ScrollArea, ScrollBar } from './components/ui/scroll-area'
 export { Section, type SectionProps } from './components/ui/section'
 export type { SelectTriggerProps } from './components/ui/select'
 export {

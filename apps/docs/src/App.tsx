@@ -18,11 +18,9 @@ import {
   Header,
   HeaderActions,
   HeaderBody,
-  HeaderBrand,
   HeaderNav,
   Heading,
   Link,
-  Logo,
   NavigationItem,
   Section,
   Tabs,
@@ -35,7 +33,7 @@ import {
 } from '@dsfrkit/react'
 import { useEffect, useState } from 'react'
 
-import pkg from '../../../package.json'
+import pkg from '../../../packages/react/package.json'
 import { DSFRKitLogo } from './components/DSFRKitLogo'
 import { InstallationGuide, RoutingGuide } from './Guides'
 
@@ -101,20 +99,11 @@ function AppContent() {
       >
         <HeaderBody>
           <div className="flex items-center gap-4 lg:gap-8">
-            <HeaderBrand
-              logo={<Logo size="md" />}
-              href="/"
-              onClick={(e) => {
-                e.preventDefault()
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-                setActiveSection('')
-              }}
-            />
             <Box className="hidden sm:flex items-center gap-2">
-              <DSFRKitLogo iconOnly={false} className="h-8 w-auto !p-0 !m-0" />
-              <Badge variant="warning">
+              <DSFRKitLogo iconOnly={false} className="h-16 w-auto !p-0 !m-0" />
+              <Badge variant="info">
                 <span className="lowercase">v</span>
-                {pkg.version} BETA
+                {pkg.version}
               </Badge>
             </Box>
             <Box className="flex sm:hidden items-center">

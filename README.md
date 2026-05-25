@@ -10,10 +10,6 @@ Composants React accessibles et conformes au [Système de Design de l'État fran
 [![npm @dsfrkit/icons](https://img.shields.io/npm/v/@dsfrkit/icons.svg?label=%40dsfrkit%2Ficons)](https://www.npmjs.com/package/@dsfrkit/icons)
 [![npm @dsfrkit/cli](https://img.shields.io/npm/v/@dsfrkit/cli.svg?label=%40dsfrkit%2Fcli)](https://www.npmjs.com/package/@dsfrkit/cli)
 
-> [!WARNING]  
-> **Statut : Beta public**  
-> Ce projet est actuellement en phase de développement actif (beta). Des composants sont régulièrement ajoutés ou modifiés. N'hésitez pas à remonter vos retours ou contribuer !
-
 ---
 
 ## Pourquoi DSFRKit ?

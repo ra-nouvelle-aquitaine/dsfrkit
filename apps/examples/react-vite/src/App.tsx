@@ -100,6 +100,7 @@ import {
   RadioGroup,
   RadioGroupItem,
   Range,
+  ScrollArea,
   Section,
   Select,
   SelectContent,
@@ -974,24 +975,26 @@ const dossiers = [
 function SidebarContent() {
   return (
     <>
-      <Box className="p-4 flex-1 overflow-y-auto">
-        <Navigation orientation="vertical">
-          <NavigationSection title="Navigation" defaultOpen>
-            <NavigationItem href="#" isActive>
-              Vue d'ensemble
-            </NavigationItem>
-            <NavigationItem href="#">Dossiers</NavigationItem>
-            <NavigationItem href="#">Agents</NavigationItem>
-            <NavigationItem href="#">Calendrier</NavigationItem>
-            <NavigationItem href="#">Statistiques</NavigationItem>
-          </NavigationSection>
-          <NavigationSection title="Administration">
-            <NavigationItem href="#">Configuration</NavigationItem>
-            <NavigationItem href="#">Rôles & droits</NavigationItem>
-            <NavigationItem href="#">Journal d'audit</NavigationItem>
-          </NavigationSection>
-        </Navigation>
-      </Box>
+      <ScrollArea className="flex-1 w-full border-r-0">
+        <Box className="p-4">
+          <Navigation orientation="vertical">
+            <NavigationSection title="Navigation" defaultOpen>
+              <NavigationItem href="#" isActive>
+                Vue d'ensemble
+              </NavigationItem>
+              <NavigationItem href="#">Dossiers</NavigationItem>
+              <NavigationItem href="#">Agents</NavigationItem>
+              <NavigationItem href="#">Calendrier</NavigationItem>
+              <NavigationItem href="#">Statistiques</NavigationItem>
+            </NavigationSection>
+            <NavigationSection title="Administration">
+              <NavigationItem href="#">Configuration</NavigationItem>
+              <NavigationItem href="#">Rôles & droits</NavigationItem>
+              <NavigationItem href="#">Journal d'audit</NavigationItem>
+            </NavigationSection>
+          </Navigation>
+        </Box>
+      </ScrollArea>
       <Box className="p-4 border-t border-border">
         <Flex align="center" className="gap-3">
           <Avatar className="h-8 w-8">

@@ -36,11 +36,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@dsfrkit/tokens": "1.0.0",
+    "@dsfrkit/tokens": "workspace:*",
     "tailwindcss": ">=3.4.0"
   },
   "devDependencies": {
-    "@dsfrkit/tokens": "1.0.0",
+    "@dsfrkit/tokens": "workspace:*",
     "tailwindcss": "^3.4.19",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
