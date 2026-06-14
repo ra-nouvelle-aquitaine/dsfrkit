@@ -46,7 +46,7 @@ export const Vertical: Story = {
           'Mayotte',
         ].map((region) => (
           <Box key={region} className="mb-2">
-            <Text size="sm">{region}</Text>
+            <Text size="2">{region}</Text>
           </Box>
         ))}
       </Box>
@@ -89,7 +89,7 @@ export const Both: Story = {
                 key={j}
                 className="flex h-12 w-32 items-center justify-center bg-muted mr-2 border border-border"
               >
-                <Text size="sm">
+                <Text size="2">
                   L{i + 1}-C{j + 1}
                 </Text>
               </Box>

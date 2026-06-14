@@ -62,6 +62,8 @@ export interface InputProps
   action?: React.ReactNode
   /** Position de l'icône ou de l'addon ('start' par défaut, 'end' inversera) */
   position?: 'start' | 'end'
+  /** Élément décoratif absolu injecté dans la zone de saisie */
+  inputOverlay?: React.ReactNode
 }
 
 import { EyeIcon, EyeOffIcon } from '@dsfrkit/icons'
@@ -146,6 +148,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       addon,
       action,
       position = 'end',
+      inputOverlay,
       id,
       ...props
     },
@@ -215,6 +218,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
 
           <div className="relative flex items-center flex-1">
+            {inputOverlay}
+
             {hasElementAtStart && (
               <div
                 className={cn(

@@ -61,6 +61,14 @@ export {
   pictogramsByCategory,
 } from './components/ui/artwork'
 export { AspectRatio } from './components/ui/aspect-ratio'
+export type {
+  AutocompleteMultipleProps,
+  AutocompleteOption,
+  AutocompleteOptionRenderState,
+  AutocompleteProps,
+  AutocompleteSingleProps,
+} from './components/ui/autocomplete'
+export { Autocomplete } from './components/ui/autocomplete'
 export type { AvatarBadgeProps, AvatarFallbackProps, AvatarProps } from './components/ui/avatar'
 export {
   Avatar,
