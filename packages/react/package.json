@@ -1,6 +1,6 @@
 {
   "name": "@dsfrkit/react",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Composants React source pour le Système de Design de l'État français (DSFR)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -76,7 +76,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@dsfrkit/icons": "workspace:*",
+    "@dsfrkit/icons": "1.1.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
     "@radix-ui/react-avatar": "^1.1.11",
