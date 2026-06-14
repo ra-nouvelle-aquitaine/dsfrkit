@@ -1,6 +1,6 @@
 {
   "name": "@dsfrkit/config",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Preset Tailwind CSS pour le Système de Design de l'État français (DSFR)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -36,11 +36,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@dsfrkit/tokens": "workspace:*",
+    "@dsfrkit/tokens": "1.1.0",
     "tailwindcss": ">=3.4.0"
   },
   "devDependencies": {
-    "@dsfrkit/tokens": "workspace:*",
+    "@dsfrkit/tokens": "1.1.0",
     "tailwindcss": "^3.4.19",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
