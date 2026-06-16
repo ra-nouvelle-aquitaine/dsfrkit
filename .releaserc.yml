@@ -7,41 +7,46 @@ plugins:
   - - semantic-release-gitmoji
     - releaseRules:
         major:
-          - "💥"   # Breaking changes
+          - "💥" # Breaking changes
         minor:
-          - "✨"   # New feature
-          - "🎨"   # Improve structure/format
-          - "♿"   # Accessibility
+          - "✨" # New feature
+          - "🎨" # Improve structure/format
+          - "♿" # Accessibility
         patch:
-          - "🐛"   # Bug fix
-          - "🩹"   # Simple fix
-          - "🔒"   # Security fix
-          - "⚡"   # Performance
-          - "💄"   # UI/style
-          - "♻️"   # Refactor
-          - "🔧"   # Configuration
-          - "📝"   # Documentation
-          - "🏗️"   # Architecture
-          - "✅"   # Tests
-          - "🔥"   # Remove code/files
-          - "🚚"   # Move/rename
-          - "📦"   # Dependencies
-          - "🌐"   # i18n
-          - "🍱"   # Assets
-          - "🚀"   # Deploy
-          - "🔖"   # Release/version tag
+          - "🐛" # Bug fix
+          - "🩹" # Simple fix
+          - "🔒" # Security fix
+          - "⚡" # Performance
+          - "💄" # UI/style
+          - "♻️" # Refactor
+          - "🔧" # Configuration
+          - "📝" # Documentation
+          - "🏗️" # Architecture
+          - "✅" # Tests
+          - "🔥" # Remove code/files
+          - "🚚" # Move/rename
+          - "📦" # Dependencies
+          - "🌐" # i18n
+          - "🍱" # Assets
+          - "🚀" # Deploy
+          - "🔖" # Release/version tag
 
   - - "@semantic-release/changelog"
     - changelogFile: "CHANGELOG.md"
 
+  - - "@semantic-release/exec"
+    - publishCmd: node "$(git rev-parse --show-toplevel)/scripts/release-workspace-deps.mjs" resolve
+
   - - "@semantic-release/npm"
+
+  - - "@semantic-release/exec"
+    - prepareCmd: node "$(git rev-parse --show-toplevel)/scripts/release-workspace-deps.mjs" restore
 
   - - "@semantic-release/git"
     - message: "🔖 release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       assets:
         - "CHANGELOG.md"
         - "package.json"
-        - "pnpm-lock.yaml"
 
   - - "@semantic-release/github"
     - assets:

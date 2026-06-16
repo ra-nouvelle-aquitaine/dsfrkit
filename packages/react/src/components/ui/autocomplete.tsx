@@ -14,11 +14,23 @@ export interface AutocompleteOption {
   label: string
   disabled?: boolean
   description?: string
+  /** Identifiant du groupe d'options auquel rattacher cette suggestion. */
+  group?: string
+  /** Termes additionnels pris en compte par le filtrage par défaut. */
+  keywords?: string[]
   /**
    * Données libres attachées à l'option (ex: `avatarUrl`, `icon`, `email`...).
    * Exploitables dans `renderOption` pour personnaliser l'affichage d'une ligne.
    */
   [key: string]: unknown
+}
+
+/** Groupe d'options affiché dans la liste de suggestions. */
+export interface AutocompleteOptionGroup {
+  /** Identifiant référencé par `AutocompleteOption.group`. */
+  value: string
+  /** Libellé affiché en en-tête de groupe. */
+  label: React.ReactNode
 }
 
 /** État transmis à `renderOption` pour personnaliser l'affichage d'une suggestion. */
@@ -31,15 +43,34 @@ export interface AutocompleteOptionRenderState {
   highlightedLabel: React.ReactNode
 }
 
+/** État transmis à `filterOption` pour personnaliser le filtrage des suggestions. */
+export interface AutocompleteOptionFilterState {
+  /** Texte saisi par l'utilisateur, sans transformation. */
+  query: string
+  /** Texte de recherche normalisé (minuscules, sans accents, espaces compactés). */
+  normalizedQuery: string
+}
+
 interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 'defaultValue'> {
   /** Liste des options suggérées */
   options: AutocompleteOption[]
+  /**
+   * Déclaration optionnelle des groupes (ordre et libellé).
+   * Les options s'y rattachent via `option.group`.
+   */
+  groups?: AutocompleteOptionGroup[]
   /** Callback déclenché à la modification du texte de recherche (utile pour les API asynchrones) */
   onSearchChange?: (search: string) => void
   /** Message affiché lorsque aucun résultat ne correspond */
   emptyMessage?: string
   /** Indique si les suggestions sont en cours de chargement */
   loading?: boolean
+  /** Message affiché pendant le chargement des suggestions */
+  loadingMessage?: string
+  /** Nombre minimal de caractères requis avant d'afficher les suggestions */
+  minSearchLength?: number
+  /** Message affiché tant que `minSearchLength` n'est pas atteint */
+  minSearchMessage?: string
   /** Affiche un bouton « Effacer » lorsqu'une valeur est saisie (activé par défaut). */
   clearable?: boolean
   /** Callback déclenché lorsque l'utilisateur efface la valeur via le bouton dédié */
@@ -62,6 +93,14 @@ interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 
     option: AutocompleteOption,
     state: AutocompleteOptionRenderState
   ) => React.ReactNode
+  /**
+   * Personnalise le filtrage local des suggestions.
+   * Non appelé quand la recherche est vide ou que `minSearchLength` n'est pas atteint.
+   */
+  filterOption?: (
+    option: AutocompleteOption,
+    state: AutocompleteOptionFilterState
+  ) => boolean
 }
 
 export interface AutocompleteSingleProps extends AutocompleteBaseProps {
@@ -124,6 +163,33 @@ const toValueArray = (input: string | string[] | undefined): string[] => {
   return input === '' ? [] : [input]
 }
 
+const getSafeMinSearchLength = (value: number) =>
+  Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0
+
+const getMinSearchMessage = (minSearchLength: number) =>
+  `Saisissez au moins ${minSearchLength} caractère${minSearchLength > 1 ? 's' : ''}.`
+
+interface AutocompleteRenderedGroup {
+  key: string
+  heading?: React.ReactNode
+  options: AutocompleteOption[]
+}
+
+const getGroupMapKey = (group: string) => `group:${group}`
+const ungroupedMapKey = 'ungrouped'
+const defaultGroups: AutocompleteOptionGroup[] = []
+
+const getReactNodeText = (node: React.ReactNode): string => {
+  if (node === null || node === undefined || typeof node === 'boolean') return ''
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(getReactNodeText).join(' ')
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) {
+    return getReactNodeText(node.props.children)
+  }
+
+  return ''
+}
+
 /**
  * Surligne dans un libellé la portion correspondant à la recherche.
  * La correspondance est insensible aux accents et à la casse, tout en préservant
@@ -165,6 +231,7 @@ function renderHighlightedLabel(label: string, query: string, enabled: boolean):
 const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawProps, ref) => {
   const {
     options,
+    groups = defaultGroups,
     multiple = false,
     value: valueProp,
     defaultValue,
@@ -172,6 +239,9 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     onSearchChange,
     emptyMessage = 'Aucun résultat trouvé.',
     loading = false,
+    loadingMessage = 'Chargement...',
+    minSearchLength = 0,
+    minSearchMessage,
     allowCustomValue = false,
     clearable = true,
     onClear,
@@ -179,6 +249,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     name,
     highlightMatches = true,
     renderOption,
+    filterOption,
     label,
     hint,
     error,
@@ -213,6 +284,19 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
 
   const activeSelection = isControlled ? toValueArray(valueProp) : localSelection
   const activeValue = activeSelection[0] ?? ''
+  const safeMinSearchLength = getSafeMinSearchLength(minSearchLength)
+  const normalizedQuery = React.useMemo(() => normalizeSearchText(query), [query])
+  const hasEnoughSearchLength = normalizedQuery.length >= safeMinSearchLength
+  const resolvedMinSearchMessage = minSearchMessage ?? getMinSearchMessage(safeMinSearchLength)
+  const groupSearchLabelsByValue = React.useMemo(() => {
+    const labels = new Map<string, string>()
+
+    for (const group of groups) {
+      labels.set(group.value, getReactNodeText(group.label))
+    }
+
+    return labels
+  }, [groups])
 
   // Option sélectionnée correspondant à la valeur active (mode simple)
   const selectedOption = React.useMemo(
@@ -246,20 +330,65 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
   }, [open, isMultiple, selectedOption, allowCustomValue, activeValue])
 
   const filteredOptions = React.useMemo(() => {
-    if (!query.trim()) {
+    if (!hasEnoughSearchLength) {
+      return []
+    }
+
+    if (!normalizedQuery) {
       return options
     }
 
-    const normalizedQuery = normalizeSearchText(query)
-
     return options.filter((option) => {
+      if (filterOption) {
+        return filterOption(option, { query, normalizedQuery })
+      }
+
+      const groupSearchLabel = option.group ? groupSearchLabelsByValue.get(option.group) : ''
       const haystack = normalizeSearchText(
-        `${option.label} ${option.description || ''} ${option.value}`
+        `${option.label} ${option.description || ''} ${option.value} ${option.group || ''} ${groupSearchLabel || ''} ${
+          option.keywords?.join(' ') || ''
+        }`
       )
 
       return haystack.includes(normalizedQuery)
     })
-  }, [options, query])
+  }, [options, query, normalizedQuery, hasEnoughSearchLength, filterOption, groupSearchLabelsByValue])
+
+  const filteredOptionGroups = React.useMemo<AutocompleteRenderedGroup[]>(() => {
+    if (filteredOptions.length === 0) return []
+
+    const hasGroups = groups.length > 0 || filteredOptions.some((option) => option.group)
+    if (!hasGroups) {
+      return [{ key: 'all', options: filteredOptions }]
+    }
+
+    const renderedGroups: AutocompleteRenderedGroup[] = []
+    const groupsByKey = new Map<string, AutocompleteRenderedGroup>()
+
+    const getRenderedGroup = (key: string, heading?: React.ReactNode) => {
+      const existing = groupsByKey.get(key)
+      if (existing) return existing
+
+      const group: AutocompleteRenderedGroup = { key, heading, options: [] }
+      renderedGroups.push(group)
+      groupsByKey.set(key, group)
+      return group
+    }
+
+    for (const group of groups) {
+      getRenderedGroup(getGroupMapKey(group.value), group.label)
+    }
+
+    for (const option of filteredOptions) {
+      if (option.group) {
+        getRenderedGroup(getGroupMapKey(option.group), option.group).options.push(option)
+      } else {
+        getRenderedGroup(ungroupedMapKey).options.push(option)
+      }
+    }
+
+    return renderedGroups.filter((group) => group.options.length > 0)
+  }, [filteredOptions, groups])
 
   const hasExactOptionMatch = React.useMemo(() => {
     const normalizedSearch = normalizeSearchText(search)
@@ -574,66 +703,84 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                <span>Chargement...</span>
+                <span>{loadingMessage}</span>
+              </div>
+            ) : !hasEnoughSearchLength ? (
+              <div className="p-4 text-center text-sm text-foreground-muted">
+                {resolvedMinSearchMessage}
               </div>
             ) : filteredOptions.length === 0 ? (
               <div className="p-4 text-center text-sm text-foreground-muted">{emptyMessage}</div>
             ) : (
-              <CommandGroup>
-                {filteredOptions.map((option) => {
-                  const isSelected = isMultiple
-                    ? activeSelection.includes(option.value)
-                    : activeValue === option.value
-                  // Clé composite pour l'identité cmdk (libellé + description + valeur)
-                  const searchKey = normalizeSearchText(
-                    `${option.label} ${option.description || ''} ${option.value}`
-                  )
-                  const highlightedLabel = renderHighlightedLabel(
-                    option.label,
-                    query,
-                    highlightMatches
-                  )
+              filteredOptionGroups.map((optionGroup, groupIndex) => (
+                <CommandGroup
+                  key={optionGroup.key}
+                  heading={optionGroup.heading}
+                  className={cn(
+                    'overflow-visible [&_[cmdk-group-heading]]:sticky [&_[cmdk-group-heading]]:top-0 [&_[cmdk-group-heading]]:z-10 [&_[cmdk-group-heading]]:-mx-1 [&_[cmdk-group-heading]]:bg-background-alt [&_[cmdk-group-heading]]:px-5 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-sm [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-foreground-muted',
+                    groupIndex > 0 && 'mt-1 pt-1'
+                  )}
+                >
+                  {optionGroup.options.map((option) => {
+                    const isSelected = isMultiple
+                      ? activeSelection.includes(option.value)
+                      : activeValue === option.value
+                    // Clé composite pour l'identité cmdk (libellé + description + valeur)
+                    const groupSearchLabel = option.group
+                      ? groupSearchLabelsByValue.get(option.group)
+                      : ''
+                    const searchKey = normalizeSearchText(
+                      `${option.label} ${option.description || ''} ${option.value} ${
+                        option.group || ''
+                      } ${groupSearchLabel || ''} ${option.keywords?.join(' ') || ''}`
+                    )
+                    const highlightedLabel = renderHighlightedLabel(
+                      option.label,
+                      query,
+                      highlightMatches
+                    )
 
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      value={searchKey}
-                      disabled={option.disabled}
-                      onSelect={() => handleSelect(option)}
-                      className={cn(
-                        'group flex cursor-pointer items-center justify-between px-4 py-2.5 text-base outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast focus:text-primary aria-selected:bg-background-contrast aria-selected:text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50'
-                      )}
-                    >
-                      {renderOption ? (
-                        renderOption(option, {
-                          selected: isSelected,
-                          query,
-                          highlightedLabel,
-                        })
-                      ) : (
-                        <>
-                          <div className="flex flex-col">
-                            <span className="font-normal text-foreground-title">
-                              {highlightedLabel}
-                            </span>
-                            {option.description && (
-                              <span className="text-xs text-foreground-muted mt-0.5">
-                                {option.description}
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        value={searchKey}
+                        disabled={option.disabled}
+                        onSelect={() => handleSelect(option)}
+                        className={cn(
+                          'group flex cursor-pointer items-center justify-between px-4 py-2.5 text-base outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast focus:text-primary aria-selected:bg-background-contrast aria-selected:text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50'
+                        )}
+                      >
+                        {renderOption ? (
+                          renderOption(option, {
+                            selected: isSelected,
+                            query,
+                            highlightedLabel,
+                          })
+                        ) : (
+                          <>
+                            <div className="flex flex-col">
+                              <span className="font-normal text-foreground-title">
+                                {highlightedLabel}
                               </span>
+                              {option.description && (
+                                <span className="text-xs text-foreground-muted mt-0.5">
+                                  {option.description}
+                                </span>
+                              )}
+                            </div>
+                            {isSelected && (
+                              <CheckIcon
+                                className="h-4 w-4 text-primary ml-2 shrink-0"
+                                aria-hidden="true"
+                              />
                             )}
-                          </div>
-                          {isSelected && (
-                            <CheckIcon
-                              className="h-4 w-4 text-primary ml-2 shrink-0"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </>
-                      )}
-                    </CommandItem>
-                  )
-                })}
-              </CommandGroup>
+                          </>
+                        )}
+                      </CommandItem>
+                    )
+                  })}
+                </CommandGroup>
+              ))
             )}
           </CommandList>
         </PopoverContent>

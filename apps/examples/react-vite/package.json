@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@dsfrkit/config": "1.1.0",
-    "@dsfrkit/icons": "1.1.0",
-    "@dsfrkit/react": "1.1.0",
-    "@dsfrkit/tokens": "1.1.0",
+    "@dsfrkit/config": "workspace:*",
+    "@dsfrkit/icons": "workspace:*",
+    "@dsfrkit/react": "workspace:*",
+    "@dsfrkit/tokens": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.5.0"

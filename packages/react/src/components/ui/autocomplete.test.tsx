@@ -15,6 +15,13 @@ const accentedOptions: AutocompleteOption[] = [
   { value: 'ci', label: "Côte d'Ivoire", description: 'Afrique' },
 ]
 
+const groupedOptions: AutocompleteOption[] = [
+  { value: 'fr', label: 'France', group: 'europe' },
+  { value: 'ca', label: 'Canada', group: 'north-america' },
+  { value: 'jp', label: 'Japon', group: 'asia' },
+  { value: 'be', label: 'Belgique', group: 'europe' },
+]
+
 describe('Component: Autocomplete (DSFR)', () => {
   it('should render the input with label and placeholder', () => {
     render(
@@ -90,6 +97,153 @@ describe('Component: Autocomplete (DSFR)', () => {
     const visibleOptions = screen.getAllByRole('option')
     expect(visibleOptions).toHaveLength(1)
     expect(visibleOptions[0]).toHaveTextContent('États-Unis')
+  })
+
+  it('should include option keywords in the default filtering', async () => {
+    const user = userEvent.setup()
+    render(
+      <Autocomplete
+        label="Commune"
+        options={[
+          { value: 'paris', label: 'Paris', keywords: ['capitale'] },
+          { value: 'bordeaux', label: 'Bordeaux' },
+        ]}
+      />
+    )
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    await user.type(input, 'capitale')
+
+    const visibleOptions = screen.getAllByRole('option')
+    expect(visibleOptions).toHaveLength(1)
+    expect(visibleOptions[0]).toHaveTextContent('Paris')
+  })
+
+  it('should allow custom filtering with the normalized query', async () => {
+    const user = userEvent.setup()
+    const filterOption = vi.fn(
+      (option: AutocompleteOption, { normalizedQuery }: { normalizedQuery: string }) =>
+        option.value === normalizedQuery
+    )
+
+    render(
+      <Autocomplete
+        label="Pays"
+        options={[
+          { value: 'be', label: 'Belgique' },
+          { value: 'ca', label: 'Canada' },
+        ]}
+        filterOption={filterOption}
+      />
+    )
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    await user.type(input, 'bé')
+
+    expect(filterOption).toHaveBeenCalledWith(
+      expect.objectContaining({ value: 'be' }),
+      expect.objectContaining({ query: 'bé', normalizedQuery: 'be' })
+    )
+    const visibleOptions = screen.getAllByRole('option')
+    expect(visibleOptions).toHaveLength(1)
+    expect(visibleOptions[0]).toHaveTextContent('Belgique')
+  })
+
+  it('should wait for the minimum search length before showing options', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} minSearchLength={2} />)
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+
+    expect(screen.getByText('Saisissez au moins 2 caractères.')).toBeInTheDocument()
+    expect(screen.queryByRole('option')).not.toBeInTheDocument()
+
+    await user.type(input, 'ca')
+
+    const visibleOptions = screen.getAllByRole('option')
+    expect(visibleOptions).toHaveLength(1)
+    expect(visibleOptions[0]).toHaveTextContent('Canada')
+  })
+
+  it('should render option groups in the configured order', async () => {
+    const user = userEvent.setup()
+    render(
+      <Autocomplete
+        label="Pays"
+        options={groupedOptions}
+        groups={[
+          { value: 'north-america', label: 'Amérique du Nord' },
+          { value: 'europe', label: 'Europe' },
+          { value: 'asia', label: 'Asie' },
+        ]}
+      />
+    )
+
+    await user.click(screen.getByRole('combobox'))
+
+    expect(screen.getByText('Amérique du Nord')).toBeInTheDocument()
+    expect(screen.getByText('Europe')).toBeInTheDocument()
+    expect(screen.getByText('Asie')).toBeInTheDocument()
+
+    const visibleOptions = screen.getAllByRole('option')
+    expect(visibleOptions.map((option) => option.textContent)).toEqual([
+      'Canada',
+      'France',
+      'Belgique',
+      'Japon',
+    ])
+  })
+
+  it('should filter options by declared group labels', async () => {
+    const user = userEvent.setup()
+    render(
+      <Autocomplete
+        label="Département"
+        options={[
+          { value: '75', label: 'Paris', group: 'idf' },
+          { value: '92', label: 'Hauts-de-Seine', group: 'idf' },
+          { value: '13', label: 'Bouches-du-Rhône', group: 'paca' },
+        ]}
+        groups={[
+          { value: 'idf', label: 'Île-de-France' },
+          { value: 'paca', label: "Provence-Alpes-Côte d'Azur" },
+        ]}
+      />
+    )
+
+    const input = screen.getByRole('combobox')
+    await user.click(input)
+    await user.type(input, 'ile')
+
+    expect(screen.getByText('Île-de-France')).toBeInTheDocument()
+    expect(screen.queryByText("Provence-Alpes-Côte d'Azur")).not.toBeInTheDocument()
+
+    const visibleOptions = screen.getAllByRole('option')
+    expect(visibleOptions.map((option) => option.textContent)).toEqual([
+      'Paris',
+      'Hauts-de-Seine',
+    ])
+  })
+
+  it('should infer group labels from option.group when groups are not declared', async () => {
+    const user = userEvent.setup()
+    render(
+      <Autocomplete
+        label="Pays"
+        options={[
+          { value: 'fr', label: 'France', group: 'Europe' },
+          { value: 'ci', label: "Côte d'Ivoire", group: 'Afrique' },
+        ]}
+      />
+    )
+
+    await user.click(screen.getByRole('combobox'))
+
+    expect(screen.getByText('Europe')).toBeInTheDocument()
+    expect(screen.getByText('Afrique')).toBeInTheDocument()
   })
 
   it('should select an option when clicked', async () => {

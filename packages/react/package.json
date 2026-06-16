@@ -76,7 +76,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@dsfrkit/icons": "1.1.0",
+    "@dsfrkit/icons": "workspace:*",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
     "@radix-ui/react-avatar": "^1.1.11",

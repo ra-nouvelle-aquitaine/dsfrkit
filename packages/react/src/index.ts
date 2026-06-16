@@ -64,6 +64,8 @@ export { AspectRatio } from './components/ui/aspect-ratio'
 export type {
   AutocompleteMultipleProps,
   AutocompleteOption,
+  AutocompleteOptionFilterState,
+  AutocompleteOptionGroup,
   AutocompleteOptionRenderState,
   AutocompleteProps,
   AutocompleteSingleProps,

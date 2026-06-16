@@ -30,6 +30,72 @@ Conforme aux recommandations d'ergonomie et d'accessibilité du Système de Desi
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    options: {
+      control: 'object',
+      description:
+        'Liste des suggestions. Chaque option accepte `value`, `label`, `description`, `disabled`, `group`, `keywords` et des données libres pour `renderOption`.',
+      table: { category: 'Suggestions' },
+    },
+    groups: {
+      control: 'object',
+      description:
+        "Groupes d'options affichés dans l'ascenseur. `value` correspond à `option.group`, `label` est l'en-tête affiché et recherché.",
+      table: { category: 'Suggestions' },
+    },
+    emptyMessage: {
+      control: 'text',
+      description: 'Message affiché quand aucune suggestion ne correspond à la recherche.',
+      table: { category: 'Suggestions', defaultValue: { summary: 'Aucun résultat trouvé.' } },
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Affiche un état de chargement dans la liste de suggestions.',
+      table: { category: 'Recherche asynchrone', defaultValue: { summary: 'false' } },
+    },
+    loadingMessage: {
+      control: 'text',
+      description: 'Message affiché pendant le chargement des suggestions.',
+      table: { category: 'Recherche asynchrone', defaultValue: { summary: 'Chargement...' } },
+    },
+    minSearchLength: {
+      control: { type: 'number', min: 0, step: 1 },
+      description: "Nombre minimal de caractères requis avant d'afficher les suggestions.",
+      table: { category: 'Filtrage', defaultValue: { summary: '0' } },
+    },
+    minSearchMessage: {
+      control: 'text',
+      description: "Message affiché tant que `minSearchLength` n'est pas atteint.",
+      table: { category: 'Filtrage' },
+    },
+    filterOption: {
+      control: false,
+      description:
+        'Fonction de filtrage local personnalisée. Reçoit `(option, { query, normalizedQuery })`.',
+      table: { category: 'Filtrage' },
+    },
+    highlightMatches: {
+      control: 'boolean',
+      description: 'Surligne la portion de texte correspondant à la recherche.',
+      table: { category: 'Filtrage', defaultValue: { summary: 'true' } },
+    },
+    renderOption: {
+      control: false,
+      description:
+        "Fonction de rendu personnalisée d'une suggestion. Voir la story `CustomOptionRender`.",
+      table: { category: 'Rendu' },
+    },
+    onSearchChange: {
+      control: false,
+      description: 'Callback déclenché à chaque modification du texte recherché.',
+      table: { category: 'Événements' },
+    },
+    onValueChange: {
+      control: false,
+      description: 'Callback déclenché à la sélection ou modification de la valeur.',
+      table: { category: 'Événements' },
+    },
+  },
   decorators: [
     (Story) => (
       <Box style={{ width: '320px', minHeight: '360px' }}>
@@ -55,6 +121,23 @@ const countries = [
   { value: 'us', label: 'États-Unis', description: 'Amérique du Nord' },
   { value: 'jp', label: 'Japon', description: 'Asie' },
   { value: 'cn', label: 'Chine', description: 'Asie' },
+]
+
+const regionGroups = [
+  { value: 'idf', label: 'Île-de-France' },
+  { value: 'paca', label: "Provence-Alpes-Côte d'Azur" },
+  { value: 'ara', label: 'Auvergne-Rhône-Alpes' },
+]
+
+const departments = [
+  { value: '75', label: 'Paris (75)', group: 'idf', keywords: ['capitale'] },
+  { value: '92', label: 'Hauts-de-Seine (92)', group: 'idf' },
+  { value: '93', label: 'Seine-Saint-Denis (93)', group: 'idf' },
+  { value: '13', label: 'Bouches-du-Rhône (13)', group: 'paca', keywords: ['marseille'] },
+  { value: '83', label: 'Var (83)', group: 'paca', keywords: ['toulon'] },
+  { value: '06', label: 'Alpes-Maritimes (06)', group: 'paca', keywords: ['nice'] },
+  { value: '69', label: 'Rhône (69)', group: 'ara', keywords: ['lyon'] },
+  { value: '38', label: 'Isère (38)', group: 'ara', keywords: ['grenoble'] },
 ]
 
 export const Default: SingleStory = {
@@ -94,6 +177,67 @@ export const Default: SingleStory = {
       await expect(page.getByText('France')).toBeInTheDocument()
       await expect(page.getByText('Espagne')).toBeInTheDocument()
       await expect(page.getByText('États-Unis')).toBeInTheDocument()
+    })
+  },
+}
+
+export const GroupedOptions: SingleStory = {
+  args: {
+    label: 'Département',
+    placeholder: 'Rechercher un département...',
+    options: departments,
+    groups: regionGroups,
+    emptyMessage: 'Aucun département trouvé.',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Les suggestions peuvent être regroupées via `option.group`. La prop `groups` permet de contrôler l'ordre et le libellé des en-têtes ; le filtrage par défaut tient aussi compte des `keywords`.",
+      },
+    },
+  },
+  render: (args) => {
+    const [value, setValue] = useState('')
+
+    return (
+      <Box className="space-y-4">
+        <Autocomplete {...args} value={value} onValueChange={setValue} />
+        <Text className="text-sm">
+          Valeur sélectionnée :{' '}
+          <span className="font-semibold text-primary">{value || 'aucune'}</span>
+        </Text>
+      </Box>
+    )
+  },
+  play: async ({ canvasElement, userEvent, step }) => {
+    const canvas = within(canvasElement)
+    const page = within(document.body)
+    const input = canvas.getByRole('combobox')
+
+    await step('open grouped options and filter by keyword', async () => {
+      await userEvent.click(input)
+      await waitFor(() => expect(page.getByText('Île-de-France')).toBeInTheDocument())
+      await expect(page.getAllByRole('option').map((option) => option.textContent)).toEqual([
+        'Paris (75)',
+        'Hauts-de-Seine (92)',
+        'Seine-Saint-Denis (93)',
+        'Bouches-du-Rhône (13)',
+        'Var (83)',
+        'Alpes-Maritimes (06)',
+        'Rhône (69)',
+        'Isère (38)',
+      ])
+
+      await userEvent.type(input, 'ile')
+      await waitFor(() => expect(page.getByText('Paris (75)')).toBeInTheDocument())
+      await expect(page.getByText('Île-de-France')).toBeInTheDocument()
+      await expect(page.queryByText("Provence-Alpes-Côte d'Azur")).not.toBeInTheDocument()
+      await expect(page.getAllByRole('option').map((option) => option.textContent)).toEqual([
+        'Paris (75)',
+        'Hauts-de-Seine (92)',
+        'Seine-Saint-Denis (93)',
+      ])
     })
   },
 }
@@ -249,6 +393,9 @@ export const AsyncSearch: Story = {
           placeholder="Commencez à saisir un pays..."
           options={options}
           loading={loading}
+          loadingMessage="Recherche en cours..."
+          minSearchLength={2}
+          minSearchMessage="Saisissez au moins 2 caractères pour lancer la recherche."
           value={value}
           onValueChange={setValue}
           onSearchChange={setSearch}
@@ -267,7 +414,9 @@ export const AsyncSearch: Story = {
     await step('trigger async filtering', async () => {
       await userEvent.click(input)
       await userEvent.type(input, 'jap')
-      await waitFor(() => expect(page.getByText('Japon')).toBeInTheDocument())
+      await waitFor(() =>
+        expect(page.getByRole('option', { name: /Japon/ })).toBeInTheDocument()
+      )
     })
   },
 }
