@@ -1,3 +1,17 @@
+# [v1.2.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.1.0...example-react-vite@1.2.0) (2026-06-16)
+
+## ✨ New Features
+- [`48672b5`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/48672b5)  améliorer Autocomplete avec groupement, filtres et messages de recherche 
+
+
+
+### Dependencies
+
+* **@dsfrkit/config:** upgraded to 1.2.0
+* **@dsfrkit/icons:** upgraded to 1.2.0
+* **@dsfrkit/react:** upgraded to 1.2.0
+* **@dsfrkit/tokens:** upgraded to 1.2.0
+
 # [v1.1.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.0.0...example-react-vite@1.1.0) (2026-06-14)
 
 ## ✨ New Features
