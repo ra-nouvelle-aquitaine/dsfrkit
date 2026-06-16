@@ -20,6 +20,11 @@ describe('DSFR Tailwind Preset', () => {
     expect(extendColors.primary).toBeDefined()
     expect(extendColors.background).toBeDefined()
     expect(extendColors.foreground).toBeDefined()
+    expect(extendColors.foreground.mention).toBeDefined()
+    expect(extendColors.destructive.foreground).toBeDefined()
+    expect(extendColors.destructive.hover).toBeDefined()
+    expect(extendColors.destructive.active).toBeDefined()
+    expect(extendColors.destructive['background-hover']).toBeDefined()
   })
 
   it('should map typography and spacing', () => {
