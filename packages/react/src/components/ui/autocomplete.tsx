@@ -97,10 +97,7 @@ interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 
    * Personnalise le filtrage local des suggestions.
    * Non appelé quand la recherche est vide ou que `minSearchLength` n'est pas atteint.
    */
-  filterOption?: (
-    option: AutocompleteOption,
-    state: AutocompleteOptionFilterState
-  ) => boolean
+  filterOption?: (option: AutocompleteOption, state: AutocompleteOptionFilterState) => boolean
 }
 
 export interface AutocompleteSingleProps extends AutocompleteBaseProps {
@@ -352,7 +349,14 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
 
       return haystack.includes(normalizedQuery)
     })
-  }, [options, query, normalizedQuery, hasEnoughSearchLength, filterOption, groupSearchLabelsByValue])
+  }, [
+    options,
+    query,
+    normalizedQuery,
+    hasEnoughSearchLength,
+    filterOption,
+    groupSearchLabelsByValue,
+  ])
 
   const filteredOptionGroups = React.useMemo<AutocompleteRenderedGroup[]>(() => {
     if (filteredOptions.length === 0) return []

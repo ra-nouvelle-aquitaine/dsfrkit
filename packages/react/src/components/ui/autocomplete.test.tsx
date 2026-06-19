@@ -222,10 +222,7 @@ describe('Component: Autocomplete (DSFR)', () => {
     expect(screen.queryByText("Provence-Alpes-Côte d'Azur")).not.toBeInTheDocument()
 
     const visibleOptions = screen.getAllByRole('option')
-    expect(visibleOptions.map((option) => option.textContent)).toEqual([
-      'Paris',
-      'Hauts-de-Seine',
-    ])
+    expect(visibleOptions.map((option) => option.textContent)).toEqual(['Paris', 'Hauts-de-Seine'])
   })
 
   it('should infer group labels from option.group when groups are not declared', async () => {

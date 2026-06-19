@@ -414,9 +414,7 @@ export const AsyncSearch: Story = {
     await step('trigger async filtering', async () => {
       await userEvent.click(input)
       await userEvent.type(input, 'jap')
-      await waitFor(() =>
-        expect(page.getByRole('option', { name: /Japon/ })).toBeInTheDocument()
-      )
+      await waitFor(() => expect(page.getByRole('option', { name: /Japon/ })).toBeInTheDocument())
     })
   },
 }
