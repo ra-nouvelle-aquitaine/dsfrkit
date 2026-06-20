@@ -1,3 +1,8 @@
+# [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.2.1...@dsfrkit/tokens@1.2.2) (2026-06-20)
+
+## 🐛 Corrections de bugs
+- [`b2b1c90`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/b2b1c90)  corrige les couleurs des artworks (variables CSS non définies)
+
 # [v1.2.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.2.0...@dsfrkit/tokens@1.2.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
