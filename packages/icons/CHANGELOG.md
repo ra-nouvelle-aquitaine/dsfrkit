@@ -1,3 +1,5 @@
+# [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.2.0...@dsfrkit/icons@1.3.0) (2026-06-20)
+
 # [v1.2.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.1.0...@dsfrkit/icons@1.2.0) (2026-06-16)
 
 ## ✨ New Features
