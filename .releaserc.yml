@@ -210,11 +210,14 @@ plugins:
       # @semantic-release/npm) ; les autres sont publiés via pnpm.
       publishCmd: "node -e \"process.exit(require('./package.json').private?0:1)\" && echo 'paquet privé, publication npm ignorée' || pnpm publish --no-git-checks --access public --tag ${nextRelease.channel || 'latest'}"
 
+  # On ne committe QUE le CHANGELOG : surtout pas package.json, sinon
+  # multi-semantic-release y réécrirait les `workspace:*` en versions concrètes
+  # (et pousserait les bumps de version) dans le dépôt de dev — ce qu'on refuse.
+  # Les versions publiées sont portées par les tags git, pas par package.json.
   - - "@semantic-release/git"
     - message: "🔖 release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       assets:
         - "CHANGELOG.md"
-        - "package.json"
 
   - - "@semantic-release/github"
     - assets:
