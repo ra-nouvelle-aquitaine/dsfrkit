@@ -1,3 +1,8 @@
+# [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.1...@dsfrkit/react@1.2.2) (2026-06-20)
+
+## 💄 Interface & style
+- [`a9980c9`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/a9980c9)  onglets : scrollbar fine visible en cas de débordement
+
 # [v1.2.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.0...@dsfrkit/react@1.2.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
