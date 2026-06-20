@@ -36,8 +36,12 @@ const TabsList = React.forwardRef<
       // ── Vertical ────────────────────────────────────────────────────────
       'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:justify-start',
       'data-[orientation=vertical]:py-4 data-[orientation=vertical]:border-r data-[orientation=vertical]:border-[var(--border-default-grey)]',
-      // Masquer scrollbar
-      '[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
+      // Scrollbar fine et discrète : n'apparaît (via overflow-x-auto) que lorsque
+      // les onglets débordent, donnant une affordance visible pour atteindre ceux
+      // de droite (sans elle, les onglets en débordement semblaient inaccessibles).
+      '[scrollbar-width:thin] [scrollbar-color:var(--border-default-grey)_transparent]',
+      '[&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent',
+      '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-[var(--border-default-grey)]',
       className
     )}
     {...props}
