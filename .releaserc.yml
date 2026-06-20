@@ -42,8 +42,11 @@ plugins:
   # Publication via pnpm : résout les dépendances `workspace:*` en version concrète
   # UNIQUEMENT dans le tarball publié, sans modifier le package.json du dépôt
   # (le dépôt de dev conserve donc `workspace:*` pour le linking local).
+  # `verifyConditionsCmd` vérifie l'auth npm AVANT toute mutation (commit/tag) :
+  # si le jeton est invalide, la release est abandonnée proprement, sans état cassé.
   - - "@semantic-release/exec"
-    - publishCmd: "pnpm publish --no-git-checks --access public --tag ${nextRelease.channel || 'latest'}"
+    - verifyConditionsCmd: "npm whoami --registry https://registry.npmjs.org/"
+      publishCmd: "pnpm publish --no-git-checks --access public --tag ${nextRelease.channel || 'latest'}"
 
   - - "@semantic-release/git"
     - message: "🔖 release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"

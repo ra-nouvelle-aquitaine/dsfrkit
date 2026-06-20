@@ -38,6 +38,12 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # `pnpm publish` (utilisé par semantic-release pour résoudre les `workspace:*`)
+      # lit l'auth depuis ~/.npmrc. On y écrit le placeholder ${NPM_TOKEN} : pnpm
+      # le résout depuis l'env au moment du publish (le jeton n'est pas écrit en clair).
+      - name: Configure npm auth for pnpm publish
+        run: echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> ~/.npmrc
+
       - name: Release
         run: pnpm release
         env:
