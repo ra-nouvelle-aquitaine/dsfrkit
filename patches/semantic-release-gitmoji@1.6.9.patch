@@ -1,0 +1,18 @@
+diff --git a/lib/release-notes.js b/lib/release-notes.js
+index 4acadf41268d6cee7e6d24a5f0903ebbae5f043d..030c7b772118dd75f3bdf3ab25be4534a63c7875 100644
+--- a/lib/release-notes.js
++++ b/lib/release-notes.js
+@@ -166,7 +166,11 @@ module.exports = class ReleaseNotes {
+    * @return {ReleaseNotes}
+    */
+   static get (context, releaseNotesOptions) {
+-    ReleaseNotes._instance = ReleaseNotes._instance || new ReleaseNotes(context, releaseNotesOptions)
+-    return ReleaseNotes._instance
++    // PATCH dsfrkit : ne PAS mettre en cache un singleton au niveau module.
++    // Avec multi-semantic-release, tous les packages s'exécutent dans le même
++    // process ; un singleton partagé fait que le 1er package analysé (souvent
++    // une app sans commit → 0 commit) fige l'analyse pour TOUS les autres
++    // (« no relevant changes » à tort). On renvoie une instance fraîche par appel.
++    return new ReleaseNotes(context, releaseNotesOptions)
+   }
+ }

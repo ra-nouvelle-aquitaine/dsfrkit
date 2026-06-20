@@ -47,6 +47,9 @@
     "overrides": {
       "react": "^18.3.1",
       "react-dom": "^18.3.1"
+    },
+    "patchedDependencies": {
+      "semantic-release-gitmoji@1.6.9": "patches/semantic-release-gitmoji@1.6.9.patch"
     }
   },
   "engines": {

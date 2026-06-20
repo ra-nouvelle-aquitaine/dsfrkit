@@ -8,6 +8,11 @@ overrides:
   react: ^18.3.1
   react-dom: ^18.3.1
 
+patchedDependencies:
+  semantic-release-gitmoji@1.6.9:
+    hash: 4caa259607c572beee2761efefc0a3ef945c3b342593623a27065748ab6472fc
+    path: patches/semantic-release-gitmoji@1.6.9.patch
+
 importers:
 
   .:
@@ -59,7 +64,7 @@ importers:
         version: 25.0.3(typescript@6.0.2)
       semantic-release-gitmoji:
         specifier: ^1.6.9
-        version: 1.6.9(semantic-release@25.0.3(typescript@6.0.2))
+        version: 1.6.9(patch_hash=4caa259607c572beee2761efefc0a3ef945c3b342593623a27065748ab6472fc)(semantic-release@25.0.3(typescript@6.0.2))
       tailwindcss:
         specifier: ^3.4.19
         version: 3.4.19
@@ -8066,7 +8071,7 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
-  semantic-release-gitmoji@1.6.9(semantic-release@25.0.3(typescript@6.0.2)):
+  semantic-release-gitmoji@1.6.9(patch_hash=4caa259607c572beee2761efefc0a3ef945c3b342593623a27065748ab6472fc)(semantic-release@25.0.3(typescript@6.0.2)):
     dependencies:
       dateformat: 3.0.3
       debug: 4.4.3
