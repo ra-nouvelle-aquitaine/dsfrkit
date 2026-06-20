@@ -1,3 +1,8 @@
+# [v1.2.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.2.0...@dsfrkit/tokens@1.2.1) (2026-06-20)
+
+## 🐛 Corrections de bugs
+- [`6d7b6d3`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/6d7b6d3)  préserve workspace:* dans le dépôt + corrige le lockfile gelé
+
 # [v1.2.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.1.0...@dsfrkit/tokens@1.2.0) (2026-06-16)
 
 ## ✨ New Features
