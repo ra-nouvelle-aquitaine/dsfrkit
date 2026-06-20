@@ -49,3 +49,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Debug temporaire : tracer le filtrage des commits par package.
+          DEBUG: 'msr:commitsFilter'
