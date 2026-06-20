@@ -31,6 +31,166 @@ plugins:
           - "🚀" # Deploy
           - "🔖" # Release/version tag
 
+      # Changelog en français : titres traduits + toutes les catégories
+      # gitmoji du projet (le template par défaut était en anglais et ne
+      # couvrait que 5 catégories).
+      releaseNotes:
+        template: |
+          {{#if compareUrl}}
+          # [v{{nextRelease.version}}]({{compareUrl}}) ({{datetime "UTC:yyyy-mm-dd"}})
+          {{else}}
+          # v{{nextRelease.version}} ({{datetime "UTC:yyyy-mm-dd"}})
+          {{/if}}
+
+          {{#with commits}}
+          {{#if collision}}
+          ## 💥 Changements incompatibles
+          {{#each collision}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if sparkles}}
+          ## ✨ Nouvelles fonctionnalités
+          {{#each sparkles}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if art}}
+          ## 🎨 Améliorations du code
+          {{#each art}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if zap}}
+          ## ⚡ Performances
+          {{#each zap}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if lipstick}}
+          ## 💄 Interface & style
+          {{#each lipstick}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if wheelchair}}
+          ## ♿ Accessibilité
+          {{#each wheelchair}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if bug}}
+          ## 🐛 Corrections de bugs
+          {{#each bug}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if adhesive_bandage}}
+          ## 🩹 Corrections mineures
+          {{#each adhesive_bandage}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if ambulance}}
+          ## 🚑 Correctifs critiques
+          {{#each ambulance}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if lock}}
+          ## 🔒 Sécurité
+          {{#each lock}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if recycle}}
+          ## ♻️ Refactorisation
+          {{#each recycle}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if wrench}}
+          ## 🔧 Configuration
+          {{#each wrench}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if pencil}}
+          ## 📝 Documentation
+          {{#each pencil}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if building_construction}}
+          ## 🏗️ Architecture
+          {{#each building_construction}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if white_check_mark}}
+          ## ✅ Tests
+          {{#each white_check_mark}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if fire}}
+          ## 🔥 Suppressions
+          {{#each fire}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if truck}}
+          ## 🚚 Déplacements & renommages
+          {{#each truck}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if package}}
+          ## 📦 Dépendances
+          {{#each package}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if globe_with_meridians}}
+          ## 🌐 Internationalisation
+          {{#each globe_with_meridians}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if bento}}
+          ## 🍱 Ressources
+          {{#each bento}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+
+          {{#if rocket}}
+          ## 🚀 Déploiement
+          {{#each rocket}}
+          - {{> commitTemplate}}
+          {{/each}}
+          {{/if}}
+          {{/with}}
+
   - - "@semantic-release/changelog"
     - changelogFile: "CHANGELOG.md"
 
@@ -46,7 +206,9 @@ plugins:
   # si le jeton est invalide, la release est abandonnée proprement, sans état cassé.
   - - "@semantic-release/exec"
     - verifyConditionsCmd: "npm whoami --registry https://registry.npmjs.org/"
-      publishCmd: "pnpm publish --no-git-checks --access public --tag ${nextRelease.channel || 'latest'}"
+      # Les paquets privés (apps docs/example) sont ignorés (comme le faisait
+      # @semantic-release/npm) ; les autres sont publiés via pnpm.
+      publishCmd: "node -e \"process.exit(require('./package.json').private?0:1)\" && echo 'paquet privé, publication npm ignorée' || pnpm publish --no-git-checks --access public --tag ${nextRelease.channel || 'latest'}"
 
   - - "@semantic-release/git"
     - message: "🔖 release v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
