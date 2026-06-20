@@ -1,3 +1,8 @@
+# [v1.3.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.3.0...@dsfrkit/icons@1.3.1) (2026-06-20)
+
+## 🐛 Corrections de bugs
+- [`6d7b6d3`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/6d7b6d3)  préserve workspace:* dans le dépôt + corrige le lockfile gelé
+
 # [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.2.0...@dsfrkit/icons@1.3.0) (2026-06-20)
 
 # [v1.2.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.1.0...@dsfrkit/icons@1.2.0) (2026-06-16)
