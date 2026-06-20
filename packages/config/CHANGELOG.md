@@ -1,3 +1,11 @@
+# [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.2.1...@dsfrkit/config@1.2.2) (2026-06-20)
+
+
+
+### Dependencies
+
+* **@dsfrkit/tokens:** upgraded to 1.2.2
+
 # [v1.2.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.2.0...@dsfrkit/config@1.2.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
