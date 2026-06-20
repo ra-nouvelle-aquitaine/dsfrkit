@@ -1,3 +1,17 @@
+# [v1.3.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.3.0...example-react-vite@1.3.1) (2026-06-20)
+
+## 🐛 Corrections de bugs
+- [`6d7b6d3`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/6d7b6d3)  préserve workspace:* dans le dépôt + corrige le lockfile gelé 
+
+
+
+### Dependencies
+
+* **@dsfrkit/config:** upgraded to 1.2.1
+* **@dsfrkit/icons:** upgraded to 1.3.1
+* **@dsfrkit/react:** upgraded to 1.2.1
+* **@dsfrkit/tokens:** upgraded to 1.2.1
+
 # [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.2.0...example-react-vite@1.3.0) (2026-06-20)
 
 
