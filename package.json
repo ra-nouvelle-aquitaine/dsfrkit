@@ -16,8 +16,8 @@
     "test": "turbo test",
     "typecheck": "turbo typecheck",
     "clean": "turbo clean && rm -rf node_modules",
-    "release": "multi-semantic-release",
-    "release:dry": "multi-semantic-release --dry-run",
+    "release": "multi-semantic-release --sequential-init",
+    "release:dry": "multi-semantic-release --dry-run --sequential-init",
     "generate:llms": "node apps/docs/scripts/generate-llms.cjs"
   },
   "devDependencies": {
