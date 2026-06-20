@@ -1,3 +1,13 @@
+# [v1.3.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.3.1...example-react-vite@1.3.2) (2026-06-20)
+
+
+
+### Dependencies
+
+* **@dsfrkit/config:** upgraded to 1.2.2
+* **@dsfrkit/react:** upgraded to 1.2.2
+* **@dsfrkit/tokens:** upgraded to 1.2.2
+
 # [v1.3.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.3.0...example-react-vite@1.3.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
