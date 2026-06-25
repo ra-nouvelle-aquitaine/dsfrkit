@@ -1,3 +1,14 @@
+# [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.2.2...@dsfrkit/config@1.3.0) (2026-06-25)
+
+## 🎨 Améliorations du code
+- [`861b541`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/861b541)  supporte les modificateurs d&#x27;opacité Tailwind sur les couleurs sémantiques 
+
+
+
+### Dependencies
+
+* **@dsfrkit/tokens:** upgraded to 1.3.0
+
 # [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.2.1...@dsfrkit/config@1.2.2) (2026-06-20)
 
 
