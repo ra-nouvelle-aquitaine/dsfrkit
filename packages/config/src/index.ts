@@ -25,6 +25,9 @@ const toMutableFontSize = (fontSize: typeof typography.fontSize) => {
   return result
 }
 
+const toSolidColor = (color: unknown) =>
+  typeof color === 'string' ? color.replaceAll('<alpha-value>', '1') : String(color)
+
 /**
  * Preset Tailwind CSS pour le DSFR
  * Étend la configuration Tailwind avec les tokens du design system
@@ -110,6 +113,9 @@ const dsfrPreset: Partial<Config> = {
       spacing,
       borderRadius,
       boxShadow,
+      opacity: {
+        12: '0.12',
+      },
 
       // Container pour suivre les breakpoints DSFR
       container: {
@@ -144,11 +150,13 @@ const dsfrPreset: Partial<Config> = {
 
   plugins: [
     plugin(({ addBase, addComponents, addUtilities, theme }) => {
+      const themeColor = (path: string) => toSolidColor(theme(path))
+
       // Styles de base DSFR
       addBase({
         // Focus visible DSFR — outline 2px + offset 2px
         '*:focus-visible': {
-          outline: `2px solid ${theme('colors.ring')}`,
+          outline: `2px solid ${themeColor('colors.ring')}`,
           outlineOffset: '2px',
         },
         // Suppression du focus visible pour les clics souris
@@ -192,11 +200,11 @@ const dsfrPreset: Partial<Config> = {
         },
         /* Utilitaires globaux DSFR (liens, boutons, textes) */
         '.fr-link': {
-          color: theme('colors.primary.DEFAULT'),
+          color: themeColor('colors.primary.DEFAULT'),
           textDecoration: 'underline',
           textDecorationSkipInk: 'auto',
           '&:hover': {
-            color: theme('colors.primary.hover'),
+            color: themeColor('colors.primary.hover'),
           },
         },
         '.fr-btn': {
@@ -216,7 +224,7 @@ const dsfrPreset: Partial<Config> = {
           },
         },
         '.fr-text': {
-          color: theme('colors.foreground.DEFAULT'),
+          color: themeColor('colors.foreground.DEFAULT'),
         },
       })
 
@@ -236,13 +244,13 @@ const dsfrPreset: Partial<Config> = {
         },
 
         /* Text / border helpers (DSFR fundamentals) */
-        '.text-default': { color: theme('colors.foreground.DEFAULT') },
-        '.text-muted': { color: theme('colors.foreground.muted') },
-        '.text-inverted': { color: theme('colors.foreground.inverted') },
+        '.text-default': { color: themeColor('colors.foreground.DEFAULT') },
+        '.text-muted': { color: themeColor('colors.foreground.muted') },
+        '.text-inverted': { color: themeColor('colors.foreground.inverted') },
 
-        '.border-default': { borderColor: theme('colors.border') },
-        '.border-contrast': { borderColor: theme('colors.border-contrast') },
-        '.border-active': { borderColor: theme('colors.border-active') },
+        '.border-default': { borderColor: themeColor('colors.border') },
+        '.border-contrast': { borderColor: themeColor('colors.border-contrast') },
+        '.border-active': { borderColor: themeColor('colors.border-active') },
 
         /* Élévation DSFR */
         '.elevation-raised': { boxShadow: theme('boxShadow.raised') },
@@ -252,7 +260,7 @@ const dsfrPreset: Partial<Config> = {
 
         /* Focus DSFR */
         '.focus-dsfr': {
-          outline: `2px solid ${theme('colors.ring')}`,
+          outline: `2px solid ${themeColor('colors.ring')}`,
           outlineOffset: '2px',
         },
       })

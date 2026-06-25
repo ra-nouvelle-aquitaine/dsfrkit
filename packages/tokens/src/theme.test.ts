@@ -11,4 +11,14 @@ describe('DSFR Theme Generator', () => {
     expect(cssVariables.destructive.hover).toContain('var(--error-425-625-hover')
     expect(cssVariables.destructive['background-hover']).toContain('var(--error-950-100-hover')
   })
+
+  it('should expose semantic colors with Tailwind alpha support', () => {
+    expect(cssVariables.destructive.DEFAULT).toBe(
+      'rgb(from var(--error-425-625) r g b / <alpha-value>)'
+    )
+    expect(cssVariables.destructive.background).toBe(
+      'rgb(from var(--error-950-100) r g b / <alpha-value>)'
+    )
+    expect(cssVariables.foreground.DEFAULT).toContain('/ <alpha-value>')
+  })
 })

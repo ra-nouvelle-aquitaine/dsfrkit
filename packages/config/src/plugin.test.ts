@@ -1,3 +1,6 @@
+import postcss from 'postcss'
+import type { Config } from 'tailwindcss'
+import tailwindcss from 'tailwindcss'
 import { describe, expect, it } from 'vitest'
 import dsfrPreset, { colors, spacing, typography } from './index'
 
@@ -25,6 +28,37 @@ describe('DSFR Tailwind Preset', () => {
     expect(extendColors.destructive.hover).toBeDefined()
     expect(extendColors.destructive.active).toBeDefined()
     expect(extendColors.destructive['background-hover']).toBeDefined()
+  })
+
+  it('should support Tailwind alpha modifiers on semantic colors', async () => {
+    const config: Config = {
+      presets: [dsfrPreset as Config],
+      content: [
+        {
+          raw: [
+            'focus:bg-destructive/12',
+            'focus:bg-destructive/[12%]',
+            'hover:bg-destructive/[12%]',
+            'shadow-[inset_0_-2px_0_0_theme(colors.destructive.DEFAULT)]',
+            'fr-link',
+            'focus-dsfr',
+          ].join(' '),
+        },
+      ],
+      corePlugins: {
+        preflight: false,
+      },
+    }
+
+    const result = await postcss([tailwindcss(config)]).process(
+      '@tailwind base; @tailwind components; @tailwind utilities;',
+      { from: undefined }
+    )
+
+    expect(result.css).toContain('rgb(from var(--error-425-625) r g b / 0.12)')
+    expect(result.css).toContain('rgb(from var(--error-425-625) r g b / 12%)')
+    expect(result.css).toContain('rgb(from var(--error-425-625) r g b / 1)')
+    expect(result.css).not.toContain('<alpha-value>')
   })
 
   it('should map typography and spacing', () => {
