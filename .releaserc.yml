@@ -219,7 +219,4 @@ plugins:
       assets:
         - "CHANGELOG.md"
 
-  - - "@semantic-release/github"
-    - assets:
-        - path: CHANGELOG.md
-          label: CHANGELOG.md
+  - "@semantic-release/github"
