@@ -8,8 +8,10 @@ import { cn } from '../../lib/utils'
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/bouton
  */
 const buttonVariants = cva(
-  // Classes de base - DSFR n'utilise pas de border-radius
-  'inline-flex items-center justify-center gap-2 font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:bg-background-contrast disabled:text-foreground-disabled disabled:shadow-none',
+  // Classes de base - DSFR n'utilise pas de border-radius.
+  // `cursor-pointer` est explicite : Tailwind v4 a retiré de son preflight la
+  // règle qui posait la main sur les boutons, et `.fr-btn` du DSFR la porte.
+  'inline-flex cursor-pointer items-center justify-center gap-2 font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-background-contrast disabled:text-foreground-disabled disabled:shadow-none',
   {
     variants: {
       variant: {

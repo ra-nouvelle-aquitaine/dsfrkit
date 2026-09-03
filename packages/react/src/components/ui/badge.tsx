@@ -7,8 +7,13 @@ import { cn } from '../../lib/utils'
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/badge
  */
 const badgeVariants = cva(
-  // Base DSFR : border-radius 4px, font-weight bold, uppercase
-  'inline-flex items-center rounded font-bold uppercase transition-colors',
+  // Base DSFR : border-radius 4px, font-weight bold, uppercase.
+  // `.fr-badge` tient sur une seule ligne : `white-space: nowrap`, borné à la
+  // largeur disponible et tronqué par des points de suspension au-delà. Sans
+  // cela, un libellé un peu long — « Correction demandée » — se replie sur deux
+  // lignes dans une colonne étroite, et le badge se lit comme un pavé de texte
+  // plutôt que comme une étiquette.
+  'inline-flex max-w-full items-center overflow-hidden text-ellipsis whitespace-nowrap rounded font-bold uppercase transition-colors',
   {
     variants: {
       variant: {

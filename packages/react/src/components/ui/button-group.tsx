@@ -12,7 +12,11 @@ import { cn } from '../../lib/utils'
  * Structure DSFR : le groupe a un fond neutre, l'élément actif a une bordure inset primary.
  */
 const buttonGroupVariants = cva(
-  'inline-flex items-center p-1 bg-muted shadow-[inset_1px_1px_0_0_var(--border-default-grey),inset_-1px_0_0_0_var(--border-default-grey)]',
+  // Le cadre est fermé sur les quatre côtés, comme `fr-segmented__elements` qui
+  // le pose en `inset 0 0 0 1px`. Les trois ombres précédentes — gauche, haut,
+  // droite — laissaient le bord bas ouvert, et le groupe se lisait comme une
+  // boîte inachevée posée sur la page.
+  'inline-flex items-center p-1 bg-muted shadow-[inset_0_0_0_1px_var(--border-default-grey)]',
   {
     variants: {
       size: {
