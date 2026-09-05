@@ -1,5 +1,8 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 /**
@@ -272,7 +275,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
         href: string
       } & React.AnchorHTMLAttributes<HTMLAnchorElement>
       return (
-        <a
+        <RouterAnchor
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
           className={interactiveClass}
@@ -280,7 +283,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
         >
           {icon && <span className="-ml-0.5">{icon}</span>}
           {children}
-        </a>
+        </RouterAnchor>
       )
     }
 

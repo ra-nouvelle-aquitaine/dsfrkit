@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 /**
@@ -206,7 +207,7 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
           )}
         >
           {isClickable ? (
-            <a
+            <RouterAnchor
               href={href}
               target={target}
               rel={rel}
@@ -217,7 +218,7 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
               )}
             >
               {title}
-            </a>
+            </RouterAnchor>
           ) : (
             title
           )}

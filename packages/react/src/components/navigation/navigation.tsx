@@ -2,6 +2,7 @@
 
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 /**
@@ -275,7 +276,7 @@ const NavigationItem = React.forwardRef<HTMLAnchorElement, NavigationItemProps>(
 
     return (
       <li className="list-none flex">
-        <a
+        <RouterAnchor
           ref={ref}
           href={href}
           aria-current={isActive ? 'page' : undefined}
@@ -323,7 +324,7 @@ const NavigationItem = React.forwardRef<HTMLAnchorElement, NavigationItemProps>(
               {icon}
             </span>
           )}
-        </a>
+        </RouterAnchor>
       </li>
     )
   }
