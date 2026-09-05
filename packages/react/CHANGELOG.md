@@ -1,3 +1,12 @@
+# [v1.2.3](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.2...@dsfrkit/react@1.2.3) (2026-09-05)
+
+## 💄 Interface & style
+- [`8250d89`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/8250d89)  aligne badge, bouton et contrôle segmenté sur le DSFR 
+- [`4ac8a40`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/4ac8a40)  fige le voile de la modale, quel que soit le thème 
+
+## 🐛 Corrections de bugs
+- [`14ac090`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/14ac090)  branche sur le routeur les liens qui rechargeaient la page
+
 # [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.1...@dsfrkit/react@1.2.2) (2026-06-20)
 
 ## 💄 Interface & style
