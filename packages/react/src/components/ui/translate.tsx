@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 /**
@@ -152,7 +153,7 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
               return (
                 <li key={lang.code} aria-current={isActive ? 'true' : undefined}>
                   {lang.href ? (
-                    <a
+                    <RouterAnchor
                       href={lang.href}
                       hrefLang={lang.code}
                       lang={lang.code}
@@ -166,7 +167,7 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
                       <span>
                         {lang.nativeLabel} - {lang.label}
                       </span>
-                    </a>
+                    </RouterAnchor>
                   ) : (
                     <button
                       type="button"

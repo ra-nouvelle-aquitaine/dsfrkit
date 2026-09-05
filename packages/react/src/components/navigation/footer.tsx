@@ -1,4 +1,7 @@
+'use client'
+
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 export interface FooterProps extends React.HTMLAttributes<HTMLElement> {}
@@ -81,9 +84,9 @@ const FooterBrand = React.forwardRef<HTMLDivElement, FooterBrandProps>(
   ({ className, logo, description, href = '/', ...props }, ref) => (
     <div ref={ref} className={cn('flex flex-col gap-4 md:max-w-xs', className)} {...props}>
       {logo && (
-        <a href={href} className="flex-shrink-0 w-fit">
+        <RouterAnchor href={href} className="flex-shrink-0 w-fit">
           {logo}
-        </a>
+        </RouterAnchor>
       )}
       {description && <p className="text-sm text-foreground-muted">{description}</p>}
     </div>

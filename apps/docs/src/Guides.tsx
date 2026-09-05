@@ -221,7 +221,16 @@ export function RoutingGuide() {
       <Text className="text-foreground-muted mb-4 block">
         Pour un confort de développement maximal et éviter de répéter des balises, enregistrez votre
         librairie de routage de façon globale directement dans l'arbre React à la racine ! Tous les
-        composants DSFRKit se comporteront alors comme des liens natifs de votre framework.
+        composants DSFRKit qui portent une adresse interne s'y branchent alors seuls :{' '}
+        <Code>Link</Code>, <Code>NavLink</Code>, <Code>BreadcrumbLink</Code>,{' '}
+        <Code>Pagination</Code>, <Code>Tag</Code>, <Code>Tile</Code>, <Code>HeaderBrand</Code>,{' '}
+        <Code>FooterBrand</Code>, <Code>NavigationItem</Code> et <Code>Translate</Code>.
+      </Text>
+      <Text className="text-foreground-muted mb-4 block">
+        Restent confiées au navigateur les adresses que le routeur ne sait pas suivre : URL absolue,
+        protocole (<Code>mailto:</Code>, <Code>tel:</Code>), ancre de fragment, et tout lien portant
+        un <Code>target</Code>. Les liens d'évitement (<Code>SkipLinks</Code>) visent une ancre du
+        document courant : ils restent natifs eux aussi.
       </Text>
 
       <Heading as="h4" size="3" className="mt-6">
@@ -260,7 +269,8 @@ export function RoutingGuide() {
         </Text>
       </Heading>
       <Text className="text-foreground-muted block">
-        Si vous ne souhaitez pas de configuration globale, tous nos composants de lien acceptent la
+        Si vous ne souhaitez pas de configuration globale, les composants <Code>Link</Code>,{' '}
+        <Code>NavLink</Code>, <Code>BreadcrumbLink</Code> et <Code>Pagination</Code> acceptent la
         prop <Code>asChild</Code> qui délègue le rendu explicitement au composant enfant :
       </Text>
       <CodeBlock

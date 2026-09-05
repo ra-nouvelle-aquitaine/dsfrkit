@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
 
 // ─── Internal context for mobile menu state ──────────────────────────
@@ -192,19 +193,22 @@ const HeaderBrand = React.forwardRef<HTMLDivElement, HeaderBrandProps>(
   ({ className, logo, serviceTitle, serviceTagline, href = '/', ...props }, ref) => (
     <div ref={ref} className={cn('flex items-center gap-4', className)} {...props}>
       {logo && (
-        <a
+        <RouterAnchor
           href={href}
           className="flex-shrink-0 rounded-md p-2 hover:bg-background-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           {logo}
-        </a>
+        </RouterAnchor>
       )}
       {(serviceTitle || serviceTagline) && (
         <div className="flex flex-col">
           {serviceTitle && (
-            <a href={href} className="text-lg font-bold text-foreground hover:text-primary">
+            <RouterAnchor
+              href={href}
+              className="text-lg font-bold text-foreground hover:text-primary"
+            >
               {serviceTitle}
-            </a>
+            </RouterAnchor>
           )}
           {serviceTagline && (
             <span className="text-sm text-foreground-muted hidden sm:inline">{serviceTagline}</span>
