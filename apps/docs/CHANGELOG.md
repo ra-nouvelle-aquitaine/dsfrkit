@@ -1,3 +1,14 @@
+# [v1.3.4](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.3.3...docs@1.3.4) (2026-09-05)
+
+## 🐛 Corrections de bugs
+- [`14ac090`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/14ac090)  branche sur le routeur les liens qui rechargeaient la page 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.2.3
+
 # [v1.3.3](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.3.2...docs@1.3.3) (2026-06-25)
 
 
