@@ -9,54 +9,92 @@ N'écris JAMAIS de code HTML brut ou de classes Tailwind pour recréer un compos
 
 ## 🌐 Routage (Routing)
 DSFRKit s'intègre avec tous les routeurs React (Next.js, React Router, TanStack Router) via le `RouterProvider`. 
-Une fois configuré, utilise le composant `<Link asChild>` de DSFRKit pour la navigation, ou les props `href` natives de DSFRKit (sur Button, Tile, etc.).
+Une fois configuré, toutes les adresses internes (`/…`) des composants DSFRKit passent par le routeur : `Link`, `NavigationItem`, `Breadcrumb`, `Summary`, `Tile`… Utilise leur prop `href` ; `asChild` n'est nécessaire que pour envelopper un lien externe à DSFRKit.
 
 ## 🎨 Icônes et Artworks (Pictogrammes)
 Le projet contient un système dédié pour l'iconographie :
 - **Icônes** : Utilise le package `@dsfrkit/icons`. Les imports se terminent par `Icon` (ex: `import { MailIcon } from '@dsfrkit/icons'`). Passe les en prop `icon` (ex: `<Button icon={<MailIcon />} />`).
 - **Artworks** : Le composant `Artwork` fournit les pictogrammes officiels DSFR multicolores (ex: `<Artwork name="environment/sun" size={80} />`). En cas d'artworks manquants, conseille la commande `npx @dsfrkit/cli fetch-artworks`.
 
-## 📦 Composants disponibles (UI, Layout, Typographie...)
+## 📦 Catalogue
 
-Voici le catalogue des composants du design system localisés. Consulte leur documentation respective en suivant les liens pour générer le code de l'interface demandée :
+Voici la liste exhaustive des exports publics de `@dsfrkit/react`, générée depuis `packages/react/src/index.ts`. Chaque fiche donne l'import exact (sous-composants compris), les recommandations d'usage, les exemples et l'interface des props.
 
-- [Footer](/llms/footer.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [NavLink](/llms/nav-link.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Navigation](/llms/navigation.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [SkipLinks](/llms/skip-links.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Accordion](/llms/accordion.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Alert](/llms/alert.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Artwork](/llms/artwork.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [AspectRatio](/llms/aspect-ratio.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Avatar](/llms/avatar.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Badge](/llms/badge.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Breadcrumb](/llms/breadcrumb.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [ButtonGroup](/llms/button-group.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Button](/llms/button.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Calendar](/llms/calendar.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Callout](/llms/callout.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Card](/llms/card.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Checkbox](/llms/checkbox.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Highlight](/llms/highlight.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Indicator](/llms/indicator.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Input](/llms/input.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Link](/llms/link.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Logo](/llms/logo.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Modal](/llms/modal.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Notice](/llms/notice.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Pagination](/llms/pagination.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Quote](/llms/quote.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Radio](/llms/radio.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Range](/llms/range.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [ScrollArea](/llms/scroll-area.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Select](/llms/select.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Stepper](/llms/stepper.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Table](/llms/table.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Tabs](/llms/tabs.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Tag](/llms/tag.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [ThemeToggle](/llms/theme-toggle.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Tile](/llms/tile.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Toggle](/llms/toggle.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Tooltip](/llms/tooltip.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Translate](/llms/translate.md): Documentation technique, interface de Props et exemples d'utilisation.
-- [Upload](/llms/upload.md): Documentation technique, interface de Props et exemples d'utilisation.
+### Composants
+
+- [Accordion](/llms/accordion.md) (Accordion, AccordionContent, AccordionItem, AccordionTrigger) : Permet de condenser le contenu en masquant des sections qui peuvent être affichées au clic.
+- [Alert](/llms/alert.md) (Alert, alertVariants) : Affiche un message important ou une notification à l'utilisateur (succès, erreur, info).
+- [Artwork](/llms/artwork.md) (Artwork, allPictograms, artworkByName, artworkDark, artworkLight, artworkSystem, artworks, pictogramsByCategory) : Pictogrammes officiels du DSFR avec 3 couches personnalisables :
+- [AspectRatio](/llms/aspect-ratio.md) : Affiche du contenu dans un ratio d'aspect spécifique (ex: 16/9, 4/3, 1/1).
+- [Autocomplete](/llms/autocomplete.md) : Champ de saisie textuelle avec autocomplétion (Liste déroulante riche / Combobox).
+- [Avatar](/llms/avatar.md) (Avatar, AvatarBadge, AvatarFallback, AvatarGroup, AvatarImage, avatarVariants) : Affiche une image de profil, des initiales ou une icône représentant un utilisateur ou une entité.
+- [Badge](/llms/badge.md) (Badge, badgeVariants) : Met en évidence une caractéristique visuelle ou un état (ex: "Nouveau", "En cours", "Succès").
+- [Box](/llms/box.md) : Composant conteneur générique servant de brique de base pour la mise en page.
+- [Breadcrumb](/llms/breadcrumb.md) (Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator) : Fil d'ariane permettant à l'utilisateur de se repérer et de naviguer dans la hiérarchie du site.
+- [Button](/llms/button.md) (Button, buttonVariants) : Permet d'effectuer une action ou une soumission de formulaire.
+- [ButtonGroup](/llms/button-group.md) (ButtonGroup, ButtonGroupItem, buttonGroupItemVariants, buttonGroupVariants) : Regroupe plusieurs actions connexes de manière visuellement cohérente.
+- [Calendar](/llms/calendar.md) : Sélecteur de date avancé avec prise en charge complète de l'accessibilité.
+- [Callout](/llms/callout.md) (Callout, calloutVariants) : Mise en exergue (mise en avant) d'un contenu important au sein du texte pour attirer l'œil du lecteur.
+- [Card](/llms/card.md) (Card, CardBody, CardContent, CardDescription, CardFooter, CardHeader, CardImage, CardTitle, cardVariants) : Conteneur cliquable regroupant des informations hétérogènes (image, texte, actions) liées à un même sujet.
+- [Checkbox](/llms/checkbox.md) (Checkbox, checkboxVariants) : Sélection multiple d'options au sein d'un formulaire.
+- [Code](/llms/code.md) : Affiche un extrait de code ou une commande dans le flux de texte.
+- [Command](/llms/command.md) (Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut) : Boîte de recherche avancée filtrable (type Palette de commandes / Spotlight), navigable intégralement au clavier.
+- [ConsentBanner](/llms/consent.md) (ConsentBanner, ConsentBannerActions, ConsentBannerContent, ConsentBannerTitle) : Gestionnaire de consentement aux cookies conforme au RGPD et aux recommandations de la CNIL.
+- [Container](/llms/container.md) : Limite la largeur maximale du contenu et le centre, assurant une lisibilité optimale sur les grands écrans.
+- [DataList](/llms/data-list.md) : Composant DataList de DSFRKit.
+- [DropdownMenu](/llms/dropdown-menu.md) (DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger) : Menu contextuel listant des commandes ou des actions, déclenché par un clic court sur un bouton déclencheur.
+- [Flex](/llms/flex.md) : Conteneur basé sur Flexbox.
+- [Follow](/llms/follow.md) (Follow, FollowDescription, FollowNewsletter, FollowNewsletterForm, FollowSocial, FollowSocialLink, FollowTitle) : Lettre d'information et réseaux sociaux (fr-follow) : bandeau bleu clair placé en bas de page, avant le pied de page, qui invite à suivre l'actualité du site.
+- [Footer](/llms/footer.md) (Footer, FooterBody, FooterBottom, FooterBrand, FooterContent, FooterLegalLinks, FooterLinks, FooterTop, footerInstitutionalLinks) : Pied de page DSFR (fr-footer).
+- [Grid](/llms/grid.md) : Conteneur basé sur CSS Grid.
+- [Header](/llms/header.md) (Header, HeaderActions, HeaderBody, HeaderBrand, HeaderMenuButton, HeaderNav) : Conteneur principal du Header DSFR.
+- [Heading](/llms/heading.md) : Titrage sémantique et visuel pour définir la structure logique de la page (de h1 à h6).
+- [Highlight](/llms/highlight.md) : Mise en valeur d'un texte court ou d'une citation dans le flux de lecture.
+- [HoverCard](/llms/hover-card.md) (HoverCard, HoverCardContent, HoverCardTrigger) : Affiche une carte de prévisualisation au survol d'un élément (utile pour un aperçu rapide sans quitter la page).
+- [Indicator](/llms/indicator.md) (Indicator, indicatorVariants) : Petite pastille (souvent rouge) pour indiquer la présence d'une ou plusieurs notifications ou éléments non lus.
+- [Input](/llms/input.md) (Input, inputVariants, PasswordInput, Textarea, textareaVariants) : Champ de saisie texte simple.
+- [InputOTP](/llms/input-otp.md) (InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot) : Composant InputOTP de DSFRKit.
+- [Kbd](/llms/kbd.md) : Indique une touche ou une combinaison de touches du clavier.
+- [Link](/llms/link.md) (Link, linkVariants) : Lien de navigation standard.
+- [Logo](/llms/logo.md) (Logo, logoVariants, ServiceLogo) : Affiche le logo République Française officiel.
+- [Modal](/llms/modal.md) (Modal, ModalClose, ModalContent, ModalDescription, ModalFooter, ModalHeader, ModalOverlay, ModalPortal, ModalTitle, ModalTrigger) : Fenêtre de dialogue qui se superpose au contenu principal.
+- [NavLink](/llms/nav-link.md) (NavLink, navLinkVariants) : Lien spécifiquement conçu pour la navigation principale (menu).
+- [Navigation](/llms/navigation.md) (Navigation, NavigationItem, NavigationMegaMenu, NavigationMegaMenuCategory, NavigationMenu, NavigationSection) : Navigation principale (fr-nav) et menu latéral (fr-sidemenu).
+- [Notice](/llms/notice.md) (Notice, noticeVariants) : Bandeau d'information importante (fr-notice), affiché en pleine largeur sous l'en-tête.
+- [Pagination](/llms/pagination.md) (Pagination, PaginationContent, PaginationEllipsis, PaginationFirst, PaginationItem, PaginationLast, PaginationLink, PaginationNext, PaginationPrevious) : Permet de naviguer entre les différentes pages d'une liste longue.
+- [Popover](/llms/popover.md) (Popover, PopoverAnchor, PopoverContent, PopoverTrigger) : Boîte contextuelle riche déclenchée au clic (contrairement au tooltip ou menu).
+- [Progress](/llms/progress.md) : Barre de progression indiquant l'état d'avancement d'une tâche (téléchargement, formulaire en plusieurs étapes).
+- [Quote](/llms/quote.md) : Mise en forme spécifique pour rapporter les propos d'une personne avec citation de la source.
+- [RadioGroup](/llms/radio.md) (RadioGroup, RadioGroupItem, radioVariants) : Bouton radio de sélection unique.
+- [Range](/llms/range.md) : Curseur de sélection conforme au DSFR permettant de choisir une valeur numérique (ou un intervalle) sur une plage continue.
+- [ScrollArea](/llms/scroll-area.md) (ScrollArea, ScrollBar) : Un conteneur défilant qui personnalise l'apparence des barres de défilement pour s'intégrer parfaitement au DSFR.
+- [Section](/llms/section.md) : Conteneur sémantique correspondant à une partie de page, incluant par défaut des espacements verticaux cohérents.
+- [Select](/llms/select.md) (Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue) : Menu déroulant pour la sélection d'une option parmi une liste fermée.
+- [Separator](/llms/separator.md) : Ligne de séparation horizontale ou verticale permettant de diviser le contenu visuellement et sémantiquement.
+- [Sheet](/llms/sheet.md) (Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger) : Tiroir latéral (offcanvas) s'ouvrant souvent depuis le bord droit ou gauche de l'écran.
+- [Skeleton](/llms/skeleton.md) : Emplacement factice affiché pendant un chargement de données (placeholder) pour prévenir l'effet de saut.
+- [SkipLinks](/llms/skip-links.md) : Liens d'évitement au début du document améliorant grandement l'accessibilité pour la navigation au clavier.
+- [Stepper](/llms/stepper.md) : Indicateur d'étapes indiquant la progression au travers d'un formulaire fractionné (wizard).
+- [Summary](/llms/summary.md) : Sommaire (fr-summary) : liste numérotée des sections d'une page longue, placée en haut du contenu pour y accéder directement.
+- [Table](/llms/table.md) (Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow) : Affichage de données tabulaires (lignes et colonnes) avec des capacités de tri, pagination ou responsive.
+- [Tabs](/llms/tabs.md) (Tabs, TabsContent, TabsList, TabsTrigger) : Système d'onglets pour alterner l'affichage de plusieurs vues ou catégories de contenu sur le même espace.
+- [Tag](/llms/tag.md) : Étiquette représentant un mot-clé ou une catégorie, statique, navigable ou sélectionnable selon le mode.
+- [Text](/llms/text.md) : Composant standard de base pour l'affichage de la grande majorité des textes, paragraphes, mentions ou labels.
+- [ThemeToggle](/llms/theme-toggle.md) : Bouton pour alterner entre le thème clair et le thème sombre selon le choix de l'utilisateur.
+- [Tile](/llms/tile.md) (Tile, TileGrid) : Tuile cliquable (généralement rectangulaire) avec une grande surface d'activation redirigeant vers une autre page.
+- [Toast](/llms/toast.md) (Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport) : Composant Toast de DSFRKit.
+- [Toaster](/llms/toaster.md) : Composant Toaster de DSFRKit.
+- [Toggle](/llms/toggle.md) (Toggle, toggleVariants) : Interrupteur à bascule pour changer un état binaire avec un effet de bord visuel ou système immédiat.
+- [Tooltip](/llms/tooltip.md) (Tooltip, TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipTrigger) : Bulle d'aide affichée au survol (ou focus) qui décrit ou précise la fonction de l'élément ciblé.
+- [Translate](/llms/translate.md) : Menu ou bouton de choix de langue du site.
+- [Upload](/llms/upload.md) : Champ d'envoi et de dépôt (drag & drop) de fichiers ou de documents.
+- [useToast](/llms/use-toast.md) (toast, useToast) : Composant useToast de DSFRKit.
+
+### Fournisseurs, hooks et utilitaires
+
+- [PolymorphicButton](/llms/polymorphic.md) (PolymorphicButton, PolymorphicLink, Slot) : Utilitaire PolymorphicButton de DSFRKit.
+- [RouterProvider](/llms/router-provider.md) (RouterProvider, useRouter) : Provider de routage pour DSFRKit.
+- [ThemeProvider](/llms/theme-provider.md) (ThemeProvider, useTheme, useThemeOptional) : Provider pour la gestion du thème clair/sombre
+- [ThemeScript](/llms/theme-script.md) (getThemeScriptContent, ThemeScript) : Script inline pour éviter le flash de thème au chargement
+- [useMediaQuery](/llms/use-media-query.md) (useIsDesktop, useIsMobile, useIsTablet, useMediaQuery, usePrefersHighContrast, usePrefersReducedMotion) : Hook pour détecter les media queries
+- [cn](/llms/utils.md) : Fusionne les classes Tailwind de manière intelligente

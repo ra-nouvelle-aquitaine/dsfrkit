@@ -1,35 +1,67 @@
 # Composant Tile
 
+> Tuile cliquable (généralement rectangulaire) avec une grande surface d'activation redirigeant vers une autre page.
+
 ## Import
 ```tsx
-import { Tile } from '@dsfrkit/react'
+import { Tile, TileGrid } from '@dsfrkit/react'
+import type { TileProps } from '@dsfrkit/react'
 ```
 
-## Documentation et Usages
-Composant Tile (Tuile) DSFR
-Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/tuile
-Structure DSFR :
-- Zone image en haut (optionnelle)
-- Corps (titre + description) en bas
-- Lien couvre toute la carte (via position absolute)
-- Pas de border-radius
-- Fond gris clair --background-contrast-grey
-Variantes :
-- default   : tuile verticale standard
-- horizontal : tuile horizontale (image à droite selon DSFR)
-- download  : variante teléchargement (icône dédiée)
-Tailles :
-- md (défaut)
-- sm : title + description plus petits
-- lg : title + description plus grands
+## Usage recommandé
+Tuile cliquable (généralement rectangulaire) avec une grande surface d'activation redirigeant vers une autre page.
 
+## Documentation et exemples
 Tuile DSFR
+
 @example
 // Tuile simple
 <Tile title="Démarches en ligne" description="Effectuez vos démarches" href="/demarches" />
+
 // Tuile avec icône
 <Tile title="Contact" icon={<MailIcon />} href="/contact" />
+
 // Tuile horizontale
 <Tile variant="horizontal" title="Document" description="Consulter le document" href="#" />
+
 // Tuile téléchargement
 <Tile variant="download" title="Formulaire CERFA" detail="PDF – 120 Ko" href="/doc.pdf" />
+
+Grille de tuiles DSFR
+
+## Props et types
+```ts
+export interface TileProps {
+  /** Titre principal de la tuile */
+  title: string
+  /** Description sous le titre */
+  description?: string
+  /** Lien de la tuile (rend la tuile cliquable) */
+  href?: string
+  /** Icône ou image affichée dans la zone supérieure */
+  icon?: React.ReactNode
+  /** Image affichée dans la zone image (src) */
+  imageSrc?: string
+  /** Alt de l'image */
+  imageAlt?: string
+  /** Variante de la tuile */
+  variant?: 'default' | 'horizontal' | 'download'
+  /** Taille */
+  size?: 'sm' | 'md' | 'lg'
+  /** Désactiver l'état hover/focus */
+  disabled?: boolean
+  /** Badge/tag à afficher dans la tuile */
+  badge?: React.ReactNode
+  /** Détail supplémentaire (type de fichier, poids…) */
+  detail?: string
+  /** Classes CSS supplémentaires */
+  className?: string
+  /** Attribut target du lien */
+  target?: React.AnchorHTMLAttributes<HTMLAnchorElement>['target']
+  /** Attribut rel du lien */
+  rel?: string
+}
+```
+
+## Storybook
+Rubrique : `Data Display/Tile`

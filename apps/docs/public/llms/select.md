@@ -1,34 +1,31 @@
 # Composant Select
 
+> Menu déroulant pour la sélection d'une option parmi une liste fermée.
+
 ## Import
 ```tsx
-import { Select } from '@dsfrkit/react'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue } from '@dsfrkit/react'
+import type { SelectTriggerProps } from '@dsfrkit/react'
 ```
 
-## Documentation et Usages
+## Usage recommandé
+Menu déroulant pour la sélection d'une option parmi une liste fermée.
+
+**Quand l'utiliser ?** Typiquement au sein des formulaires HTML ou applicatifs standards où une valeur précise doit être sélectionnée par l'utilisateur parmi une liste d'états (ex: Civilite, Département).
+
+**Alternatives :** Pour déclencher des *actions* applicatives (Dupliquer, Supprimer, Mettre en veille) depuis un bouton menu, utilisez plutôt `DropdownMenu`.
+
+## Documentation et exemples
 Composant Select DSFR
 Utilise Radix UI Select pour l'accessibilité
 Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/liste-deroulante
 
-@example
-```tsx
-<Select>
-<SelectTrigger>
-<SelectValue placeholder="Sélectionnez une option" />
-</SelectTrigger>
-<SelectContent>
-<SelectGroup>
-<SelectLabel>Fruits</SelectLabel>
-<SelectItem value="apple">Pomme</SelectItem>
-<SelectItem value="banana">Banane</SelectItem>
-<SelectItem value="orange">Orange</SelectItem>
-</SelectGroup>
-<SelectSeparator />
-<SelectGroup>
-<SelectLabel>Légumes</SelectLabel>
-<SelectItem value="carrot">Carotte</SelectItem>
-<SelectItem value="potato">Pomme de terre</SelectItem>
-</SelectGroup>
-</SelectContent>
-</Select>
+## Props et types
+```ts
+export interface SelectTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
+    VariantProps<typeof selectTriggerVariants> {}
 ```
+
+## Storybook
+Rubrique : `Inputs/Select`
