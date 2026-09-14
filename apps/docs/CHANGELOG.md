@@ -1,3 +1,14 @@
+# [v1.4.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.4.1...docs@1.4.2) (2026-09-14)
+
+## 🐛 Corrections de bugs
+- [`3ee747a`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/3ee747a)  rétablit la compatibilité 1.2 et les cibles des liens d&#x27;évitement 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.3.2
+
 # [v1.4.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.4.0...docs@1.4.1) (2026-09-14)
 
 ## 🐛 Corrections de bugs
