@@ -1,3 +1,17 @@
+# [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.3.0...@dsfrkit/config@1.4.0) (2026-09-14)
+
+## ♿ Accessibilité
+- [`a55157d`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/a55157d)  corrige les écarts d&#x27;accessibilité et de fidélité de l&#x27;audit dsfr 
+
+## 📝 Documentation
+- [`be0afc0`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/be0afc0)  met à jour les readme et corrige les fichiers de l&#x27;exemple symfony 
+
+
+
+### Dependencies
+
+* **@dsfrkit/tokens:** upgraded to 1.4.0
+
 # [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.2.2...@dsfrkit/config@1.3.0) (2026-06-25)
 
 ## 🎨 Améliorations du code
