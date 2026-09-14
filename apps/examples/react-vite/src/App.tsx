@@ -1,9 +1,12 @@
 import {
+  RiAccountCircleLineIcon,
   RiLayoutLeftLineIcon,
   RiMenuLineIcon,
   RiMore2LineIcon,
   RiNotification3LineIcon,
+  RiQuestionLineIcon,
   RiSearch2LineIcon,
+  RiSearchLineIcon,
 } from '@dsfrkit/icons'
 import {
   Accordion,
@@ -11,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   Alert,
+  Artwork,
   Avatar,
   AvatarFallback,
   Badge,
@@ -66,7 +70,11 @@ import {
   FooterLinks,
   FooterTop,
   Grid,
+  Header,
+  HeaderActions,
+  HeaderBody,
   HeaderBrand,
+  HeaderNav,
   Heading,
   Indicator,
   Input,
@@ -83,7 +91,11 @@ import {
   ModalTrigger,
   Navigation,
   NavigationItem,
+  NavigationMegaMenu,
+  NavigationMegaMenuCategory,
+  NavigationMenu,
   NavigationSection,
+  Notice,
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -109,7 +121,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SkipLinks,
   Stepper,
+  Summary,
   Table,
   TableBody,
   TableCell,
@@ -127,11 +141,13 @@ import {
   ThemeToggle,
   Tile,
   TileGrid,
+  Toaster,
   Toggle,
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
+  useToast,
 } from '@dsfrkit/react'
 import { useEffect, useState } from 'react'
 
@@ -229,89 +245,150 @@ function NotificationDropdown() {
 /* ------------------------------------------------------------------ */
 /*  LAYOUT STANDARD — site vitrine / portail public                    */
 /* ------------------------------------------------------------------ */
+
+const thematiques = [
+  {
+    title: 'Famille',
+    links: ['Naissance', 'Mariage et PACS', 'Divorce et séparation', 'Aides aux familles'],
+  },
+  { title: 'Logement', links: ['Location', 'Achat immobilier', 'Aides au logement', 'Travaux'] },
+  { title: 'Travail', links: ['Contrat de travail', 'Chômage', 'Formation', 'Retraite'] },
+  {
+    title: 'Papiers',
+    links: ['Carte d’identité', 'Passeport', 'Permis de conduire', 'Carte grise'],
+  },
+]
+
+const etapes = [
+  {
+    picto: 'document/document-add',
+    title: 'Pré-demande en ligne',
+    desc: 'Remplissez le formulaire en ligne et obtenez votre numéro de pré-demande.',
+  },
+  {
+    picto: 'buildings/city-hall',
+    title: 'Rendez-vous en mairie',
+    desc: 'Présentez-vous avec vos pièces justificatives et votre numéro de pré-demande.',
+  },
+  {
+    picto: 'document/document-search',
+    title: 'Traitement du dossier',
+    desc: 'Suivez l’avancement de votre dossier en temps réel via le portail.',
+  },
+  {
+    picto: 'document/national-identity-card',
+    title: 'Retrait du titre',
+    desc: "Retirez votre carte d'identité dans un délai de 3 mois après sa mise à disposition.",
+  },
+]
+
 function StandardDemo() {
   const [rangeValue, setRangeValue] = useState([50])
+  const { toast } = useToast()
 
   return (
     <Flex direction="col" className="min-h-screen bg-background">
-      {/* Header DSFR 2-rangées : marque + outils | puis navigation */}
-      <header className="w-full bg-background-elevated border-b border-border">
-        {/* Rangée 1 : Marque + Outils (liens rapides + recherche) */}
-        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 py-4">
+      <SkipLinks
+        links={[
+          { targetId: 'main-content', label: 'Contenu' },
+          { targetId: 'main-navigation', label: 'Menu' },
+          { targetId: 'footer', label: 'Pied de page' },
+        ]}
+      />
+
+      {/* En-tête DSFR : bloc-marque, accès rapides et recherche, puis navigation principale */}
+      <Header>
+        <HeaderBody>
           <HeaderBrand
             logo={<Logo size="md" />}
             serviceTitle="Service Public"
             serviceTagline="Direction générale de l'administration"
             href="/"
           />
-
-          {/* Outils d'accès rapide — bloc droit, structure verticale comme DSFR */}
-          <div className="hidden lg:flex flex-col items-end gap-2">
-            {/* Liens rapides — ligne du haut */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="whitespace-nowrap font-medium gap-1 text-primary w-auto"
-              >
-                Espace pro
+          <HeaderActions className="hidden lg:flex lg:flex-col lg:items-end">
+            <Flex align="center" className="gap-2">
+              <Button variant="ghost" size="sm" icon={<RiQuestionLineIcon />}>
+                Aide
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="whitespace-nowrap font-medium gap-1 text-primary w-auto"
-              >
+              <Button variant="ghost" size="sm" icon={<RiAccountCircleLineIcon />}>
                 Mon compte
               </Button>
-              <ThemeToggle
-                iconOnly
-                variant="ghost"
-                className="text-primary hover:bg-background-alt"
-              />
-            </div>
-            {/* Barre de recherche — ligne du bas */}
-            <div className="w-full max-w-[300px]">
+              <ThemeToggle iconOnly variant="ghost" size="sm" />
+            </Flex>
+            {/* biome-ignore lint/a11y/useSemanticElements: l'élément <search> n'est pas typé par React 18 ; role="search" expose le repère de recherche, comme dans le DSFR. */}
+            <form
+              role="search"
+              className="w-80"
+              onSubmit={(event) => {
+                event.preventDefault()
+                toast({ title: 'Recherche lancée' })
+              }}
+            >
               <Input
                 type="search"
                 placeholder="Rechercher"
                 aria-label="Rechercher sur le site"
                 action={
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    className="px-3"
-                    aria-label="Lancer la recherche"
-                    title="Lancer la recherche"
-                  >
-                    <RiSearch2LineIcon size={18} />
-                  </Button>
+                  <Button type="submit" icon={<RiSearchLineIcon />} aria-label="Rechercher" />
                 }
               />
-            </div>
-          </div>
-
-          {/* Mobile : juste le toggle thème + burger placeholder */}
-          <div className="flex lg:hidden items-center gap-2">
-            <ThemeToggle iconOnly variant="ghost" />
-          </div>
-        </div>
-
-        {/* Rangée 2 : Navigation principale */}
-        <div className="border-t border-border">
-          <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
-            <Navigation orientation="horizontal" aria-label="Navigation principale">
+            </form>
+          </HeaderActions>
+          <HeaderNav>
+            <Navigation id="main-navigation" aria-label="Menu principal">
               <NavigationItem href="#" isActive>
                 Accueil
               </NavigationItem>
-              <NavigationItem href="#">Démarches</NavigationItem>
-              <NavigationItem href="#">Actualités</NavigationItem>
+              <NavigationMenu title="Mes démarches">
+                <NavigationItem href="#">Suivre une démarche</NavigationItem>
+                <NavigationItem href="#">Prendre rendez-vous</NavigationItem>
+                <NavigationItem href="#">Mes documents</NavigationItem>
+                <NavigationItem href="#">Mes paiements</NavigationItem>
+              </NavigationMenu>
+              <NavigationMegaMenu
+                title="Thématiques"
+                leader={{
+                  title: 'Toutes les thématiques',
+                  description:
+                    'Retrouvez les démarches administratives classées par grand thème de la vie quotidienne.',
+                  link: { label: 'Voir toute la rubrique', href: '#' },
+                }}
+              >
+                {thematiques.map((categorie) => (
+                  <NavigationMegaMenuCategory
+                    key={categorie.title}
+                    title={categorie.title}
+                    href="#"
+                  >
+                    {categorie.links.map((lien) => (
+                      <NavigationItem key={lien} href="#">
+                        {lien}
+                      </NavigationItem>
+                    ))}
+                  </NavigationMegaMenuCategory>
+                ))}
+              </NavigationMegaMenu>
+              <NavigationMenu title="Actualités">
+                <NavigationItem href="#">Communiqués de presse</NavigationItem>
+                <NavigationItem href="#">Agenda</NavigationItem>
+                <NavigationItem href="#">Dossiers thématiques</NavigationItem>
+              </NavigationMenu>
               <NavigationItem href="#">Contact</NavigationItem>
             </Navigation>
-          </div>
-        </div>
-      </header>
+          </HeaderNav>
+        </HeaderBody>
+      </Header>
 
-      <main id="main-content" className="flex-1">
+      <Notice
+        variant="warning"
+        title="Maintenance programmée"
+        link={{ label: 'Voir les services concernés', href: '#' }}
+        closable
+      >
+        Le service de pré-demande sera indisponible dimanche de 2h à 6h.
+      </Notice>
+
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
         {/* Fil d'Ariane */}
         <Container size="xl">
           <Box className="pt-2">
@@ -355,7 +432,6 @@ function StandardDemo() {
             </Box>
           </Container>
 
-          {/* Alerte */}
           <Container size="xl" className="mt-8">
             <Alert variant="info" title="Information importante">
               À compter du 1er janvier 2025, les demandes de renouvellement peuvent être effectuées
@@ -374,88 +450,115 @@ function StandardDemo() {
               <Tile
                 title="Pré-demande en ligne"
                 description="Remplissez votre pré-demande depuis chez vous pour gagner du temps au guichet."
+                icon={<Artwork name="digital/application" size={80} />}
                 href="#"
               />
               <Tile
                 title="Pièces justificatives"
                 description="Consultez la liste des documents nécessaires selon votre situation."
+                icon={<Artwork name="document/document" size={80} />}
                 href="#"
               />
               <Tile
                 title="Prendre rendez-vous"
                 description="Trouvez un créneau disponible dans la mairie de votre choix."
+                icon={<Artwork name="digital/calendar" size={80} />}
                 href="#"
               />
             </TileGrid>
           </Container>
         </Section>
 
-        {/* Contenu éditorial */}
+        {/* Contenu éditorial avec sommaire */}
         <Section size="sm">
           <Container size="xl">
-            <Grid className="md:grid-cols-3 gap-8">
-              <Box className="md:col-span-2 space-y-6">
-                <Heading as="h2" size="5">
-                  Comment ça marche ?
-                </Heading>
-                {[
-                  {
-                    step: 1,
-                    title: 'Pré-demande en ligne',
-                    desc: 'Remplissez le formulaire en ligne et obtenez votre numéro de pré-demande.',
-                  },
-                  {
-                    step: 2,
-                    title: 'Rendez-vous en mairie',
-                    desc: 'Présentez-vous avec vos pièces justificatives et votre numéro de pré-demande.',
-                  },
-                  {
-                    step: 3,
-                    title: 'Traitement du dossier',
-                    desc: 'Suivez l’avancement de votre dossier en temps réel via le portail.',
-                  },
-                  {
-                    step: 4,
-                    title: 'Retrait du titre',
-                    desc: "Retirez votre carte d'identité dans un délai de 3 mois après sa mise à disposition.",
-                  },
-                ].map((s) => (
-                  <Flex key={s.step} className="gap-4">
-                    <Flex
-                      align="center"
-                      justify="center"
-                      className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold"
-                    >
-                      {s.step}
-                    </Flex>
-                    <Box>
-                      <Heading as="h3" size="3">
-                        {s.title}
-                      </Heading>
-                      <Text className="text-foreground-muted">{s.desc}</Text>
-                    </Box>
-                  </Flex>
-                ))}
+            <Grid columns="1" className="gap-8 md:grid-cols-12">
+              <Box className="md:col-span-4">
+                <Summary
+                  title="Sur cette page"
+                  items={[
+                    { label: 'Comment ça marche ?', href: '#comment-ca-marche' },
+                    {
+                      label: 'Avant de commencer',
+                      href: '#avant-de-commencer',
+                      items: [
+                        { label: 'Coût', href: '#cout' },
+                        { label: 'Besoin d’aide', href: '#aide' },
+                      ],
+                    },
+                    { label: 'Questions fréquentes', href: '#faq' },
+                  ]}
+                />
               </Box>
-              <Box className="space-y-6">
-                <Callout accent="info" title="Le saviez-vous ?">
-                  La carte nationale d'identité est gratuite en cas de première demande ou de
-                  renouvellement. En cas de perte ou de vol, un timbre fiscal de 25 € est requis.
-                </Callout>
-                <Card>
-                  <CardContent className="p-5">
-                    <CardTitle className="text-base mb-2">Besoin d'aide ?</CardTitle>
-                    <CardDescription className="mb-4">
-                      Contactez le centre d'appels.
-                    </CardDescription>
-                    <Text size="4" weight="bold" className="text-primary">
-                      34 00
-                    </Text>
-                    <Text size="1" className="text-foreground-muted">
-                      Service gratuit + prix d'un appel
-                    </Text>
-                  </CardContent>
-                </Card>
+              <Box className="space-y-10 md:col-span-8">
+                <section className="space-y-6">
+                  <Heading as="h2" size="5" id="comment-ca-marche" className="scroll-mt-4">
+                    Comment ça marche ?
+                  </Heading>
+                  <ol className="m-0 list-none space-y-6 p-0">
+                    {etapes.map((etape, index) => (
+                      <li key={etape.title}>
+                        <Flex align="start" className="gap-4">
+                          <Artwork name={etape.picto} size={64} className="shrink-0" />
+                          <Box>
+                            <Heading as="h3" size="3" className="m-0">
+                              {index + 1}. {etape.title}
+                            </Heading>
+                            <Text className="text-foreground-muted">{etape.desc}</Text>
+                          </Box>
+                        </Flex>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+
+                <section className="space-y-6">
+                  <Heading as="h2" size="5" id="avant-de-commencer" className="scroll-mt-4">
+                    Avant de commencer
+                  </Heading>
+                  <Callout accent="info" title="Coût" id="cout" titleMarkup="h3">
+                    La carte nationale d'identité est gratuite en cas de première demande ou de
+                    renouvellement. En cas de perte ou de vol, un timbre fiscal de 25 € est requis.
+                  </Callout>
+                  <Card id="aide">
+                    <CardHeader>
+                      <CardTitle as="h3">Besoin d'aide ?</CardTitle>
+                      <CardDescription>Contactez le centre d'appels.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Text size="4" weight="bold" className="text-primary">
+                        34 00
+                      </Text>
+                      <Text size="1" className="text-foreground-muted">
+                        Service gratuit + prix d'un appel
+                      </Text>
+                    </CardContent>
+                  </Card>
+                </section>
+
+                <section className="space-y-6">
+                  <Heading as="h2" size="5" id="faq" className="scroll-mt-4">
+                    Questions fréquentes
+                  </Heading>
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="delai">
+                      <AccordionTrigger>Quel est le délai de fabrication ?</AccordionTrigger>
+                      <AccordionContent>
+                        Comptez environ 3 semaines après le rendez-vous en mairie. Les délais
+                        peuvent s'allonger avant les périodes de vacances.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="mineur">
+                      <AccordionTrigger>
+                        Mon enfant mineur peut-il faire la demande ?
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        Oui, en présence d'un parent exerçant l'autorité parentale, qui signe la
+                        demande.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </section>
               </Box>
             </Grid>
           </Container>
@@ -478,82 +581,83 @@ function StandardDemo() {
               <TabsContent value="forms" className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Formulaires</CardTitle>
+                    <CardTitle>Formulaire de contact</CardTitle>
+                    <CardDescription>
+                      Libellés, aides et messages sont portés par les composants de saisie.
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Box>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2">
-                        Nom
-                      </label>
-                      <Input id="name" placeholder="Entrez votre nom" />
-                    </Box>
-                    <Box>
-                      <label htmlFor="email-input" className="block text-sm font-medium mb-2">
-                        Email
-                      </label>
-                      <Input id="email-input" type="email" placeholder="votre@email.fr" />
-                    </Box>
-                    <Box>
-                      <label htmlFor="message" className="block text-sm font-medium mb-2">
-                        Message
-                      </label>
-                      <Textarea id="message" placeholder="Votre message..." rows={3} />
-                    </Box>
-                    <Box>
-                      <Text as="span" size="2" weight="medium" className="block mb-2">
-                        Sélecteur
-                      </Text>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Choisissez" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="a">Option A</SelectItem>
-                          <SelectItem value="b">Option B</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </Box>
-                    <Box className="space-y-2">
-                      <Text as="span" size="2" weight="medium">
-                        Cases à cocher
-                      </Text>
-                      <Flex align="center" className="gap-2">
-                        <Checkbox id="c1" />
-                        <label htmlFor="c1" className="text-sm">
-                          J'accepte les conditions
+                  <CardContent>
+                    <form
+                      className="space-y-6"
+                      onSubmit={(event) => {
+                        event.preventDefault()
+                        toast({
+                          title: 'Message envoyé',
+                          description: 'Nous vous répondrons sous 48 heures.',
+                          variant: 'success',
+                        })
+                      }}
+                    >
+                      <Input label="Nom" autoComplete="family-name" required />
+                      <Input
+                        label="Adresse électronique"
+                        hint="Format attendu : nom@domaine.fr"
+                        type="email"
+                        autoComplete="email"
+                        required
+                      />
+                      <Box className="space-y-2">
+                        <label htmlFor="contact-motif" className="block text-base leading-6">
+                          Motif de la demande
                         </label>
-                      </Flex>
-                    </Box>
-                    <Box className="space-y-2">
-                      <Text as="span" size="2" weight="medium">
-                        Radio
-                      </Text>
-                      <RadioGroup defaultValue="o1">
-                        <Flex align="center" className="gap-2">
-                          <RadioGroupItem value="o1" id="r1" />
-                          <label htmlFor="r1" className="text-sm">
-                            Physique
-                          </label>
-                        </Flex>
-                        <Flex align="center" className="gap-2">
-                          <RadioGroupItem value="o2" id="r2" />
-                          <label htmlFor="r2" className="text-sm">
-                            Morale
-                          </label>
-                        </Flex>
-                      </RadioGroup>
-                    </Box>
-                    <Box className="space-y-2">
-                      <Text as="span" size="2" weight="medium">
-                        Toggle
-                      </Text>
-                      <Toggle>Notifications</Toggle>
-                    </Box>
-                    <Box className="space-y-2">
-                      <Text as="span" size="2" weight="medium">
-                        Range
-                      </Text>
+                        <Select>
+                          <SelectTrigger id="contact-motif">
+                            <SelectValue placeholder="Sélectionnez un motif" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="demarche">Question sur une démarche</SelectItem>
+                            <SelectItem value="technique">Problème technique</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </Box>
+                      <Textarea label="Message" rows={3} />
+                      <fieldset className="m-0 border-0 p-0">
+                        <legend id="contact-profil" className="mb-3 text-base leading-6">
+                          Vous êtes
+                        </legend>
+                        <RadioGroup
+                          aria-labelledby="contact-profil"
+                          defaultValue="particulier"
+                          className="flex flex-row gap-6"
+                        >
+                          <RadioGroupItem value="particulier" label="Un particulier" />
+                          <RadioGroupItem value="professionnel" label="Un professionnel" />
+                        </RadioGroup>
+                      </fieldset>
+                      <fieldset className="m-0 border-0 p-0">
+                        <legend id="contact-rappel" className="mb-3 text-base leading-6">
+                          Comment souhaitez-vous être recontacté ?
+                        </legend>
+                        <RadioGroup
+                          aria-labelledby="contact-rappel"
+                          defaultValue="courriel"
+                          className="grid gap-4 md:grid-cols-2"
+                        >
+                          <RadioGroupItem
+                            value="courriel"
+                            label="Par courriel"
+                            pictogram={<Artwork name="digital/mail-send" size={56} />}
+                          />
+                          <RadioGroupItem
+                            value="rendez-vous"
+                            label="En rendez-vous"
+                            hint="Au guichet de votre mairie"
+                            pictogram={<Artwork name="digital/calendar" size={56} />}
+                          />
+                        </RadioGroup>
+                      </fieldset>
                       <Range
+                        label="Degré d'urgence"
                         value={rangeValue}
                         onValueChange={setRangeValue}
                         min={0}
@@ -562,7 +666,10 @@ function StandardDemo() {
                         showValue
                         formatValue={(v) => `${v} %`}
                       />
-                    </Box>
+                      <Toggle label="Recevoir la copie du message" />
+                      <Checkbox label="J'accepte que mes données soient utilisées pour traiter ma demande" />
+                      <Button type="submit">Envoyer</Button>
+                    </form>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -572,7 +679,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Modales</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex flex-row flex-wrap gap-4 p-6">
+                  <CardContent className="flex flex-row flex-wrap gap-4">
                     <Modal>
                       <ModalTrigger asChild>
                         <Button>Ouvrir la modale</Button>
@@ -593,13 +700,19 @@ function StandardDemo() {
                         </ModalFooter>
                       </ModalContent>
                     </Modal>
+                    <Button
+                      variant="secondary"
+                      onClick={() => toast({ title: 'Brouillon enregistré', variant: 'success' })}
+                    >
+                      Afficher un toast
+                    </Button>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader>
                     <CardTitle>Consentement</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  <CardContent>
                     <ConsentBannerDemo />
                   </CardContent>
                 </Card>
@@ -607,7 +720,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Infobulles</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex gap-4 p-6">
+                  <CardContent className="flex gap-4">
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -625,7 +738,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Alertes</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4 p-6">
+                  <CardContent className="space-y-4">
                     <Alert variant="info" title="Information">
                       Ceci est une alerte d'information.
                     </Alert>
@@ -644,7 +757,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Badges & Tags</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4 p-6">
+                  <CardContent className="space-y-4">
                     <Flex wrap="wrap" className="gap-2">
                       <Badge>Défaut</Badge>
                       <Badge variant="success">Succès</Badge>
@@ -665,31 +778,9 @@ function StandardDemo() {
                 </Card>
                 <Card>
                   <CardHeader>
-                    <CardTitle>Accordéons</CardTitle>
+                    <CardTitle>Citation et indicateur d'étapes</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-6">
-                    <Accordion type="single" collapsible className="w-full">
-                      <AccordionItem value="i1">
-                        <AccordionTrigger>Qu'est-ce que le DSFR ?</AccordionTrigger>
-                        <AccordionContent>
-                          Le Système de Design de l'État (DSFR) est un ensemble de composants
-                          réutilisables.
-                        </AccordionContent>
-                      </AccordionItem>
-                      <AccordionItem value="i2">
-                        <AccordionTrigger>Comment utiliser DSFRKit ?</AccordionTrigger>
-                        <AccordionContent>
-                          Il suffit d'installer le paquet et d'importer les composants nécessaires.
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Divers</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6 p-6">
+                  <CardContent className="space-y-6">
                     <Quote author="Victor Hugo" sourceItems={[{ label: 'Les Misérables' }]}>
                       La liberté commence où l'ignorance finit.
                     </Quote>
@@ -710,7 +801,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Liens</CardTitle>
                   </CardHeader>
-                  <CardContent className="flex flex-col space-y-2 p-6">
+                  <CardContent className="flex flex-col space-y-2">
                     <Link href="#">Lien par défaut</Link>
                     <Link href="#" variant="muted">
                       Lien atténué
@@ -724,7 +815,7 @@ function StandardDemo() {
                   <CardHeader>
                     <CardTitle>Pagination</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  <CardContent>
                     <Pagination>
                       <PaginationContent>
                         <PaginationItem>
@@ -765,7 +856,7 @@ function StandardDemo() {
             <Heading as="h2" size="5" className="mb-6">
               Actualités
             </Heading>
-            <Grid className="md:grid-cols-3 gap-6">
+            <Grid columns="1" className="gap-6 md:grid-cols-3">
               {[
                 {
                   date: '15 mars 2025',
@@ -784,14 +875,14 @@ function StandardDemo() {
                 },
               ].map((a) => (
                 <Card key={a.title}>
-                  <CardContent className="p-5">
-                    <Text size="1" className="text-foreground-muted mb-2">
+                  <CardHeader>
+                    <Text size="1" className="m-0 text-foreground-muted">
                       {a.date}
                     </Text>
-                    <CardTitle className="text-base mb-2">{a.title}</CardTitle>
+                    <CardTitle as="h3">{a.title}</CardTitle>
                     <CardDescription>{a.desc}</CardDescription>
-                  </CardContent>
-                  <CardFooter className="px-5 pb-5">
+                  </CardHeader>
+                  <CardFooter>
                     <Link href="#">Lire la suite</Link>
                   </CardFooter>
                 </Card>
@@ -806,7 +897,9 @@ function StandardDemo() {
           title="Abonnez-vous à notre lettre d'information"
           description="Vous recevrez chaque semaine les dernières actualités."
         >
-          <FollowNewsletterForm onSubmit={() => undefined} />
+          <FollowNewsletterForm
+            onSubmit={() => toast({ title: 'Inscription enregistrée', variant: 'success' })}
+          />
         </FollowNewsletter>
         <FollowSocial>
           <FollowSocialLink network="facebook" href="https://www.facebook.com" />
@@ -817,22 +910,30 @@ function StandardDemo() {
         </FollowSocial>
       </Follow>
 
-      <Footer>
+      <Footer id="footer">
         <FooterTop>
-          <FooterLinks title="À propos">
+          <FooterLinks title="Démarches" titleAs="h2">
+            <a href="#identite">Carte d'identité</a>
+            <a href="#passeport">Passeport</a>
+            <a href="#permis">Permis de conduire</a>
+          </FooterLinks>
+          <FooterLinks title="À propos" titleAs="h2">
             <a href="#missions">Missions</a>
             <a href="#organisation">Organisation</a>
             <a href="#budget">Budget</a>
           </FooterLinks>
-          <FooterLinks title="Aide">
+          <FooterLinks title="Aide" titleAs="h2">
             <a href="#faq">FAQ</a>
             <a href="#contact">Contact</a>
-            <a href="#accessibilite">Accessibilité</a>
           </FooterLinks>
         </FooterTop>
         <FooterBody>
-          <FooterBrand logo={<Logo size="lg" />} href="/" />
-          <FooterContent description="Service public de délivrance des titres d'identité." />
+          <FooterBrand
+            logo={<Logo size="lg" />}
+            href="/"
+            linkTitle="Retour à l’accueil du site - Service Public"
+          />
+          <FooterContent description="Service public de délivrance des titres d'identité : pré-demande en ligne, prise de rendez-vous et suivi de votre dossier." />
         </FooterBody>
         <FooterBottom copyright="Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de ce site sont proposés sous licence etalab-2.0">
           <FooterLegalLinks>
@@ -840,6 +941,7 @@ function StandardDemo() {
             <a href="#accessibilite">Accessibilité : partiellement conforme</a>
             <a href="#mentions">Mentions légales</a>
             <a href="#donnees">Données personnelles</a>
+            <a href="#cookies">Gestion des cookies</a>
           </FooterLegalLinks>
         </FooterBottom>
       </Footer>
@@ -970,13 +1072,7 @@ function DashboardDemo() {
         className={`flex-shrink-0 bg-background border-r border-border hidden md:flex flex-col transition-all duration-200 ${sidebarOpen ? 'w-64' : 'w-0 overflow-hidden border-r-0'}`}
       >
         <Flex align="center" className="h-16 gap-3 px-4 border-b border-border shrink-0">
-          <Flex
-            align="center"
-            justify="center"
-            className="w-10 h-10 bg-primary text-primary-foreground rounded-lg font-bold text-lg"
-          >
-            App
-          </Flex>
+          <Logo size="sm" showMotto={false} />
           <Flex direction="col" className="min-w-0">
             <Text as="span" size="2" weight="bold" className="leading-tight truncate">
               MonApplication
@@ -995,24 +1091,17 @@ function DashboardDemo() {
           {/* Mobile: Sheet sidebar trigger */}
           <Sheet>
             <SheetTrigger asChild>
-              <button
-                type="button"
-                className="md:hidden p-2 rounded-md text-foreground hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              <Button
+                variant="ghost"
+                className="md:hidden"
+                icon={<RiMenuLineIcon />}
                 aria-label="Ouvrir le menu"
-              >
-                <RiMenuLineIcon size={20} aria-hidden="true" />
-              </button>
+              />
             </SheetTrigger>
             <SheetContent side="left" className="p-0 w-72 flex flex-col">
               <SheetHeader className="px-4 pt-12 pb-4 border-b border-border">
                 <SheetTitle className="flex items-center gap-3">
-                  <Flex
-                    align="center"
-                    justify="center"
-                    className="w-8 h-8 bg-primary text-primary-foreground rounded-lg font-bold text-sm"
-                  >
-                    App
-                  </Flex>
+                  <Logo size="sm" showMotto={false} />
                   MonApplication
                 </SheetTitle>
               </SheetHeader>
@@ -1021,18 +1110,14 @@ function DashboardDemo() {
           </Sheet>
 
           {/* Desktop: toggle sidebar */}
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             onClick={() => setSidebarOpen((v) => !v)}
-            className="hidden md:flex p-2 rounded-md text-foreground hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="hidden md:inline-flex"
+            icon={sidebarOpen ? <RiLayoutLeftLineIcon /> : <RiMenuLineIcon />}
             aria-label={sidebarOpen ? 'Réduire le menu' : 'Ouvrir le menu'}
-          >
-            {sidebarOpen ? (
-              <RiLayoutLeftLineIcon size={20} aria-hidden="true" />
-            ) : (
-              <RiMenuLineIcon size={20} aria-hidden="true" />
-            )}
-          </button>
+            aria-expanded={sidebarOpen}
+          />
 
           {/* Search bar */}
           <Flex align="center" className="flex-1 min-w-0 px-1 md:px-4">
@@ -1084,10 +1169,7 @@ function DashboardDemo() {
             <ThemeToggle size="lg" iconOnly variant="ghost" className="h-full" />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className="flex items-center gap-2 p-2 h-full px-3 rounded-none hover:bg-background-contrast transition-colors border-l border-border"
-                >
+                <Button variant="ghost" className="h-full gap-2 border-l border-border px-3">
                   <Avatar className="w-8 h-8">
                     <AvatarFallback>JD</AvatarFallback>
                   </Avatar>
@@ -1099,7 +1181,7 @@ function DashboardDemo() {
                       Administrateur
                     </Text>
                   </Box>
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" sideOffset={8} className="min-w-[200px]">
                 <Box className="px-4 py-3 border-b border-border">
@@ -1273,9 +1355,12 @@ function DashboardDemo() {
                             <TableCell>
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                    <RiMore2LineIcon size={16} aria-hidden="true" />
-                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    icon={<RiMore2LineIcon />}
+                                    aria-label={`Actions pour le dossier ${d.ref}`}
+                                  />
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuItem>Voir le dossier</DropdownMenuItem>
@@ -1406,6 +1491,8 @@ function App() {
   return (
     <ThemeProvider>
       <AppContent />
+      {/* Une seule fois, à la racine : affiche les notifications de toast() */}
+      <Toaster />
     </ThemeProvider>
   )
 }

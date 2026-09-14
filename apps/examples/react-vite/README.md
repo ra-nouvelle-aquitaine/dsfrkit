@@ -2,7 +2,7 @@
 
 Application de démonstration de DSFRKit, publiée sur [ra-nouvelle-aquitaine.github.io/dsfrkit/example](https://ra-nouvelle-aquitaine.github.io/dsfrkit/example/). Elle assemble les composants de `@dsfrkit/react` dans deux gabarits, accessibles par un sélecteur en haut de page :
 
-- **Standard** — site vitrine ou portail public : en-tête et navigation, fil d'Ariane, alertes, formulaire, onglets, tuiles, cartes, pagination, lettre d'information et pied de page ;
+- **Standard** — site vitrine ou portail public : liens d'évitement, en-tête DSFR avec menus déroulants et méga-menu, bandeau d'information, fil d'Ariane, tuiles à pictogrammes, sommaire, formulaire complet (dont radios riches) avec notifications toast, lettre d'information et pied de page ;
 - **Dashboard** — application métier : menu latéral, tableau de dossiers, indicateurs de progression, notifications.
 
 ## Lancer l'exemple
