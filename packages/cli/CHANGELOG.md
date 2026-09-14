@@ -1,3 +1,8 @@
+# [v1.2.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/cli@1.2.1...@dsfrkit/cli@1.2.2) (2026-09-14)
+
+## 📝 Documentation
+- [`be0afc0`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/be0afc0)  met à jour les readme et corrige les fichiers de l&#x27;exemple symfony
+
 # [v1.2.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/cli@1.2.0...@dsfrkit/cli@1.2.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
