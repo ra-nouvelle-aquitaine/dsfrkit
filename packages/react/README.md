@@ -55,7 +55,7 @@ export default {
 ### Fournisseurs
 
 ```tsx
-import { RouterProvider, ThemeProvider } from '@dsfrkit/react'
+import { RouterProvider, ThemeProvider, Toaster } from '@dsfrkit/react'
 import { Link as RouterLink } from 'react-router-dom'
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -64,13 +64,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
       Link={RouterLink}
       linkPropsAdapter={({ href, ...rest }) => ({ to: href, ...rest })}
     >
-      <ThemeProvider defaultTheme="system">{children}</ThemeProvider>
+      <ThemeProvider defaultTheme="system">
+        {children}
+        <Toaster />
+      </ThemeProvider>
     </RouterProvider>
   )
 }
 ```
 
 - `ThemeProvider` gère le thème clair, sombre ou système (`useTheme` pour le lire ou le changer). `ThemeScript` évite le flash de thème au chargement en rendu serveur.
+- `Toaster` doit être monté **une fois** à la racine (à côté du `ThemeProvider`) pour que les notifications de `toast()` et `useToast()` s'affichent : sans lui, elles sont mises en file mais jamais rendues.
 - `RouterProvider` est facultatif. Quand il est présent, les adresses internes (`/…`) passées en `href` aux composants (`Link`, `NavigationItem`, `Breadcrumb`, `Pagination`, `Summary`, `Tile`, `Footer`…) passent par le routeur de l'application. Avec Next.js, `<RouterProvider Link={NextLink}>` suffit.
 
 ## Utilisation

@@ -6,6 +6,13 @@ import * as React from 'react'
 
 import { cn } from '../../lib/utils'
 
+/**
+ * Primitives Toast (Radix UI), pour écrire un `Toaster` personnalisé.
+ *
+ * Dans la plupart des cas, montez `<Toaster />` et appelez `toast()` : ces
+ * primitives ne sont utiles que pour changer le rendu. Elles doivent alors être
+ * rendues dans un `ToastProvider` contenant un `ToastViewport`.
+ */
 const ToastProvider = ToastPrimitives.Provider
 
 const ToastViewport = React.forwardRef<

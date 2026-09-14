@@ -16,6 +16,12 @@ Le projet contient un système dédié pour l'iconographie :
 - **Icônes** : Utilise le package `@dsfrkit/icons`. Les imports se terminent par `Icon` (ex: `import { MailIcon } from '@dsfrkit/icons'`). Passe les en prop `icon` (ex: `<Button icon={<MailIcon />} />`).
 - **Artworks** : Le composant `Artwork` fournit les pictogrammes officiels DSFR multicolores (ex: `<Artwork name="environment/sun" size={80} />`). En cas d'artworks manquants, conseille la commande `npx @dsfrkit/cli fetch-artworks`.
 
+## 🧩 Mise en place à la racine de l'application
+- `ThemeProvider` : thème clair / sombre (obligatoire).
+- `Toaster` : à monter **une seule fois** si l'application utilise `toast()` ou `useToast()` ; sans lui, aucune notification ne s'affiche.
+- `RouterProvider` : facultatif, pour la navigation sans rechargement.
+- CSS : `@import '@dsfrkit/tokens/theme.css';` en tête de la feuille de styles, preset `@dsfrkit/config` dans `tailwind.config.js` avec `./node_modules/@dsfrkit/react/dist/**/*.{js,mjs}` dans `content`.
+
 ## 📦 Catalogue
 
 Voici la liste exhaustive des exports publics de `@dsfrkit/react`, générée depuis `packages/react/src/index.ts`. Chaque fiche donne l'import exact (sous-composants compris), les recommandations d'usage, les exemples et l'interface des props.
@@ -82,13 +88,13 @@ Voici la liste exhaustive des exports publics de `@dsfrkit/react`, générée de
 - [Text](/llms/text.md) : Composant standard de base pour l'affichage de la grande majorité des textes, paragraphes, mentions ou labels.
 - [ThemeToggle](/llms/theme-toggle.md) : Bouton pour alterner entre le thème clair et le thème sombre selon le choix de l'utilisateur.
 - [Tile](/llms/tile.md) (Tile, TileGrid) : Tuile cliquable (généralement rectangulaire) avec une grande surface d'activation redirigeant vers une autre page.
-- [Toast](/llms/toast.md) (Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport) : Composant Toast de DSFRKit.
-- [Toaster](/llms/toaster.md) : Composant Toaster de DSFRKit.
+- [Toast](/llms/toast.md) (Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport) : Primitives Toast (Radix UI), pour écrire un Toaster personnalisé.
+- [Toaster](/llms/toaster.md) : Notification éphémère et non bloquante qui apparaît brièvement (en bas de l'écran) puis disparaît d'elle-même.
 - [Toggle](/llms/toggle.md) (Toggle, toggleVariants) : Interrupteur à bascule pour changer un état binaire avec un effet de bord visuel ou système immédiat.
 - [Tooltip](/llms/tooltip.md) (Tooltip, TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipTrigger) : Bulle d'aide affichée au survol (ou focus) qui décrit ou précise la fonction de l'élément ciblé.
 - [Translate](/llms/translate.md) : Menu ou bouton de choix de langue du site.
 - [Upload](/llms/upload.md) : Champ d'envoi et de dépôt (drag & drop) de fichiers ou de documents.
-- [useToast](/llms/use-toast.md) (toast, useToast) : Composant useToast de DSFRKit.
+- [useToast](/llms/use-toast.md) (toast, useToast) : Accès aux toasts depuis un composant : toast() pour en afficher un, dismiss(id?) pour les fermer, toasts pour lire la file.
 
 ### Fournisseurs, hooks et utilitaires
 

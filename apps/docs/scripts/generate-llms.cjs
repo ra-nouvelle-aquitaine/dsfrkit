@@ -42,6 +42,12 @@ Le projet contient un système dédié pour l'iconographie :
 - **Icônes** : Utilise le package \`@dsfrkit/icons\`. Les imports se terminent par \`Icon\` (ex: \`import { MailIcon } from '@dsfrkit/icons'\`). Passe les en prop \`icon\` (ex: \`<Button icon={<MailIcon />} />\`).
 - **Artworks** : Le composant \`Artwork\` fournit les pictogrammes officiels DSFR multicolores (ex: \`<Artwork name="environment/sun" size={80} />\`). En cas d'artworks manquants, conseille la commande \`npx @dsfrkit/cli fetch-artworks\`.
 
+## 🧩 Mise en place à la racine de l'application
+- \`ThemeProvider\` : thème clair / sombre (obligatoire).
+- \`Toaster\` : à monter **une seule fois** si l'application utilise \`toast()\` ou \`useToast()\` ; sans lui, aucune notification ne s'affiche.
+- \`RouterProvider\` : facultatif, pour la navigation sans rechargement.
+- CSS : \`@import '@dsfrkit/tokens/theme.css';\` en tête de la feuille de styles, preset \`@dsfrkit/config\` dans \`tailwind.config.js\` avec \`./node_modules/@dsfrkit/react/dist/**/*.{js,mjs}\` dans \`content\`.
+
 ## 📦 Catalogue
 
 Voici la liste exhaustive des exports publics de \`@dsfrkit/react\`, générée depuis \`packages/react/src/index.ts\`. Chaque fiche donne l'import exact (sous-composants compris), les recommandations d'usage, les exemples et l'interface des props.
@@ -170,15 +176,27 @@ const extractTypeSource = (content, name) => {
   return content.slice(match.index).trimEnd()
 }
 
+/** Première phrase du premier paragraphe (lignes jointes jusqu'à la ligne vide). */
 const firstSentence = (text) => {
-  const plain = text
-    .replace(/`/g, '')
-    .replace(/\*\*/g, '')
-    .split('\n')
-    .find((line) => line.trim() && !line.startsWith('#') && !line.startsWith('@'))
-  if (!plain) return ''
-  const sentence = plain.trim().match(/^.*?[.!?](?=\s|$)/)
-  return (sentence ? sentence[0] : plain.trim()).replace(/\s+/g, ' ')
+  const lines = text.replace(/`/g, '').replace(/\*\*/g, '').split('\n')
+  const start = lines.findIndex(
+    (line) => line.trim() && !line.startsWith('#') && !line.startsWith('@')
+  )
+  if (start === -1) return ''
+  // Le paragraphe s'arrête à la ligne vide, ou quand une ligne sans ponctuation
+  // finale est suivie d'une majuscule (phrase JSDoc écrite sans point).
+  const end = lines.findIndex(
+    (line, index) =>
+      index > start &&
+      (!line.trim() || (/^\s*\p{Lu}/u.test(line) && !/[.!?:,;]\s*$/.test(lines[index - 1])))
+  )
+  const paragraph = lines
+    .slice(start, end === -1 ? undefined : end)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+  const sentence = paragraph.match(/^.*?[.!?](?=\s|$)/)
+  return sentence ? sentence[0] : paragraph
 }
 
 // ─── 4. Écriture des fiches ──────────────────────────────────────────────────

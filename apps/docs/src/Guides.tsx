@@ -197,15 +197,20 @@ export function InstallationGuide() {
       {/* SECTION BASSE : Fichiers manquants (Provider) */}
       <Box className="space-y-6 pt-8 border-t border-border">
         <Heading as="h3" size="4">
-          Dernière étape : Ajouter le ThemeProvider
+          Dernière étape : Ajouter les fournisseurs
         </Heading>
         <Text className="text-foreground-muted">
           Puisque DSFRKit délègue l'exécution à Tailwind et Radix, un seul point d'entrée contextuel
           est nécessaire au sommet de votre arbre React pour synchroniser les thèmes (Clair/Sombre)
           du DSFR.
         </Text>
+        <Text className="text-foreground-muted">
+          Si l'application affiche des notifications éphémères, montez aussi <Code>Toaster</Code>{' '}
+          une seule fois à cet endroit : <Code>toast()</Code> et <Code>useToast()</Code> ne font
+          qu'ajouter la notification à une file, et rien ne s'affiche sans lui.
+        </Text>
         <CodeBlock
-          code={`// src/main.tsx ou src/App.tsx\nimport { ThemeProvider } from '@dsfrkit/react'\n\nfunction App() {\n  return (\n    <ThemeProvider defaultTheme="system">\n      <MyApp />\n    </ThemeProvider>\n  )\n}`}
+          code={`// src/main.tsx ou src/App.tsx\nimport { ThemeProvider, Toaster } from '@dsfrkit/react'\n\nfunction App() {\n  return (\n    <ThemeProvider defaultTheme="system">\n      <MyApp />\n      <Toaster />\n    </ThemeProvider>\n  )\n}`}
         />
       </Box>
     </Box>
@@ -223,8 +228,9 @@ export function RoutingGuide() {
         librairie de routage de façon globale directement dans l'arbre React à la racine ! Tous les
         composants DSFRKit qui portent une adresse interne s'y branchent alors seuls :{' '}
         <Code>Link</Code>, <Code>NavLink</Code>, <Code>BreadcrumbLink</Code>,{' '}
-        <Code>Pagination</Code>, <Code>Tag</Code>, <Code>Tile</Code>, <Code>HeaderBrand</Code>,{' '}
-        <Code>FooterBrand</Code>, <Code>NavigationItem</Code> et <Code>Translate</Code>.
+        <Code>Pagination</Code>, <Code>Tag</Code>, <Code>Tile</Code>, <Code>HeaderBrand</Code>, les
+        liens du <Code>Footer</Code>, <Code>NavigationItem</Code> (menus et méga-menus compris),{' '}
+        <Code>Summary</Code>, le lien de <Code>Notice</Code> et <Code>Translate</Code>.
       </Text>
       <Text className="text-foreground-muted mb-4 block">
         Restent confiées au navigateur les adresses que le routeur ne sait pas suivre : URL absolue,

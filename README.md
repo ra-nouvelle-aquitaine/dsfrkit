@@ -93,18 +93,30 @@ export default {
 ## Utilisation
 
 ```tsx
-import { ThemeProvider, Button, Alert } from '@dsfrkit/react'
+import { Alert, Button, ThemeProvider, Toaster, useToast } from '@dsfrkit/react'
 
-function App() {
+function Page() {
+  const { toast } = useToast()
+
   return (
-    <ThemeProvider defaultTheme="system">
-      <Button variant="primary" size="lg">
-        Valider
-      </Button>
-
+    <>
       <Alert variant="success" title="Succès">
         Votre action a été effectuée avec succès.
       </Alert>
+
+      <Button variant="primary" size="lg" onClick={() => toast({ title: 'Brouillon enregistré' })}>
+        Enregistrer
+      </Button>
+    </>
+  )
+}
+
+export function App() {
+  return (
+    <ThemeProvider defaultTheme="system">
+      <Page />
+      {/* Une seule fois, à la racine : sans lui, toast() n'affiche rien */}
+      <Toaster />
     </ThemeProvider>
   )
 }
