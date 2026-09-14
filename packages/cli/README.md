@@ -1,49 +1,76 @@
 # @dsfrkit/cli
 
-CLI pour installer et copier les composants DSFR dans votre projet.
+CLI pour configurer un projet React avec DSFRKit et copier des composants DSFR dans votre code, à la manière de shadcn/ui.
 
-## Installation
+## Utilisation
 
 ```bash
-# Via pnpm (recommandé)
+# Sans installation
 pnpm dlx @dsfrkit/cli init
-
-# Via npx
 npx @dsfrkit/cli init
 
 # Installation globale
 pnpm add -g @dsfrkit/cli
+dsfrkit init
 ```
 
 ## Commandes
 
 ### `init`
 
-Initialise le projet avec la configuration DSFR.
+Configure le projet courant pour DSFRKit.
 
 ```bash
 dsfrkit init
 ```
 
-Cette commande :
-- ✅ Crée le dossier `src/components/ui`
-- ✅ Crée le fichier `src/lib/utils.ts` avec la fonction `cn()`
-- ✅ Configure `tailwind.config.js` avec le preset DSFR
-- ✅ Installe les dépendances nécessaires
+Sans `package.json` dans le dossier, la commande propose d'abord de créer un projet React + TypeScript avec Vite (npm, pnpm, yarn ou bun).
+
+Elle pose ensuite quatre questions — dossier des composants (`src/components/ui` par défaut), installation des dépendances, téléchargement des pictogrammes, fichiers d'instructions pour les assistants IA — puis :
+
+- crée le dossier des composants ;
+- crée `src/lib/utils.ts` avec la fonction `cn()` ;
+- crée `tailwind.config.js` avec le preset `@dsfrkit/config` (un fichier existant n'est pas écrasé : la commande indique le preset et le `content` à ajouter) ;
+- crée `src/index.css` avec l'import de `@dsfrkit/tokens/theme.css` et les directives Tailwind, ou signale l'import manquant si le fichier existe déjà ;
+- si demandé, installe `@dsfrkit/config`, `tailwindcss`, `class-variance-authority`, `clsx`, `tailwind-merge` (développement) et `@dsfrkit/tokens` ;
+- si demandé, télécharge les pictogrammes officiels (voir `fetch-artworks`) ;
+- si demandé, écrit les instructions IA qui renvoient vers [`llms.txt`](https://ra-nouvelle-aquitaine.github.io/dsfrkit/llms.txt) : `.github/copilot-instructions.md` (GitHub Copilot), `clauderc.md` (Claude Code), `.cursorrules` (Cursor), `.windsurfrules` (Windsurf), `AGENTS.md` (OpenAI Codex et autres).
 
 ### `add`
 
-Ajoute des composants au projet.
+Copie le code source de composants dans le projet.
 
 ```bash
-# Ajouter des composants spécifiques
+# Composants nommés
 dsfrkit add button alert
 
-# Mode interactif
+# Sélection interactive
 dsfrkit add
 ```
 
-Cette commande copie les composants dans `src/components/ui/` avec toutes leurs dépendances.
+Les fichiers sont écrits dans le premier dossier existant parmi `src/components/ui`, `components/ui` et `app/components/ui`, ou dans `src/components/ui` créé pour l'occasion.
+
+| Nom | Composant | Fichiers |
+|-----|-----------|----------|
+| `button` | Button | `button.tsx` |
+| `alert` | Alert | `alert.tsx` |
+| `card` | Card | `card.tsx` |
+| `input` | Input | `input.tsx` |
+| `modal` | Modal | `modal.tsx` |
+| `select` | Select | `select.tsx` |
+| `themetoggle` | ThemeToggle | `theme-toggle.tsx`, `theme-artwork.tsx` (télécharge aussi les pictogrammes) |
+
+Les autres composants de la bibliothèque (Navigation, Footer, Notice, Summary, Stepper…) s'utilisent depuis le paquet [`@dsfrkit/react`](../react), qui peut cohabiter avec les composants copiés.
+
+Les composants copiés importent `cn` depuis `@/lib/utils` : l'alias `@` doit pointer vers `src` dans la configuration TypeScript et du bundler.
+
+### `fetch-artworks`
+
+Télécharge les pictogrammes SVG officiels depuis le [dépôt du DSFR](https://github.com/GouvernementFR/dsfr) (clone partiel, `git` requis) et les copie dans `public/dist/artwork`.
+
+```bash
+dsfrkit fetch-artworks
+```
 
 ## Workflow recommandé
 
@@ -59,32 +86,23 @@ Cette commande copie les composants dans `src/components/ui/` avec toutes leurs 
 
 3. **Utiliser les composants**
    ```tsx
-   import { Button } from '@/components/ui/button'
    import { Alert } from '@/components/ui/alert'
+   import { Button } from '@/components/ui/button'
 
-   function App() {
+   export function App() {
      return (
-       <div>
+       <>
+         <Alert variant="success" title="Succès">
+           Votre demande a été enregistrée.
+         </Alert>
          <Button variant="primary">Valider</Button>
-         <Alert variant="success">Succès !</Alert>
-       </div>
+       </>
      )
    }
    ```
 
-4. **Personnaliser selon vos besoins**
+4. **Personnaliser** : les composants copiés vous appartiennent, modifiez-les librement.
 
-   Les composants sont copiés dans votre projet, vous pouvez les modifier librement !
-
-## Composants disponibles
-
-- ✅ `button` - Bouton DSFR avec variants
-- ✅ `alert` - Alerte DSFR
-- 🚧 `card` - Carte (à venir)
-- 🚧 `input` - Champ de formulaire (à venir)
-- 🚧 `modal` - Modale (à venir)
-- 🚧 Plus de composants bientôt...
-
-## License
+## Licence
 
 ETALAB-2.0

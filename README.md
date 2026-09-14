@@ -37,17 +37,22 @@ Composants React accessibles et conformes au [Système de Design de l'État fran
 
 ### Méthode 1 : CLI (recommandée)
 ```bash
-# 2. Initialiser le projet (génère tailwind.config, tokens, etc.)
+# 1. Initialiser le projet (tailwind.config.js, src/index.css, src/lib/utils.ts, dépendances)
 pnpm dlx @dsfrkit/cli init
 
-# 3. Ajouter des composants à la carte
+# 2. Copier des composants dans src/components/ui
 pnpm dlx @dsfrkit/cli add button alert card modal
 ```
 
-### Méthode 2 :  NPM Classique
+> La commande `add` propose pour l'instant `button`, `alert`, `card`, `input`, `modal`, `select` et `themetoggle`. Les autres composants s'utilisent depuis le paquet `@dsfrkit/react` (méthode 2), que les deux approches peuvent combiner.
+
+### Méthode 2 : paquet npm
 ```bash
-# Installer le preset Tailwind et tous les composants
+# Preset Tailwind et thème (variables CSS et polices)
 pnpm add -D @dsfrkit/config tailwindcss
+pnpm add @dsfrkit/tokens
+
+# Tous les composants et les icônes
 pnpm add @dsfrkit/react @dsfrkit/icons
 ```
 
@@ -131,7 +136,9 @@ function App() {
 }
 ```
 
-Routeurs supportés : **React Router**, **TanStack Router**, **Next.js**. Voir la [documentation Routing](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/?path=/docs/guides-routing--docs) pour les détails.
+Une fois le `RouterProvider` en place, les adresses internes (`/…`) de tous les composants — `Link`, `NavigationItem`, `Breadcrumb`, `Summary`, `Tile`, `Footer`… — passent par le routeur, sans `asChild`. Les URL absolues, ancres `#` et liens `target="_blank"` restent des liens natifs.
+
+Routeurs supportés : **React Router**, **TanStack Router**, **Next.js**. Voir le [guide d'installation et de routage](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/?path=/docs/installation--docs) pour les détails.
 
 ---
 
@@ -139,11 +146,11 @@ Routeurs supportés : **React Router**, **TanStack Router**, **Next.js**. Voir l
 
 | Package | Description |
 |---------|-------------|
-| [`@dsfrkit/react`](./packages/react) | Composants React (60+) |
-| [`@dsfrkit/tokens`](./packages/tokens) | Design tokens DSFR (couleurs, typographie, espacements) |
+| [`@dsfrkit/react`](./packages/react) | Composants React (60+), fournisseurs de thème et de routage |
+| [`@dsfrkit/tokens`](./packages/tokens) | Design tokens DSFR (couleurs, typographie, espacements) et `theme.css` (variables, polices) |
 | [`@dsfrkit/config`](./packages/config) | Preset Tailwind CSS pour le DSFR |
-| [`@dsfrkit/icons`](./packages/icons) | Icônes React optimisées |
-| [`@dsfrkit/cli`](./packages/cli) | CLI pour copier les composants dans votre projet |
+| [`@dsfrkit/icons`](./packages/icons) | Icônes React (Remix Icon, standard du DSFR) |
+| [`@dsfrkit/cli`](./packages/cli) | CLI : initialisation du projet, copie de composants, pictogrammes |
 
 ---
 
@@ -151,16 +158,25 @@ Routeurs supportés : **React Router**, **TanStack Router**, **Next.js**. Voir l
 
 | Catégorie | Composants |
 |-----------|-----------|
-| **Formulaires** | Button, ButtonGroup, Checkbox, Input, InputOTP, Radio, Range, Select, Toggle, Upload |
-| **Feedback** | Alert, Callout, Notice, Toast, Progress, Indicator |
-| **Data Display** | Accordion, Badge, Card, DataList, Quote, Table, Tabs, Tag, Tile |
-| **Overlay** | Modal, Sheet, Popover, HoverCard, DropdownMenu, Command, Tooltip |
-| **Navigation** | Header, Footer, Navigation, NavLink, Breadcrumb, Pagination, SkipLinks, Link |
-| **Typographie** | Heading, Text, Code, Kbd, Highlight |
-| **Layout** | Box, Container, Flex, Grid, Section, Separator, Skeleton |
-| **Branding** | Logo, Avatar, Artwork, Calendar, ConsentBanner, Follow, Translate, ThemeToggle |
+| **Formulaires** | Autocomplete, Button, ButtonGroup, Calendar, Checkbox, Input (Textarea, PasswordInput), InputOTP, Radio (dont radio riche à pictogramme), Range, Select, Toggle, Upload |
+| **Feedback** | Alert, Notice, Progress, Toast |
+| **Data Display** | Accordion, Avatar, Badge, Callout, Card, DataList, Indicator, Skeleton, Table, Tag, Tile |
+| **Overlay** | Command, DropdownMenu, HoverCard, Modal, Popover, Sheet, Tooltip |
+| **Navigation** | Breadcrumb, Footer, Header, Navigation (menus et méga-menus, menu latéral), NavLink, Pagination, SkipLinks, Stepper, Summary, Tabs |
+| **Typographie** | Code, Heading, Highlight, Kbd, Link, Quote, Text |
+| **Layout** | AspectRatio, Box, Container, Flex, Grid, ScrollArea, Section, Separator |
+| **Branding** | Artwork, ConsentBanner, Follow, Logo, ThemeToggle, Translate |
+| **Fournisseurs et utilitaires** | RouterProvider, ThemeProvider, ThemeScript, useMediaQuery (et variantes), cn |
 
 > Consultez le [Storybook](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/) pour voir chaque composant en action avec ses variantes et ses props.
+
+---
+
+## Documentation pour les assistants IA
+
+[`llms.txt`](https://ra-nouvelle-aquitaine.github.io/dsfrkit/llms.txt) recense tous les exports publics de `@dsfrkit/react`, avec une fiche par composant : import exact, recommandations d'usage, exemples et interface des props. `dsfrkit init` peut y renvoyer les assistants (Copilot, Claude Code, Cursor, Windsurf, Codex).
+
+Ces fiches sont générées depuis le code et les stories : relancez `pnpm generate:llms` après avoir modifié l'API d'un composant.
 
 ---
 

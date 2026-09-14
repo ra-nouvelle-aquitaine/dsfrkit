@@ -1,58 +1,91 @@
 # Exemple React + Vite
 
-Exemple d'intégration de DSFRKit dans un projet React + Vite.
+Application de démonstration de DSFRKit, publiée sur [ra-nouvelle-aquitaine.github.io/dsfrkit/example](https://ra-nouvelle-aquitaine.github.io/dsfrkit/example/). Elle assemble les composants de `@dsfrkit/react` dans deux gabarits, accessibles par un sélecteur en haut de page :
 
-## Installation
+- **Standard** — site vitrine ou portail public : en-tête et navigation, fil d'Ariane, alertes, formulaire, onglets, tuiles, cartes, pagination, lettre d'information et pied de page ;
+- **Dashboard** — application métier : menu latéral, tableau de dossiers, indicateurs de progression, notifications.
+
+## Lancer l'exemple
+
+Depuis la racine du monorepo :
 
 ```bash
 pnpm install
+pnpm dev:example
 ```
 
-## Développement
+## Intégrer DSFRKit dans votre projet React + Vite
 
-```bash
-pnpm dev
-```
+L'exemple utilise le paquet npm, sans copie de composants.
 
-## Étapes d'intégration
-
-1. **Installer les dépendances**
+1. **Installer les paquets**
    ```bash
+   pnpm add @dsfrkit/react @dsfrkit/icons @dsfrkit/tokens
    pnpm add -D @dsfrkit/config tailwindcss postcss autoprefixer
-   pnpm add class-variance-authority clsx tailwind-merge
    ```
 
-2. **Configurer Tailwind**
+2. **Configurer PostCSS** — `postcss.config.js` :
+   ```js
+   export default {
+     plugins: {
+       tailwindcss: {},
+       autoprefixer: {},
+     },
+   }
+   ```
 
-   Créer `tailwind.config.js` :
+3. **Configurer Tailwind** — `tailwind.config.js` :
    ```js
    import dsfrPreset from '@dsfrkit/config'
 
    export default {
      presets: [dsfrPreset],
-     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+     content: [
+       './index.html',
+       './src/**/*.{js,ts,jsx,tsx}',
+       './node_modules/@dsfrkit/react/dist/**/*.{js,mjs}',
+     ],
    }
    ```
 
-3. **Ajouter les directives Tailwind**
-
-   Dans `src/index.css` :
+4. **Importer le thème** — `src/index.css` :
    ```css
+   @import '@dsfrkit/tokens/theme.css';
+
    @tailwind base;
    @tailwind components;
    @tailwind utilities;
-   ```
 
-4. **Ajouter des composants**
-   ```bash
-   pnpm dlx @dsfrkit/cli add button alert
-   ```
-
-5. **Utiliser les composants**
-   ```tsx
-   import { Button } from '@/components/ui/button'
-
-   function App() {
-     return <Button variant="primary">Valider</Button>
+   @layer base {
+     body {
+       @apply font-marianne bg-background text-foreground;
+     }
    }
    ```
+
+5. **Ajouter le fournisseur de thème** — `src/main.tsx` :
+   ```tsx
+   import { ThemeProvider } from '@dsfrkit/react'
+
+   ReactDOM.createRoot(root).render(
+     <ThemeProvider>
+       <App />
+     </ThemeProvider>
+   )
+   ```
+
+6. **Utiliser les composants**
+   ```tsx
+   import { Button, Notice } from '@dsfrkit/react'
+
+   export function App() {
+     return (
+       <>
+         <Notice title="Service en maintenance dimanche de 2h à 6h." />
+         <Button>Valider</Button>
+       </>
+     )
+   }
+   ```
+
+Pour une navigation sans rechargement, ajoutez un `RouterProvider` avec le `Link` de votre routeur (voir le [README de `@dsfrkit/react`](../../../packages/react/README.md#fournisseurs)).

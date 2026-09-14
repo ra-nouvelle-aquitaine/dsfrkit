@@ -1,9 +1,15 @@
+/* Variables de couleur DSFR (thèmes clair et sombre) et polices Marianne / Spectral */
+@import '@dsfrkit/tokens/theme.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   body {
-    @apply font-marianne bg-white text-grey-1000;
+    @apply bg-background text-foreground font-marianne antialiased;
   }
 }

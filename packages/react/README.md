@@ -1,115 +1,123 @@
 # @dsfrkit/react
 
-Composants React source pour le Système de Design de l'État français (DSFR).
+Composants React accessibles et conformes au Système de Design de l'État français (DSFR), construits sur [Radix UI](https://www.radix-ui.com/) et stylés avec [Tailwind CSS](https://tailwindcss.com/) via le preset `@dsfrkit/config`.
 
-> **Note importante** : Ce package contient les **sources** des composants. Il est conçu pour être utilisé via le CLI `@dsfrkit/cli` qui copie les composants dans votre projet, à la manière de shadcn/ui. Vous pouvez ensuite les modifier selon vos besoins.
+Le paquet publie des composants compilés (ESM et CommonJS) et typés. Pour copier le code source d'un composant dans votre projet et le modifier, voir [`@dsfrkit/cli`](../cli).
 
-## Installation via CLI (recommandé)
-
-```bash
-# Initialiser le projet
-pnpm dlx @dsfrkit/cli init
-
-# Ajouter des composants
-pnpm dlx @dsfrkit/cli add button alert
-```
-
-## Installation directe (alternative)
-
-Si vous préférez installer le package directement :
+## Installation
 
 ```bash
-pnpm add @dsfrkit/react
+pnpm add @dsfrkit/react @dsfrkit/icons @dsfrkit/tokens
+pnpm add -D @dsfrkit/config tailwindcss
 ```
 
-## Usage
+Dépendances attendues : `react` et `react-dom` 18, `tailwindcss` 3.4.
 
-### Button
+### Tailwind
+
+Le preset apporte les couleurs, la typographie et les espacements du DSFR. Ajoutez les fichiers compilés du paquet au `content` pour que Tailwind génère les classes utilisées par les composants :
+
+```js
+// tailwind.config.js
+import dsfrPreset from '@dsfrkit/config'
+
+export default {
+  presets: [dsfrPreset],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@dsfrkit/react/dist/**/*.{js,mjs}',
+  ],
+}
+```
+
+### CSS global
+
+`theme.css` déclare les variables de couleur DSFR (thèmes clair et sombre) et les polices Marianne et Spectral :
+
+```css
+/* src/index.css */
+@import '@dsfrkit/tokens/theme.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-marianne antialiased;
+  }
+}
+```
+
+### Fournisseurs
 
 ```tsx
-import { Button } from '@dsfrkit/react'
+import { RouterProvider, ThemeProvider } from '@dsfrkit/react'
+import { Link as RouterLink } from 'react-router-dom'
 
-function App() {
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Button variant="primary" size="lg">
-        Valider
-      </Button>
-
-      <Button variant="secondary">
-        Action secondaire
-      </Button>
-
-      <Button variant="tertiary" size="sm">
-        Annuler
-      </Button>
-
-      <Button variant="danger" disabled>
-        Supprimer
-      </Button>
-    </>
+    <RouterProvider
+      Link={RouterLink}
+      linkPropsAdapter={({ href, ...rest }) => ({ to: href, ...rest })}
+    >
+      <ThemeProvider defaultTheme="system">{children}</ThemeProvider>
+    </RouterProvider>
   )
 }
 ```
 
-**Variants disponibles** :
-- `primary` - Bleu France (défaut)
-- `secondary` - Rouge Marianne
-- `tertiary` - Bouton outline
-- `ghost` - Bouton fantôme
-- `danger` - Rouge danger
-- `success` - Vert succès
-- `warning` - Orange avertissement
+- `ThemeProvider` gère le thème clair, sombre ou système (`useTheme` pour le lire ou le changer). `ThemeScript` évite le flash de thème au chargement en rendu serveur.
+- `RouterProvider` est facultatif. Quand il est présent, les adresses internes (`/…`) passées en `href` aux composants (`Link`, `NavigationItem`, `Breadcrumb`, `Pagination`, `Summary`, `Tile`, `Footer`…) passent par le routeur de l'application. Avec Next.js, `<RouterProvider Link={NextLink}>` suffit.
 
-**Tailles** :
-- `sm` - Petit
-- `md` - Moyen (défaut)
-- `lg` - Large
-
-### Alert
+## Utilisation
 
 ```tsx
-import { Alert } from '@dsfrkit/react'
+import { Alert, Button, Input } from '@dsfrkit/react'
 
-function App() {
+export function Exemple() {
   return (
-    <>
-      <Alert variant="success" title="Succès">
-        Votre action a été effectuée avec succès.
+    <form>
+      <Input label="Adresse électronique" type="email" hint="Format attendu : nom@domaine.fr" />
+      <Alert variant="info" title="Information">
+        Votre demande sera traitée sous 48 heures.
       </Alert>
-
-      <Alert variant="error" title="Erreur">
-        Une erreur est survenue lors du traitement.
-      </Alert>
-
-      <Alert variant="info">
-        Informations importantes.
-      </Alert>
-    </>
+      <Button type="submit">Envoyer</Button>
+    </form>
   )
 }
 ```
 
-**Variants disponibles** :
-- `info` - Information (défaut)
-- `success` - Succès
-- `warning` - Avertissement
-- `error` - Erreur
+Les composants suivent l'API de Radix : les composants composés s'assemblent par sous-composants (`Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`), et les variantes passent par des props (`variant`, `size`). Pour fusionner vos classes avec celles d'un composant, utilisez `cn()`.
 
-## Composants disponibles
+## Composants
 
-- ✅ Button
-- ✅ Alert
-- 🚧 Card (à venir)
-- 🚧 Input (à venir)
-- 🚧 Modal (à venir)
-- 🚧 Accordion (à venir)
-- 🚧 Tabs (à venir)
+| Catégorie | Composants |
+|-----------|-----------|
+| **Formulaires** | Autocomplete, Button, ButtonGroup, Calendar, Checkbox, Input (Textarea, PasswordInput), InputOTP, RadioGroup, Range, Select, Toggle, Upload |
+| **Feedback** | Alert, Notice, Progress, Toast (Toaster, useToast) |
+| **Data Display** | Accordion, Avatar, Badge, Callout, Card, DataList, Indicator, Skeleton, Table, Tag, Tile |
+| **Overlay** | Command, DropdownMenu, HoverCard, Modal, Popover, Sheet, Tooltip |
+| **Navigation** | Breadcrumb, Footer, Header, Navigation (NavigationMenu, NavigationMegaMenu), NavLink, Pagination, SkipLinks, Stepper, Summary, Tabs |
+| **Typographie** | Code, Heading, Highlight, Kbd, Link, Quote, Text |
+| **Layout** | AspectRatio, Box, Container, Flex, Grid, ScrollArea, Section, Separator |
+| **Branding** | Artwork, ConsentBanner, Follow, Logo, ThemeToggle, Translate |
+| **Fournisseurs et utilitaires** | RouterProvider, ThemeProvider, ThemeScript, useTheme, useMediaQuery, useIsMobile, useIsDesktop, cn |
 
-## Personnalisation
+Chaque composant est présenté avec ses variantes et ses props dans le [Storybook](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/). La fiche technique de chaque export (import, usage, props) est aussi disponible dans [`llms.txt`](https://ra-nouvelle-aquitaine.github.io/dsfrkit/llms.txt).
 
-Les composants utilisent [class-variance-authority](https://cva.style/) pour les variants et [tailwind-merge](https://github.com/dcastil/tailwind-merge) pour la fusion des classes. Vous pouvez facilement étendre ou modifier les variants selon vos besoins.
+## Icônes et pictogrammes
 
-## License
+- **Icônes** : `@dsfrkit/icons` (Remix Icon, standard du DSFR), à passer en prop `icon` : `<Button icon={<MailIcon />}>Contact</Button>`.
+- **Pictogrammes** : `<Artwork name="buildings/city-hall" size={80} />` affiche les pictogrammes officiels du DSFR, à passer par exemple à `RadioGroupItem` (`pictogram`) ou à `Tile` (`icon`).
+
+## Accessibilité
+
+Les composants reposent sur des primitives Radix (clavier, focus, attributs ARIA) et appliquent les règles du DSFR : libellés visibles, messages d'erreur liés par `aria-describedby`, focus visible, `aria-current` sur la page courante. Ils facilitent la conformité RGAA 4.1 sans la garantir : elle dépend aussi du contenu et de l'assemblage de vos pages.
+
+## Licence
 
 ETALAB-2.0

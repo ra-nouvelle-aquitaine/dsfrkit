@@ -2,8 +2,8 @@ const Encore = require('@symfony/webpack-encore')
 
 Encore.setOutputPath('public/build/')
   .setPublicPath('/build')
+  // assets/app.js importe assets/styles/app.css : une seule entrée suffit.
   .addEntry('app', './assets/app.js')
-  .addStyleEntry('app', './assets/styles/app.css')
 
   // Enable PostCSS loader for Tailwind
   .enablePostCssLoader()
