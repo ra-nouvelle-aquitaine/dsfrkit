@@ -24,7 +24,7 @@ const variantColors: Record<string, string> = {
   success: 'bg-success-background text-success',
   warning: 'bg-warning-background text-warning',
   error: 'bg-destructive-background text-destructive',
-  new: 'bg-yellow-tournesol-950 text-yellow-tournesol-main',
+  new: 'bg-yellow-moutarde-950 text-yellow-moutarde-main',
 
   // Accentuations DSFR
   // 'blue-france' tag uses specific variables: open-blue-france for bg and primary text
@@ -69,7 +69,7 @@ const variantHoverColors: Record<string, string> = {
   success: 'hover:bg-success/20',
   warning: 'hover:bg-warning/20',
   error: 'hover:bg-destructive/20',
-  new: 'hover:bg-yellow-tournesol-975',
+  new: 'hover:bg-yellow-moutarde-975',
   'blue-france': 'hover:bg-blue-france-925',
   'green-tilleul-verveine': 'hover:bg-[var(--background-contrast-green-tilleul-verveine-hover)]',
   'green-bourgeon': 'hover:bg-[var(--background-contrast-green-bourgeon-hover)]',
@@ -98,7 +98,7 @@ const variantSelectedColors: Record<string, string> = {
   success: 'bg-success text-success-foreground hover:bg-success-hover',
   warning: 'bg-warning text-warning-foreground hover:bg-warning-hover',
   error: 'bg-destructive text-destructive-foreground hover:bg-destructive-hover',
-  new: 'bg-yellow-tournesol-main text-white hover:bg-yellow-tournesol-main/90',
+  new: 'bg-yellow-moutarde-main text-foreground-inverted hover:bg-yellow-moutarde-main/90',
   'blue-france': 'bg-primary text-primary-foreground hover:bg-primary-hover',
   'green-tilleul-verveine':
     'bg-[var(--background-action-high-green-tilleul-verveine)] text-[var(--text-inverted-green-tilleul-verveine)] hover:bg-[var(--background-action-high-green-tilleul-verveine-hover)]',
@@ -253,7 +253,6 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
     },
     ref
   ) => {
-    const generatedId = React.useId()
     const defaultSelected =
       'defaultSelected' in rest
         ? Boolean((rest as { defaultSelected?: boolean }).defaultSelected)
@@ -267,7 +266,11 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
     const hoverColors = variantHoverColors[resolvedVariant] ?? variantHoverColors.default
 
     const baseClass = cn(tagBase({ size }), colors, className)
-    const interactiveClass = cn(baseClass, hoverColors, 'cursor-pointer')
+    const interactiveClass = cn(
+      baseClass,
+      hoverColors,
+      'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+    )
 
     // ── Mode CLICKABLE (lien) ────────────────────────────────────────────
     if (clickable) {
@@ -287,18 +290,16 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
       )
     }
 
-    // ── Mode PRESSABLE (checkbox sélectionnable) ─────────────────────────
+    // ── Mode PRESSABLE (bouton à état) ───────────────────────────────────
     if (pressable) {
       const {
         defaultSelected: _defaultSelected,
         onSelectedChange,
-        ...spanProps
+        ...buttonProps
       } = rest as {
         defaultSelected?: boolean
         onSelectedChange?: (v: boolean) => void
-      } & React.HTMLAttributes<HTMLSpanElement>
-
-      const id = generatedId
+      } & React.ButtonHTMLAttributes<HTMLButtonElement>
 
       const toggle = () => {
         const next = !selected
@@ -307,33 +308,24 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
       }
 
       return (
-        <span
-          className="relative inline-flex"
-          {...(spanProps as React.HTMLAttributes<HTMLSpanElement>)}
+        <button
+          ref={ref as React.Ref<HTMLButtonElement>}
+          {...buttonProps}
+          type="button"
+          aria-pressed={selected}
+          onClick={toggle}
+          className={cn(
+            tagBase({ size }),
+            selected
+              ? (variantSelectedColors[resolvedVariant] ?? variantSelectedColors.default)
+              : colors,
+            !selected && hoverColors,
+            'relative cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+            className
+          )}
         >
-          <input
-            type="checkbox"
-            id={id}
-            checked={selected}
-            onChange={toggle}
-            className="sr-only"
-            aria-label={typeof children === 'string' ? children : undefined}
-          />
-          <label
-            htmlFor={id}
-            className={cn(
-              tagBase({ size }),
-              selected
-                ? (variantSelectedColors[resolvedVariant] ?? variantSelectedColors.default)
-                : colors,
-              !selected && hoverColors,
-              'cursor-pointer',
-              className
-            )}
-          >
-            {icon && <span className="-ml-0.5">{icon}</span>}
-            {children}
-          </label>
+          {icon && <span className="-ml-0.5">{icon}</span>}
+          {children}
 
           {/* Indicateur de sélection — petit cercle ✓ en haut à droite */}
           {selected && (
@@ -349,7 +341,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
               <CheckCircleIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
             </span>
           )}
-        </span>
+        </button>
       )
     }
 
@@ -381,10 +373,12 @@ const Tag = React.forwardRef<HTMLElement, TagProps>(
             className={cn(
               'ml-1 -mr-0.5 flex items-center justify-center',
               'rounded-full p-0.5',
-              'hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-current',
-              size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'
+              'hover:bg-background-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              size === 'sm' ? 'min-w-6 min-h-6' : 'min-w-8 min-h-8'
             )}
-            aria-label="Supprimer"
+            aria-label={
+              typeof children === 'string' ? `Supprimer ${children}` : 'Supprimer ce filtre'
+            }
           >
             <CloseIcon className={size === 'sm' ? 'w-2.5 h-2.5' : 'w-3 h-3'} />
           </button>

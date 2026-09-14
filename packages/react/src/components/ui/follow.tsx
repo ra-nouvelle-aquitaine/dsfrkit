@@ -3,7 +3,11 @@ import { cn } from '../../lib/utils'
 
 const Follow = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
-    <div ref={ref} className={cn('bg-background-alt w-full py-8 md:py-12', className)} {...props}>
+    <div
+      ref={ref}
+      className={cn('w-full bg-background-alt-blue-france py-6 md:py-8', className)}
+      {...props}
+    >
       <div className="fr-container">
         <div className="fr-grid-row gap-y-8">{children}</div>
       </div>
@@ -34,9 +38,13 @@ const FollowSocial = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 )
 FollowSocial.displayName = 'FollowSocial'
 
-const FollowTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h5 ref={ref} className={cn('m-0 text-xl font-bold leading-sns', className)} {...props} />
+export interface FollowTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  as?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+}
+
+const FollowTitle = React.forwardRef<HTMLHeadingElement, FollowTitleProps>(
+  ({ as: Comp = 'h2', className, ...props }, ref) => (
+    <Comp ref={ref} className={cn('m-0 text-xl font-bold leading-7', className)} {...props} />
   )
 )
 FollowTitle.displayName = 'FollowTitle'
@@ -45,7 +53,7 @@ const FollowDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn('m-0 text-sm text-foreground mb-2', className)} {...props} />
+  <p ref={ref} className={cn('mb-2 text-base leading-6 text-foreground', className)} {...props} />
 ))
 FollowDescription.displayName = 'FollowDescription'
 

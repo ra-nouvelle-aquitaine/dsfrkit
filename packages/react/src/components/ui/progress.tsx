@@ -54,22 +54,27 @@ export interface ProgressProps
 }
 
 const Progress = React.forwardRef<React.ElementRef<typeof ProgressPrimitive.Root>, ProgressProps>(
-  ({ className, value, animationDuration = 500, variant, size, ...props }, ref) => (
-    <ProgressPrimitive.Root
-      ref={ref}
-      tabIndex={-1}
-      className={cn(progressVariants({ variant, size, className }))}
-      {...props}
-    >
-      <ProgressPrimitive.Indicator
-        className="h-full w-full flex-1"
-        style={{
-          transform: `translateX(-${100 - (value || 0)}%)`,
-          transition: `transform ${animationDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`,
-        }}
-      />
-    </ProgressPrimitive.Root>
-  )
+  ({ className, value, animationDuration = 500, variant, size, ...props }, ref) => {
+    const clampedValue = value == null ? null : Math.min(100, Math.max(0, value))
+
+    return (
+      <ProgressPrimitive.Root
+        ref={ref}
+        value={clampedValue}
+        tabIndex={-1}
+        className={cn(progressVariants({ variant, size, className }))}
+        {...props}
+      >
+        <ProgressPrimitive.Indicator
+          className="h-full w-full flex-1 transition-transform ease-in-out motion-reduce:transition-none"
+          style={{
+            transform: `translateX(-${100 - (clampedValue ?? 0)}%)`,
+            transitionDuration: `${animationDuration}ms`,
+          }}
+        />
+      </ProgressPrimitive.Root>
+    )
+  }
 )
 Progress.displayName = ProgressPrimitive.Root.displayName
 

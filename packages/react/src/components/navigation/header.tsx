@@ -9,11 +9,15 @@ import { cn } from '../../lib/utils'
 type HeaderContextValue = {
   mobileOpen: boolean
   setMobileOpen: React.Dispatch<React.SetStateAction<boolean>>
+  mobileMenuId: string
+  mobileButtonRef: React.RefObject<HTMLButtonElement>
 }
 
 const HeaderContext = React.createContext<HeaderContextValue>({
   mobileOpen: false,
   setMobileOpen: () => {},
+  mobileMenuId: '',
+  mobileButtonRef: { current: null },
 })
 
 // ─── Header ──────────────────────────────────────────────────────────
@@ -32,14 +36,19 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
 const Header = React.forwardRef<HTMLElement, HeaderProps>(
   ({ className, children, size, ...props }, ref) => {
     const [mobileOpen, setMobileOpen] = React.useState(false)
+    const mobileMenuId = React.useId()
+    const mobileButtonRef = React.useRef<HTMLButtonElement>(null)
 
-    const contextValue = React.useMemo(() => ({ mobileOpen, setMobileOpen }), [mobileOpen])
+    const contextValue = React.useMemo(
+      () => ({ mobileOpen, setMobileOpen, mobileMenuId, mobileButtonRef }),
+      [mobileOpen, mobileMenuId]
+    )
 
     return (
       <HeaderContext.Provider value={contextValue}>
         <header
           ref={ref}
-          className={cn('w-full bg-background-elevated border-b border-border', className)}
+          className={cn('w-full bg-background-elevated elevation-raised', className)}
           {...props}
         >
           {React.Children.map(children, (child) => {
@@ -65,7 +74,35 @@ const HeaderBody = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { size?: HeaderProps['size'] }
 >(({ className, size, children, ...props }, ref) => {
-  const { mobileOpen, setMobileOpen } = React.useContext(HeaderContext)
+  const { mobileOpen, setMobileOpen, mobileMenuId, mobileButtonRef } =
+    React.useContext(HeaderContext)
+  const mobileMenuRef = React.useRef<HTMLDivElement>(null)
+
+  React.useEffect(() => {
+    if (!mobileOpen) return
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileOpen(false)
+        mobileButtonRef.current?.focus()
+      }
+    }
+    const handleNavigation = (event: MouseEvent) => {
+      if (
+        mobileMenuRef.current?.contains(event.target as Node) &&
+        (event.target as HTMLElement).closest('a')
+      ) {
+        setMobileOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    document.addEventListener('click', handleNavigation)
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      document.removeEventListener('click', handleNavigation)
+    }
+  }, [mobileOpen, mobileButtonRef, setMobileOpen])
 
   // Separate children into nav and non-nav for mobile layout
   const navChildren: React.ReactNode[] = []
@@ -90,27 +127,28 @@ const HeaderBody = React.forwardRef<
     <div ref={ref} className={cn('w-full', className)} {...props}>
       {/* Top bar: brand + burger + actions */}
       <div
-        className={cn('mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 py-4', {
-          'max-w-screen-sm': size === 'sm',
-          'max-w-screen-md': size === 'md',
+        className={cn('mx-auto flex items-center justify-between gap-4 py-4', {
+          'max-w-screen-sm px-4 lg:px-6': size === 'sm',
+          'max-w-screen-md px-4 lg:px-6': size === 'md',
           'fr-container': size === 'lg' || !size,
-          'max-w-screen-xl': size === 'xl',
-          'max-w-screen-2xl': size === '2xl',
-          'max-w-full': size === 'full',
+          'max-w-screen-xl px-4 lg:px-6': size === 'xl',
+          'max-w-screen-2xl px-4 lg:px-6': size === '2xl',
+          'max-w-full px-4 lg:px-6': size === 'full',
         })}
       >
         {otherChildren}
         {/* Burger button — mobile only, shown when there is a HeaderNav */}
         {hasNav && (
           <button
+            ref={mobileButtonRef}
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
-            aria-controls="header-mobile-menu"
+            aria-controls={mobileMenuId}
             aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             className={cn(
-              'md:hidden p-2 rounded-md text-foreground order-last',
-              'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+              'md:hidden min-h-10 min-w-10 p-2 text-foreground order-last',
+              'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
             )}
           >
             {mobileOpen ? (
@@ -154,20 +192,21 @@ const HeaderBody = React.forwardRef<
       {/* Nav area — desktop inline, mobile collapsible below */}
       {hasNav && (
         <div
-          id="header-mobile-menu"
+          ref={mobileMenuRef}
+          id={mobileMenuId}
           className={cn(
             'border-t border-border md:border-t-0 md:shadow-[0_1px_0_0_var(--border-default-grey),0_-1px_0_0_var(--border-default-grey)]',
             mobileOpen ? 'block' : 'hidden md:block'
           )}
         >
           <div
-            className={cn('mx-auto px-4 sm:px-6 lg:px-8', {
-              'max-w-screen-sm': size === 'sm',
-              'max-w-screen-md': size === 'md',
+            className={cn('mx-auto', {
+              'max-w-screen-sm px-4 lg:px-6': size === 'sm',
+              'max-w-screen-md px-4 lg:px-6': size === 'md',
               'fr-container': size === 'lg' || !size,
-              'max-w-screen-xl': size === 'xl',
-              'max-w-screen-2xl': size === '2xl',
-              'max-w-full': size === 'full',
+              'max-w-screen-xl px-4 lg:px-6': size === 'xl',
+              'max-w-screen-2xl px-4 lg:px-6': size === '2xl',
+              'max-w-full px-4 lg:px-6': size === 'full',
             })}
           >
             {navChildren}
@@ -195,7 +234,7 @@ const HeaderBrand = React.forwardRef<HTMLDivElement, HeaderBrandProps>(
       {logo && (
         <RouterAnchor
           href={href}
-          className="flex-shrink-0 rounded-md p-2 hover:bg-background-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="flex-shrink-0 p-2 hover:bg-background-alt transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {logo}
         </RouterAnchor>
@@ -294,11 +333,10 @@ const HeaderMenuButton = React.forwardRef<HTMLButtonElement, HeaderMenuButtonPro
       type="button"
       onClick={onToggle}
       aria-expanded={isOpen}
-      aria-controls="mobile-menu"
       aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
       className={cn(
-        'md:hidden p-2 rounded-md text-foreground',
-        'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        'md:hidden min-h-10 min-w-10 p-2 text-foreground',
+        'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         className
       )}
       {...props}
@@ -314,6 +352,7 @@ const HeaderMenuButton = React.forwardRef<HTMLButtonElement, HeaderMenuButtonPro
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
@@ -329,6 +368,7 @@ const HeaderMenuButton = React.forwardRef<HTMLButtonElement, HeaderMenuButtonPro
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <line x1="4" y1="6" x2="20" y2="6" />
           <line x1="4" y1="12" x2="20" y2="12" />

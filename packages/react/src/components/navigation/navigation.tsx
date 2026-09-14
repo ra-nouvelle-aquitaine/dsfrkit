@@ -39,6 +39,22 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
   ) => {
     const isVertical = orientation === 'vertical'
     const [mobileOpen, setMobileOpen] = React.useState(false)
+    const mobileContentId = React.useId()
+    const mobileButtonRef = React.useRef<HTMLButtonElement>(null)
+
+    React.useEffect(() => {
+      if (!mobileOpen) return
+
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          setMobileOpen(false)
+          mobileButtonRef.current?.focus()
+        }
+      }
+
+      document.addEventListener('keydown', handleEscape)
+      return () => document.removeEventListener('keydown', handleEscape)
+    }, [mobileOpen])
 
     const contextValue = React.useMemo(() => ({ orientation, depth: 0 }), [orientation])
 
@@ -63,9 +79,11 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
               {/* Mobile toggle (hidden on md+) */}
               {title && (
                 <button
+                  ref={mobileButtonRef}
                   type="button"
                   className="md:hidden flex items-center justify-between w-full px-4 py-3 text-base font-bold text-foreground"
                   aria-expanded={mobileOpen}
+                  aria-controls={mobileContentId}
                   onClick={() => setMobileOpen(!mobileOpen)}
                 >
                   {title}
@@ -79,7 +97,10 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={cn('transition-transform duration-200', mobileOpen && 'rotate-180')}
+                    className={cn(
+                      'transition-transform duration-200 motion-reduce:transition-none',
+                      mobileOpen && 'rotate-180'
+                    )}
                     aria-hidden="true"
                   >
                     <path d="m6 9 6 6 6-6" />
@@ -88,7 +109,10 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
               )}
 
               {/* Content: always visible on md+, toggle on mobile */}
-              <div className={cn('w-full', title && !mobileOpen ? 'hidden md:block' : 'block')}>
+              <div
+                id={mobileContentId}
+                className={cn('w-full', title && !mobileOpen ? 'hidden md:block' : 'block')}
+              >
                 {/* Title (desktop) */}
                 {title && (
                   <p className="hidden md:block px-4 py-3 text-lg font-bold text-foreground-title">
@@ -103,9 +127,11 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
             <div className="w-full">
               {/* Horizontal Mobile Toggle */}
               <button
+                ref={mobileButtonRef}
                 type="button"
                 className="md:hidden flex items-center gap-2 px-4 py-4 w-full text-base font-medium text-primary hover:bg-background-alt"
                 aria-expanded={mobileOpen}
+                aria-controls={mobileContentId}
                 onClick={() => setMobileOpen(!mobileOpen)}
               >
                 <svg
@@ -130,6 +156,7 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
               </button>
 
               <ul
+                id={mobileContentId}
                 className={cn(
                   'flex flex-col md:flex-row items-stretch m-0 p-0 list-none',
                   mobileOpen ? 'flex border-t border-border' : 'hidden md:flex'
@@ -195,13 +222,13 @@ const NavigationSection = React.forwardRef<HTMLLIElement, NavigationSectionProps
 
     if (!collapsible) {
       return (
-        <li ref={ref} className={cn('list-none', className)} {...props}>
+        <li ref={ref} className={cn('relative list-none', className)} {...props}>
           <div className={cn('flex items-center w-full', sectionClasses)}>{title}</div>
           <div
             className={cn(
               isVertical
                 ? ''
-                : 'md:absolute md:top-full md:left-0 md:z-50 md:min-w-[12rem] md:bg-background md:shadow-lg md:border md:border-border md:py-1'
+                : 'md:absolute md:top-full md:left-0 md:z-50 md:min-w-[20rem] md:bg-popover md:elevation-overlap md:border-t md:border-primary md:py-1'
             )}
           >
             {content}
@@ -211,12 +238,12 @@ const NavigationSection = React.forwardRef<HTMLLIElement, NavigationSectionProps
     }
 
     return (
-      <li ref={ref} className={cn('list-none', className)} {...props}>
+      <li ref={ref} className={cn('relative list-none', className)} {...props}>
         <CollapsiblePrimitive.Root defaultOpen={defaultOpen}>
           <CollapsiblePrimitive.Trigger
             className={cn(
               'flex items-center justify-between w-full cursor-pointer transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
               sectionClasses
             )}
           >
@@ -231,7 +258,7 @@ const NavigationSection = React.forwardRef<HTMLLIElement, NavigationSectionProps
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="shrink-0 ml-3 transition-transform duration-200 [[data-state=open]>&]:rotate-180"
+              className="shrink-0 ml-3 transition-transform duration-200 motion-reduce:transition-none [[data-state=open]>&]:rotate-180"
               aria-hidden="true"
             >
               <path d="m6 9 6 6 6-6" />
@@ -243,7 +270,7 @@ const NavigationSection = React.forwardRef<HTMLLIElement, NavigationSectionProps
               'overflow-hidden',
               isVertical
                 ? ''
-                : 'md:absolute md:top-full md:left-0 md:z-50 md:min-w-[12rem] md:bg-background md:shadow-lg md:border md:border-border md:py-1'
+                : 'md:absolute md:top-full md:left-0 md:z-50 md:min-w-[20rem] md:bg-popover md:elevation-overlap md:border-t md:border-primary md:py-1'
             )}
           >
             {content}
@@ -282,7 +309,7 @@ const NavigationItem = React.forwardRef<HTMLAnchorElement, NavigationItemProps>(
           aria-current={isActive ? 'page' : undefined}
           className={cn(
             'flex items-center gap-2 w-full h-full transition-colors no-underline',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
             isVertical
               ? cn(
                   'py-3 text-base text-foreground',

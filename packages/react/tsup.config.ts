@@ -77,6 +77,12 @@ export default defineConfig({
     'src/components/ui/use-toast.ts',
   ],
   format: ['cjs', 'esm'],
+  // Les points d'entrée réexportent aussi des primitives Radix et des hooks.
+  // Sans bannière, esbuild supprime les directives placées dans les modules
+  // internes et Next.js traite alors le paquet comme un module serveur.
+  banner: {
+    js: "'use client';",
+  },
   dts: true,
   clean: false,
   external: [
@@ -106,5 +112,8 @@ export default defineConfig({
     'react-day-picker',
     'sonner',
   ],
-  treeshake: true,
+  // Le second passage Rollup de `treeshake: true` supprimait la bannière et
+  // produisait des paquets incompatibles avec la frontière RSC de Next.js.
+  // esbuild conserve déjà les exports inutilisés hors des points d'entrée.
+  treeshake: false,
 })

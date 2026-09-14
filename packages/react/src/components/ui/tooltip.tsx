@@ -5,7 +5,7 @@ import * as React from 'react'
 import { cn } from '../../lib/utils'
 
 const TooltipProvider = ({
-  delayDuration = 0,
+  delayDuration = 300,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Provider>) => (
   <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />
@@ -42,18 +42,16 @@ const TooltipContent = React.forwardRef<
       className={cn(
         // DSFR : fond élevé, ombre, texte par défaut
         // drop-shadow (≠ box-shadow) suit le contour SVG de la flèche → bordure continue autour du tooltip ET de la flèche
-        'z-[100] overflow-visible bg-background-elevated text-foreground',
-        'shadow-[0_8px_16px_0_rgba(0,0,0,0.1),0_8px_16px_-16px_rgba(0,0,0,0.32)]',
-        '[filter:drop-shadow(0_0_0_1px_hsl(var(--border)))]',
-        'animate-in fade-in-0 zoom-in-95',
+        'z-[100] overflow-visible bg-background-overlap text-foreground border border-border elevation-overlap',
+        'animate-in fade-in-0 zoom-in-95 motion-reduce:animate-none',
         'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
         'data-[side=bottom]:slide-in-from-top-2',
         'data-[side=left]:slide-in-from-right-2',
         'data-[side=right]:slide-in-from-left-2',
         'data-[side=top]:slide-in-from-bottom-2',
-        size === 'sm' && 'px-2 py-1 text-xs max-w-[200px]',
-        size === 'md' && 'px-3 py-2 text-sm max-w-[280px]',
-        size === 'lg' && 'px-4 py-2 text-base max-w-[360px]',
+        size === 'sm' && 'px-2 py-1 text-xs max-w-[12.5rem]',
+        size === 'md' && 'px-2 py-2 text-xs max-w-[min(24rem,calc((100vw-2rem)*2/3))]',
+        size === 'lg' && 'px-4 py-2 text-base max-w-[22.5rem]',
         className
       )}
       {...props}
@@ -71,7 +69,7 @@ const TooltipArrow = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TooltipPrimitive.Arrow
     ref={ref}
-    className={cn('fill-background-elevated', className)}
+    className={cn('fill-background-overlap', className)}
     {...props}
   />
 ))

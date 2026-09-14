@@ -39,7 +39,7 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        'relative flex h-10 w-10 items-center justify-center border-y border-r border-border text-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md',
+        'relative flex h-10 w-10 items-center justify-center border-y border-r border-border text-sm transition-all first:rounded-l first:border-l last:rounded-r motion-reduce:transition-none',
         isActive && 'z-10 ring-2 ring-primary ring-offset-background border-primary',
         className
       )}
@@ -48,7 +48,7 @@ const InputOTPSlot = React.forwardRef<
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-4 w-px animate-caret-blink bg-primary duration-1000" />
+          <div className="h-4 w-px animate-caret-blink bg-primary duration-1000 motion-reduce:animate-none" />
         </div>
       )}
     </div>
@@ -60,10 +60,7 @@ const InputOTPSeparator = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'>
 >(({ ...props }, ref) => (
-  // biome-ignore lint/a11y/useFocusableInteractive: le séparateur est décoratif, géré par la bibliothèque input-otp
-  // biome-ignore lint/a11y/useSemanticElements: role="separator" requis par l'API de la bibliothèque input-otp
-  // biome-ignore lint/a11y/useAriaPropsForRole: composant totalement décoratif
-  <div ref={ref} role="separator" {...props}>
+  <div ref={ref} aria-hidden="true" {...props}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -75,6 +72,7 @@ const InputOTPSeparator = React.forwardRef<
       strokeLinecap="round"
       strokeLinejoin="round"
       className="h-4 w-4"
+      aria-hidden="true"
     >
       <path d="M5 12h14" />
     </svg>

@@ -8,13 +8,13 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
-  ({ className, asChild = false, size = 'lg', ...props }, ref) => {
+  ({ className, asChild = false, size = 'xl', ...props }, ref) => {
     const Comp = asChild ? Slot : 'div'
     return (
       <Comp
         ref={ref}
         className={cn(
-          'mx-auto px-4 sm:px-6 lg:px-8 w-full',
+          'mx-auto w-full px-4 lg:px-6',
           {
             'max-w-screen-sm': size === 'sm',
             'max-w-screen-md': size === 'md',

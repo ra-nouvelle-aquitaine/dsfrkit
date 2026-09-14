@@ -102,7 +102,7 @@ export const DatePickerSingle: Story = {
     const [open, setOpen] = useState(false)
 
     return (
-      <Box className="w-[320px]">
+      <Box className="w-full max-w-[320px]">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Box>
@@ -160,7 +160,7 @@ export const DatePickerMultiple: Story = {
           : `${dates.length} dates sélectionnées`
 
     return (
-      <Box className="w-[320px]">
+      <Box className="w-full max-w-[320px]">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Box>
@@ -216,7 +216,7 @@ export const DatePickerRange: Story = {
       : ''
 
     return (
-      <Box className="w-[320px]">
+      <Box className="w-full max-w-[320px]">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Box>

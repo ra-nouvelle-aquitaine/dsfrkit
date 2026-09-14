@@ -10,7 +10,7 @@ describe('Component: Button (DSFR)', () => {
     expect(button).toBeInTheDocument()
     // DSFR Primary background and typography validation
     expect(button).toHaveClass('bg-primary')
-    expect(button).toHaveClass('font-bold')
+    expect(button).toHaveClass('font-medium')
   })
 
   it('should apply secondary variant class matching DSFR spec (border blue, transparent background)', () => {
@@ -33,6 +33,7 @@ describe('Component: Button (DSFR)', () => {
 
     const button = screen.getByRole('button', { name: 'Chargement en cours...' })
     expect(button).toBeDisabled()
+    expect(button).toHaveAttribute('aria-busy', 'true')
 
     // The SVG spinner should be present inside
     const spinner = document.querySelector('.animate-spin')
@@ -52,5 +53,27 @@ describe('Component: Button (DSFR)', () => {
     expect(link).toHaveClass('bg-warning', 'text-foreground-inverted')
     // No explicit button should exist
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
+  })
+
+  it('should render a void element through asChild without injecting children', () => {
+    render(
+      <Button asChild>
+        <input type="button" value="Envoyer le formulaire" />
+      </Button>
+    )
+
+    expect(screen.getByRole('button', { name: 'Envoyer le formulaire' })).toHaveClass('bg-primary')
+  })
+
+  it('should preserve icons and expose a disabled asChild control', () => {
+    render(
+      <Button asChild disabled icon={<span data-testid="icon">icon</span>}>
+        <a href="/destination">Continuer</a>
+      </Button>
+    )
+
+    const link = screen.getByRole('link', { name: 'Continuer' })
+    expect(link).toHaveAttribute('aria-disabled', 'true')
+    expect(screen.getByTestId('icon')).toBeInTheDocument()
   })
 })

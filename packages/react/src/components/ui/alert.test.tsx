@@ -16,7 +16,7 @@ describe('Component: Alert (DSFR)', () => {
     expect(screen.getByText('Une maintenance aura lieu ce soir.')).toBeInTheDocument()
 
     // DSFR layout check: left thick border
-    expect(alertElement).toHaveClass('border-l-info', 'bg-info-background')
+    expect(alertElement).toHaveClass('border-info', 'bg-background')
   })
 
   it('should append the un-intrusive close button and dispatch event accurately', async () => {
@@ -38,7 +38,7 @@ describe('Component: Alert (DSFR)', () => {
     const closeBtn = screen.getByRole('button', { name: 'Fermer ce message de maintenance' })
 
     expect(closeBtn).toBeInTheDocument()
-    expect(alertElement).toHaveClass('border-l-warning')
+    expect(alertElement).toHaveClass('border-warning')
 
     // Simulate natural user click
     await user.click(closeBtn)
@@ -53,6 +53,6 @@ describe('Component: Alert (DSFR)', () => {
     // Direct approach: test standard rendering then confirm it doesn't crash on null children
     const { container } = render(<Alert variant="error" />)
     expect(container.firstChild).toBeInTheDocument()
-    expect(container.firstChild).toHaveClass('border-l-destructive')
+    expect(container.firstChild).toHaveClass('border-destructive')
   })
 })

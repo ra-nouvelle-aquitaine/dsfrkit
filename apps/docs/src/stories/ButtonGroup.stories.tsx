@@ -37,7 +37,7 @@ export default meta
 type Story = StoryObj<typeof ButtonGroup>
 
 export const Single: Story = {
-  args: { type: 'single', defaultValue: 'list' },
+  args: { type: 'single', defaultValue: 'list', legend: "Mode d'affichage" },
   render: (args) => (
     <ButtonGroup {...args}>
       <ButtonGroupItem value="list">Liste</ButtonGroupItem>
@@ -48,7 +48,7 @@ export const Single: Story = {
 }
 
 export const Multiple: Story = {
-  args: { type: 'multiple', defaultValue: ['bold'] },
+  args: { type: 'multiple', defaultValue: ['bold'], legend: 'Mise en forme' },
   render: (args) => (
     <ButtonGroup {...args}>
       <ButtonGroupItem value="bold">Gras</ButtonGroupItem>

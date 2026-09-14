@@ -48,7 +48,7 @@ export const VerticalSideMenu: Story = {
     docs: {
       source: {
         code: `
-<Box className="w-80">
+<Box className="w-full max-w-80">
   <Navigation orientation="vertical" title="Titre de rubrique">
     <NavigationSection title="Titre du lien 1" defaultOpen isActive>
       <NavigationItem href="#" isActive icon={<RiHome3LineIcon />}>Accueil</NavigationItem>
@@ -66,7 +66,7 @@ export const VerticalSideMenu: Story = {
     },
   },
   render: (args) => (
-    <Box className="w-80">
+    <Box className="w-full max-w-80">
       <Navigation {...args}>
         <NavigationSection title="Titre du lien 1" defaultOpen isActive>
           <NavigationItem href="#" isActive icon={<RiHome3LineIcon />}>
@@ -141,7 +141,7 @@ export const VerticalWithoutTitle: Story = {
     docs: {
       source: {
         code: `
-<Box className="w-80">
+<Box className="w-full max-w-80">
   <Navigation orientation="vertical">
     <NavigationItem href="#" isActive>Accueil</NavigationItem>
     <NavigationItem href="#">Services</NavigationItem>
@@ -153,7 +153,7 @@ export const VerticalWithoutTitle: Story = {
     },
   },
   render: () => (
-    <Box className="w-80">
+    <Box className="w-full max-w-80">
       <Navigation orientation="vertical">
         <NavigationItem href="#" isActive>
           Accueil

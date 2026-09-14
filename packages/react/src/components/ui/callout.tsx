@@ -12,57 +12,57 @@ import { cn } from '../../lib/utils'
 
 const calloutVariants = cva(
   // Base DSFR : bordure gauche épaisse (4px), pas de border-radius, fond adaptatif
-  'relative w-full border-l-[4px] transition-colors',
+  'relative mb-6 w-full border-l-4 text-foreground',
   {
     variants: {
       accent: {
         // Default : bordure bleue france, fond alt
-        default: 'bg-muted border-l-primary text-foreground',
+        default: 'bg-background-contrast border-l-primary',
         // Statuts
-        info: 'bg-info-background border-l-info text-info',
-        success: 'bg-success-background border-l-success text-success',
-        warning: 'bg-warning-background border-l-warning text-warning',
-        error: 'bg-destructive-background border-l-destructive text-destructive',
+        info: 'bg-info-background border-l-info',
+        success: 'bg-success-background border-l-success',
+        warning: 'bg-warning-background border-l-warning',
+        error: 'bg-destructive-background border-l-destructive',
         // Accentuations DSFR
         'green-tilleul-verveine':
-          'bg-[var(--background-contrast-green-tilleul-verveine)] border-l-[var(--border-default-green-tilleul-verveine)] text-[var(--text-label-green-tilleul-verveine)]',
+          'bg-[var(--background-contrast-green-tilleul-verveine)] border-l-[var(--border-default-green-tilleul-verveine)]',
         'green-bourgeon':
-          'bg-[var(--background-contrast-green-bourgeon)] border-l-[var(--border-default-green-bourgeon)] text-[var(--text-label-green-bourgeon)]',
+          'bg-[var(--background-contrast-green-bourgeon)] border-l-[var(--border-default-green-bourgeon)]',
         'green-emeraude':
-          'bg-[var(--background-contrast-green-emeraude)] border-l-[var(--border-default-green-emeraude)] text-[var(--text-label-green-emeraude)]',
+          'bg-[var(--background-contrast-green-emeraude)] border-l-[var(--border-default-green-emeraude)]',
         'green-menthe':
-          'bg-[var(--background-contrast-green-menthe)] border-l-[var(--border-default-green-menthe)] text-[var(--text-label-green-menthe)]',
+          'bg-[var(--background-contrast-green-menthe)] border-l-[var(--border-default-green-menthe)]',
         'green-archipel':
-          'bg-[var(--background-contrast-green-archipel)] border-l-[var(--border-default-green-archipel)] text-[var(--text-label-green-archipel)]',
+          'bg-[var(--background-contrast-green-archipel)] border-l-[var(--border-default-green-archipel)]',
         'blue-ecume':
-          'bg-[var(--background-contrast-blue-ecume)] border-l-[var(--border-default-blue-ecume)] text-[var(--text-label-blue-ecume)]',
+          'bg-[var(--background-contrast-blue-ecume)] border-l-[var(--border-default-blue-ecume)]',
         'blue-cumulus':
-          'bg-[var(--background-contrast-blue-cumulus)] border-l-[var(--border-default-blue-cumulus)] text-[var(--text-label-blue-cumulus)]',
+          'bg-[var(--background-contrast-blue-cumulus)] border-l-[var(--border-default-blue-cumulus)]',
         'purple-glycine':
-          'bg-[var(--background-contrast-purple-glycine)] border-l-[var(--border-default-purple-glycine)] text-[var(--text-label-purple-glycine)]',
+          'bg-[var(--background-contrast-purple-glycine)] border-l-[var(--border-default-purple-glycine)]',
         'pink-macaron':
-          'bg-[var(--background-contrast-pink-macaron)] border-l-[var(--border-default-pink-macaron)] text-[var(--text-label-pink-macaron)]',
+          'bg-[var(--background-contrast-pink-macaron)] border-l-[var(--border-default-pink-macaron)]',
         'pink-tuile':
-          'bg-[var(--background-contrast-pink-tuile)] border-l-[var(--border-default-pink-tuile)] text-[var(--text-label-pink-tuile)]',
+          'bg-[var(--background-contrast-pink-tuile)] border-l-[var(--border-default-pink-tuile)]',
         'yellow-tournesol':
-          'bg-[var(--background-contrast-yellow-tournesol)] border-l-[var(--border-default-yellow-tournesol)] text-[var(--text-label-yellow-tournesol)]',
+          'bg-[var(--background-contrast-yellow-tournesol)] border-l-[var(--border-default-yellow-tournesol)]',
         'yellow-moutarde':
-          'bg-[var(--background-contrast-yellow-moutarde)] border-l-[var(--border-default-yellow-moutarde)] text-[var(--text-label-yellow-moutarde)]',
+          'bg-[var(--background-contrast-yellow-moutarde)] border-l-[var(--border-default-yellow-moutarde)]',
         'orange-terre-battue':
-          'bg-[var(--background-contrast-orange-terre-battue)] border-l-[var(--border-default-orange-terre-battue)] text-[var(--text-label-orange-terre-battue)]',
+          'bg-[var(--background-contrast-orange-terre-battue)] border-l-[var(--border-default-orange-terre-battue)]',
         'brown-cafe-creme':
-          'bg-[var(--background-contrast-brown-cafe-creme)] border-l-[var(--border-default-brown-cafe-creme)] text-[var(--text-label-brown-cafe-creme)]',
+          'bg-[var(--background-contrast-brown-cafe-creme)] border-l-[var(--border-default-brown-cafe-creme)]',
         'brown-caramel':
-          'bg-[var(--background-contrast-brown-caramel)] border-l-[var(--border-default-brown-caramel)] text-[var(--text-label-brown-caramel)]',
+          'bg-[var(--background-contrast-brown-caramel)] border-l-[var(--border-default-brown-caramel)]',
         'brown-opera':
-          'bg-[var(--background-contrast-brown-opera)] border-l-[var(--border-default-brown-opera)] text-[var(--text-label-brown-opera)]',
+          'bg-[var(--background-contrast-brown-opera)] border-l-[var(--border-default-brown-opera)]',
         'beige-gris-galet':
-          'bg-[var(--background-contrast-beige-gris-galet)] border-l-[var(--border-default-beige-gris-galet)] text-[var(--text-label-beige-gris-galet)]',
+          'bg-[var(--background-contrast-beige-gris-galet)] border-l-[var(--border-default-beige-gris-galet)]',
       },
       size: {
-        sm: 'px-3 py-3 text-sm',
-        md: 'px-4 py-4 text-base',
-        lg: 'px-5 py-5 text-lg',
+        sm: 'p-4 text-base leading-6',
+        md: 'p-6 text-lg leading-7 md:px-12 md:py-8',
+        lg: 'p-8 text-xl leading-8 md:px-12',
       },
     },
     defaultVariants: {
@@ -95,6 +95,12 @@ const Callout = React.forwardRef<HTMLDivElement, CalloutProps>(
     ref
   ) => {
     const TitleTag = titleMarkup
+    const titleClasses =
+      size === 'sm'
+        ? 'text-xl leading-7'
+        : size === 'lg'
+          ? 'text-2xl leading-8'
+          : 'text-h4 md:text-h4-desktop'
 
     return (
       <div ref={ref} className={cn(calloutVariants({ accent, size }), className)} {...props}>
@@ -106,7 +112,9 @@ const Callout = React.forwardRef<HTMLDivElement, CalloutProps>(
               </span>
             )}
             {title && (
-              <TitleTag className="font-bold text-[1.125em] leading-snug m-0">{title}</TitleTag>
+              <TitleTag className={cn('m-0 font-bold text-foreground-title', titleClasses)}>
+                {title}
+              </TitleTag>
             )}
           </div>
         )}

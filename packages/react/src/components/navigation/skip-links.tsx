@@ -48,16 +48,22 @@ const defaultLinks: SkipLink[] = [
 const SkipLinks = React.forwardRef<HTMLDivElement, SkipLinksProps>(
   ({ className, links = defaultLinks, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn('sr-only focus-within:not-sr-only', className)} {...props}>
-        <ul className="flex flex-col gap-1 p-2 bg-background shadow-lg absolute top-0 left-0 z-[9999]">
+      <div
+        ref={ref}
+        className={cn(
+          'absolute top-0 z-[9999] w-full -translate-y-full bg-background-contrast py-4 opacity-0 focus-within:relative focus-within:translate-y-0 focus-within:opacity-100 md:py-3',
+          className
+        )}
+        {...props}
+      >
+        <ul className="fr-container flex list-none flex-col gap-4 p-0 md:flex-row md:flex-wrap md:gap-x-4 md:gap-y-0">
           {links.map((link) => (
             <li key={link.targetId}>
               <a
                 href={`#${link.targetId}`}
                 className={cn(
-                  'block px-4 py-2 text-sm font-medium text-blue-france-main',
-                  'hover:underline focus:outline-none focus:ring-2 focus:ring-blue-france-main focus:ring-offset-2',
-                  'rounded-md'
+                  'block text-base font-medium leading-6 text-primary underline',
+                  'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
                 )}
               >
                 {link.label}

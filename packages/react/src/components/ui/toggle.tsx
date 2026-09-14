@@ -10,17 +10,17 @@ import { cn } from '../../lib/utils'
  */
 
 const toggleVariants = cva(
-  'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border border-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
+  'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border border-primary bg-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none',
   {
     variants: {
       variant: {
         // En DSFR, le toggle n'a qu'un seul style visuel d'activation (bleu), les états (succès/erreur) s'affichent via des messages textes.
         default:
-          'data-[state=unchecked]:bg-border data-[state=checked]:bg-primary focus-visible:ring-primary',
+          'data-[state=unchecked]:bg-transparent data-[state=checked]:bg-primary focus-visible:ring-ring',
       },
       size: {
         sm: 'h-5 w-9',
-        md: 'h-6 w-11',
+        md: 'h-6 w-10',
         lg: 'h-7 w-14',
       },
     },
@@ -32,12 +32,12 @@ const toggleVariants = cva(
 )
 
 const toggleThumbVariants = cva(
-  'pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform border border-primary',
+  'pointer-events-none block rounded-full border border-primary bg-background ring-0 transition-transform motion-reduce:transition-none',
   {
     variants: {
       size: {
         sm: 'h-5 w-5 data-[state=checked]:translate-x-4 data-[state=unchecked]:-ml-1 data-[state=unchecked]:translate-x-0',
-        md: 'h-6 w-6 data-[state=checked]:translate-x-5 data-[state=unchecked]:-ml-1 data-[state=unchecked]:translate-x-0',
+        md: 'h-6 w-6 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',
         lg: 'h-7 w-7 data-[state=checked]:translate-x-7 data-[state=unchecked]:-ml-1 data-[state=unchecked]:translate-x-0',
       },
     },
@@ -84,6 +84,7 @@ const Toggle = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.Root>, T
       success,
       labelPosition = 'right',
       id,
+      'aria-describedby': ariaDescribedBy,
       ...props
     },
     ref
@@ -95,15 +96,18 @@ const Toggle = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.Root>, T
     const errorId = `${inputOrGeneratedId}-error`
     const successId = `${inputOrGeneratedId}-success`
 
-    const describedBy = error ? errorId : success ? successId : hint ? hintId : undefined
+    const stateDescriptionId = error ? errorId : success ? successId : undefined
+    const describedBy = [ariaDescribedBy, hint ? hintId : undefined, stateDescriptionId]
+      .filter(Boolean)
+      .join(' ')
 
     const toggle = (
       <SwitchPrimitive.Root
         ref={ref}
         id={toggleId}
         className={cn(toggleVariants({ variant, size, className }))}
-        aria-describedby={describedBy}
-        aria-invalid={!!error}
+        aria-describedby={describedBy || undefined}
+        aria-invalid={error ? 'true' : undefined}
         {...props}
       >
         <SwitchPrimitive.Thumb className={cn(toggleThumbVariants({ size }), 'group relative')}>
@@ -154,18 +158,18 @@ const Toggle = React.forwardRef<React.ElementRef<typeof SwitchPrimitive.Root>, T
             {label}
           </label>
         )}
-        {hint && !error && !success && (
-          <p id={hintId} className="text-sm text-muted-foreground mt-1">
+        {hint && (
+          <p id={hintId} className="mt-2 text-xs leading-5 text-muted-foreground">
             {hint}
           </p>
         )}
         {error && (
-          <p id={errorId} className="text-sm text-destructive mt-1 font-medium">
+          <p id={errorId} className="mt-2 text-xs leading-5 text-destructive" role="alert">
             {error}
           </p>
         )}
         {!error && success && (
-          <p id={successId} className="text-sm text-success mt-1 font-medium">
+          <p id={successId} className="mt-2 text-xs leading-5 text-success" role="status">
             {success}
           </p>
         )}

@@ -60,7 +60,7 @@ const tagArgTypes: ArgTypes = {
   pressable: {
     control: 'boolean',
     description:
-      'Rend le tag sélectionnable (checkbox cachée). Un indicateur ✓ apparaît en haut à droite quand sélectionné. Exclusif avec `clickable` et `dismissible`.',
+      'Rend le tag sélectionnable (`button` avec `aria-pressed`). Un indicateur ✓ apparaît en haut à droite quand sélectionné. Exclusif avec `clickable` et `dismissible`.',
     table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
   },
   defaultSelected: {
@@ -87,9 +87,9 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: `Composant interactif (Action ou Lien) représentant un mot-clé, un filtre ou une catégorie cliquable.
+        component: `Étiquette représentant un mot-clé ou une catégorie, statique, navigable ou sélectionnable selon le mode.
 
-**Quand l'utiliser ?** Pour des filtres de listes, des catégories d'articles ou la suppression d'options multiples. Contrairement au \`Badge\`, le \`Tag\` doit *toujours* être lié à une interaction utilisateur (clic de filtre, suivi de lien, ou suppression de filtres combinés).`,
+**Quand l'utiliser ?** Pour des filtres de listes, des catégories d'articles ou la suppression d'options multiples. Le \`Badge\` exprime plutôt un statut.`,
       },
     },
     layout: 'centered',

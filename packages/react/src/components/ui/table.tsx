@@ -36,11 +36,28 @@ interface TableProps extends React.HTMLAttributes<HTMLDivElement> {
   striped?: boolean
   /** Tableau sans bordures latérales */
   noBorder?: boolean
+  /** Attributs portés par l'élément table (aria-label, aria-describedby, etc.). */
+  tableProps?: React.TableHTMLAttributes<HTMLTableElement>
 }
 
 const Table = React.forwardRef<HTMLDivElement, TableProps>(
-  ({ className, caption, striped = false, noBorder = false, children, ...props }, ref) => {
+  (
+    {
+      className,
+      caption,
+      striped = false,
+      noBorder = false,
+      tableProps,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const contextValue = React.useMemo(() => ({ striped, noBorder }), [striped, noBorder])
+    const { className: tableClassName, ...resolvedTableProps } = tableProps ?? {}
 
     return (
       <TableContext.Provider value={contextValue}>
@@ -49,9 +66,15 @@ const Table = React.forwardRef<HTMLDivElement, TableProps>(
           className={cn('fr-table relative w-full overflow-auto', className)}
           {...props}
         >
-          <table className="w-full text-sm border-collapse text-left">
+          <table
+            className={cn('w-full text-sm border-collapse text-left', tableClassName)}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            {...resolvedTableProps}
+          >
             {caption && (
-              <caption className="caption-top text-left text-xl font-bold text-foreground-title mb-4">
+              <caption className="caption-top text-left text-h4 font-bold text-foreground-title mb-4">
                 {caption}
               </caption>
             )}
@@ -68,7 +91,7 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn('bg-muted border-b-2 border-border', className)} {...props} />
+  <thead ref={ref} className={cn('bg-muted border-b border-border', className)} {...props} />
 ))
 TableHeader.displayName = 'TableHeader'
 
@@ -118,7 +141,7 @@ const TableHead = React.forwardRef<
     <th
       ref={ref}
       className={cn(
-        'px-4 py-3 text-left align-middle text-sm font-bold text-foreground-title',
+        'px-4 py-2 text-left align-middle text-sm leading-6 font-bold text-foreground-title',
         !noBorder && 'border-b border-border',
         '[&:has([role=checkbox])]:pr-0',
         className
@@ -139,7 +162,7 @@ const TableCell = React.forwardRef<
     <td
       ref={ref}
       className={cn(
-        'px-4 py-3 align-middle text-sm text-foreground',
+        'px-4 py-2 align-middle text-sm leading-6 text-foreground',
         !noBorder && 'border-b border-border',
         '[&:has([role=checkbox])]:pr-0',
         className
@@ -156,7 +179,7 @@ const TableCaption = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <caption
     ref={ref}
-    className={cn('caption-top text-xl font-bold text-foreground-title text-left mb-4', className)}
+    className={cn('caption-top text-h4 font-bold text-foreground-title text-left mb-4', className)}
     {...props}
   />
 ))

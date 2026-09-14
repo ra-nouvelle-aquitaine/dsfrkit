@@ -11,6 +11,7 @@ import fs from 'node:fs/promises'
 import https from 'node:https'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { extractScopedVariables } from '../src/css-scope'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -48,27 +49,6 @@ async function fetchFile(url: string, asText = false): Promise<string | Buffer> 
       })
       .on('error', reject)
   })
-}
-
-function parseCSSVariables(css: string): Record<string, string> {
-  const variables: Record<string, string> = {}
-  const regex = /--([^:]+):\s*([^;]+);/g
-  let match
-
-  while ((match = regex.exec(css)) !== null) {
-    const [, name, value] = match
-    // Filtrer les noms de variables valides et les valeurs simples (pas de règles CSS)
-    if (
-      /^[a-zA-Z][a-zA-Z0-9-]*$/.test(name.trim()) &&
-      !value.includes('{') &&
-      !value.includes(':before') &&
-      !value.includes(':after')
-    ) {
-      variables[name.trim()] = value.trim()
-    }
-  }
-
-  return variables
 }
 
 function extractColors(variables: Record<string, string>): Record<string, string> {
@@ -156,7 +136,7 @@ async function generateCSSVariablesFile(
 async function generateThemeCssFile(): Promise<void> {
   const themePath = path.join(__dirname, '../src/theme.css')
 
-  const content = `@import './dsfr-variables.css';\n\n/* Polices DSFR (générées par sync-dsfr) */\n\n/* Marianne - Regular */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Regular.woff2') format('woff2'),\n    url('./fonts/Marianne-Regular.woff') format('woff');\n  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Regular Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Regular_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Regular_Italic.woff') format('woff');\n  font-weight: 400;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Marianne - Medium */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Medium.woff2') format('woff2'),\n    url('./fonts/Marianne-Medium.woff') format('woff');\n  font-weight: 500;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Medium Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Medium_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Medium_Italic.woff') format('woff');\n  font-weight: 500;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Marianne - Bold */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Bold.woff2') format('woff2'),\n    url('./fonts/Marianne-Bold.woff') format('woff');\n  font-weight: 700;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Bold Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Bold_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Bold_Italic.woff') format('woff');\n  font-weight: 700;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Spectral - Regular (pour les titres) */\n@font-face {\n  font-family: 'Spectral';\n  src: url('./fonts/Spectral-Regular.woff2') format('woff2'),\n    url('./fonts/Spectral-Regular.woff') format('woff');\n  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Spectral - ExtraBold */\n@font-face {\n  font-family: 'Spectral';\n  src: url('./fonts/Spectral-ExtraBold.woff2') format('woff2'),\n    url('./fonts/Spectral-ExtraBold.woff') format('woff');\n  font-weight: 800;\n  font-style: normal;\n  font-display: swap;\n}\n`
+  const content = `@import './dsfr-variables.css';\n\n/* Jetons de focus DSFR.\n  Le DSFR fixe la couleur de focus à #0a76f6 directement dans les règles\n  outline-color de core.css, sans l'exposer comme variable CSS. On la\n  déclare donc ici comme jeton unique du design system, afin qu'aucun\n  composant ne porte de couleur codée en dur et que la valeur reste\n  surchargeable. Elle est volontairement identique en thème clair et sombre.\n*/\n:root {\n  --dsfr-focus-default: #0a76f6;\n  --dsfr-focus-offset: var(--background-default-grey);\n\n  /* Voile des surfaces modales (.fr-modal), également codé en dur par le\n     DSFR et identique dans les deux thèmes. */\n  --dsfr-overlay: rgba(22, 22, 22, 0.64);\n\n  /* Fait suivre le thème aux contrôles natifs du navigateur : bouton de\n     sélection de fichier, ascenseurs, sélecteurs de date. Sans cette\n     déclaration ils restent clairs en thème sombre, car ils suivent le\n     réglage du système et non l'attribut de thème de la page. */\n  color-scheme: light;\n}\n\n.dark,\n[data-theme="dark"],\n[data-fr-theme="dark"] {\n  color-scheme: dark;\n}\n\n@media (prefers-color-scheme: dark) {\n  :root:not(.light):not([data-theme="light"]):not([data-fr-theme="light"]) {\n    color-scheme: dark;\n  }\n}\n\n/* Polices DSFR (générées par sync-dsfr) */\n\n/* Marianne - Regular */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Regular.woff2') format('woff2'),\n    url('./fonts/Marianne-Regular.woff') format('woff');\n  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Regular Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Regular_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Regular_Italic.woff') format('woff');\n  font-weight: 400;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Marianne - Medium */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Medium.woff2') format('woff2'),\n    url('./fonts/Marianne-Medium.woff') format('woff');\n  font-weight: 500;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Medium Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Medium_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Medium_Italic.woff') format('woff');\n  font-weight: 500;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Marianne - Bold */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Bold.woff2') format('woff2'),\n    url('./fonts/Marianne-Bold.woff') format('woff');\n  font-weight: 700;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Marianne - Bold Italic */\n@font-face {\n  font-family: 'Marianne';\n  src: url('./fonts/Marianne-Bold_Italic.woff2') format('woff2'),\n    url('./fonts/Marianne-Bold_Italic.woff') format('woff');\n  font-weight: 700;\n  font-style: italic;\n  font-display: swap;\n}\n\n/* Spectral - Regular (pour les titres) */\n@font-face {\n  font-family: 'Spectral';\n  src: url('./fonts/Spectral-Regular.woff2') format('woff2'),\n    url('./fonts/Spectral-Regular.woff') format('woff');\n  font-weight: 400;\n  font-style: normal;\n  font-display: swap;\n}\n\n/* Spectral - ExtraBold */\n@font-face {\n  font-family: 'Spectral';\n  src: url('./fonts/Spectral-ExtraBold.woff2') format('woff2'),\n    url('./fonts/Spectral-ExtraBold.woff') format('woff');\n  font-weight: 800;\n  font-style: normal;\n  font-display: swap;\n}\n\n/*\n  Support des artworks DSFR.\n  Ces classes sont utilisées dans les SVG DSFR via <use className="...">\n  pour adapter automatiquement les couleurs aux thèmes clair et sombre.\n  Elles ne proviennent pas du CSS officiel : elles doivent être conservées\n  à chaque régénération.\n*/\n.fr-artwork-decorative {\n  fill: var(--artwork-decorative-blue-france);\n}\n\n.fr-artwork-minor {\n  fill: var(--artwork-minor-red-marianne);\n}\n\n.fr-artwork-major {\n  fill: var(--artwork-major-blue-france);\n}\n`
 
   await fs.writeFile(themePath, content)
   console.log('📝 Fichier theme.css généré: packages/tokens/src/theme.css')
@@ -181,11 +161,16 @@ async function main(): Promise<void> {
     console.log(`   scheme.css: ${schemeCss.length} caractères\n`)
 
     console.log('🔍 Analyse des variables CSS (light mode)...')
-    const lightVariables = parseCSSVariables(coreCss)
+    const lightVariables = extractScopedVariables(coreCss, ':root')
     console.log(`   ${Object.keys(lightVariables).length} variables trouvées\n`)
 
     console.log('🌙 Analyse des variables CSS (dark mode)...')
-    const darkVariables = parseCSSVariables(schemeCss)
+    // Le thème sombre est décrit par scheme.css, mais core.css porte aussi
+    // quelques surcharges sombres (dont --shadow-color) sous le même sélecteur.
+    const darkVariables = {
+      ...extractScopedVariables(schemeCss, ':root[data-fr-theme=dark]'),
+      ...extractScopedVariables(coreCss, ':root[data-fr-theme=dark]'),
+    }
     console.log(`   ${Object.keys(darkVariables).length} variables dark trouvées\n`)
 
     console.log('📝 Génération du fichier CSS des variables (light + dark)...')
@@ -227,4 +212,8 @@ async function main(): Promise<void> {
   }
 }
 
-main()
+// N'exécute la synchronisation que lorsque le script est lancé directement.
+const invokedPath = process.argv[1] ? path.resolve(process.argv[1]) : ''
+if (invokedPath === fileURLToPath(import.meta.url)) {
+  main()
+}

@@ -50,7 +50,7 @@ const indicatorVariants = cva(
       },
       size: {
         default: 'h-5 min-w-[1.25rem] px-1 text-xs -top-1 -right-1',
-        sm: 'h-3 min-w-[0.75rem] px-0 text-[0.5rem] -top-0.5 -right-0.5',
+        sm: 'h-4 min-w-4 px-0.5 text-xs leading-4 -top-0.5 -right-0.5',
         dot: 'h-2.5 w-2.5 p-0 -top-0.5 -right-0.5',
       },
     },

@@ -12,7 +12,11 @@ const meta = {
 `,
       },
     },
-    layout: 'centered',
+    // `padded` plutôt que `centered` : ce composant occupe toute la largeur
+    // disponible. La mise en page centrée de Storybook place la story dans un
+    // élément flex ajusté au contenu, ce qui faisait varier sa largeur selon
+    // le contenu affiché au lieu de rester stable.
+    layout: 'padded',
   },
   tags: ['autodocs'],
   args: {
@@ -74,7 +78,7 @@ export const Default: Story = {
   args: {
     value: 60,
   },
-  render: (args) => <Progress {...args} className="w-[300px]" />,
+  render: (args) => <Progress {...args} className="w-full max-w-[300px]" />,
 }
 
 export const Animated: Story = {
@@ -86,7 +90,7 @@ export const Animated: Story = {
       return () => clearTimeout(timer)
     }, [])
 
-    return <Progress {...args} value={progress} className="w-[300px]" />
+    return <Progress {...args} value={progress} className="w-full max-w-[300px]" />
   },
 }
 
@@ -103,7 +107,7 @@ export const CustomAnimationSpeed: Story = {
     }, [args.value])
 
     return (
-      <Box className="w-[300px] space-y-2">
+      <Box className="w-full max-w-[300px] space-y-2">
         <Text as="p" size="2" className="text-foreground-muted">
           Animation lente ({args.animationDuration}ms)
         </Text>
@@ -119,7 +123,7 @@ export const SuccessVariant: Story = {
     variant: 'success',
   },
   render: (args) => (
-    <Box className="w-[300px] space-y-2">
+    <Box className="w-full max-w-[300px] space-y-2">
       <Box className="flex justify-between text-sm font-medium">
         <Text as="span">Installation terminée</Text>
         <Text as="span" className="text-success">
@@ -153,7 +157,7 @@ const ACCENTS = [
 
 export const AllVariants: Story = {
   render: () => (
-    <Box className="w-[400px] space-y-3">
+    <Box className="w-full max-w-[400px] space-y-3">
       <Box className="space-y-1">
         <Text as="span" size="1" weight="medium">
           primary
@@ -190,7 +194,7 @@ export const AllVariants: Story = {
 
 export const AllAccents: Story = {
   render: () => (
-    <Box className="w-[400px] space-y-3">
+    <Box className="w-full max-w-[400px] space-y-3">
       {ACCENTS.map((accent) => (
         <Box key={accent} className="space-y-1">
           <Text as="span" size="1" weight="medium">

@@ -3,7 +3,8 @@
  * Source: https://www.systeme-de-design.gouv.fr/fondamentaux/espacement
  *
  * Le DSFR utilise une unité de base de 0.25rem (4px) appelée « v ».
- * Les espacements vont de 1v (0.25rem) à 32 (8rem).
+ * Les espacements vont de 1v (0.25rem) à 32v (8rem).
+ * Une unité « w » vaut 2 unités « v » : 1w = 8px, 2w = 16px, etc.
  */
 
 export const spacing = {
@@ -13,23 +14,35 @@ export const spacing = {
   '1v': '0.25rem', // 4px
   '1w': '0.5rem', // 8px — alias DSFR
   '2v': '0.5rem', // 8px
+  '2w': '1rem', // 16px — alias DSFR
   '3v': '0.75rem', // 12px
-  '3w': '1rem', // 16px — alias DSFR
+  '3w': '1.5rem', // 24px — alias DSFR
   '4v': '1rem', // 16px
+  '4w': '2rem', // 32px — alias DSFR
   '5v': '1.25rem', // 20px
-  '5w': '1.5rem', // 24px — alias DSFR
+  '5w': '2.5rem', // 40px — alias DSFR
   '6v': '1.5rem', // 24px
+  '6w': '3rem', // 48px — alias DSFR
   '7v': '1.75rem', // 28px
-  '7w': '2rem', // 32px — alias DSFR
+  '7w': '3.5rem', // 56px — alias DSFR
   '8v': '2rem', // 32px
+  '8w': '4rem', // 64px — alias DSFR
   '9v': '2.25rem', // 36px
-  '9w': '2.5rem', // 40px — alias DSFR
+  '9w': '4.5rem', // 72px — alias DSFR
   '10v': '2.5rem', // 40px
+  '10w': '5rem', // 80px — alias DSFR
   '11v': '2.75rem', // 44px
+  '11w': '5.5rem', // 88px — alias DSFR
   '12v': '3rem', // 48px
+  '12w': '6rem', // 96px — alias DSFR
+  '13v': '3.25rem', // 52px
+  '13w': '6.5rem', // 104px — alias DSFR
   '14v': '3.5rem', // 56px
+  '14w': '7rem', // 112px — alias DSFR
   '15v': '3.75rem', // 60px
+  '15w': '7.5rem', // 120px — alias DSFR
   '16v': '4rem', // 64px
+  '16w': '8rem', // 128px — alias DSFR
   // Tailwind-compatible numeric keys
   0.5: '0.125rem', // 2px
   1: '0.25rem', // 4px
@@ -74,22 +87,21 @@ export const borderRadius = {
 export const boxShadow = {
   none: 'none',
   // Élévation DSFR — raised (cartes, tuiles)
-  raised: '0 2px 6px 0 rgba(0, 0, 18, 0.16)',
+  raised: 'var(--raised-shadow, 0 1px 3px rgba(0, 0, 18, 0.16))',
   // Élévation DSFR — overlap (menus déroulants, tooltips)
-  overlap: '0 6px 18px 0 rgba(0, 0, 18, 0.16)',
+  overlap: 'var(--overlap-shadow, 0 2px 6px rgba(0, 0, 18, 0.16))',
   // Élévation DSFR — sticky (éléments collants, header)
-  sticky: '0 2px 6px 0 rgba(0, 0, 18, 0.16)',
+  sticky: 'var(--raised-shadow, 0 1px 3px rgba(0, 0, 18, 0.16))',
   // Élévation DSFR — lifted (modales, dialogues)
-  lifted: '0 12px 32px 0 rgba(0, 0, 18, 0.16)',
+  lifted: 'var(--lifted-shadow, 0 3px 9px rgba(0, 0, 18, 0.16))',
   // Focus outline DSFR (2px outline + 2px offset)
-  focus:
-    '0 0 0 2px var(--dsfr-focus-offset, #ffffff), 0 0 0 4px var(--dsfr-focus-default, #000091)',
+  focus: '0 0 0 2px var(--dsfr-focus-offset), 0 0 0 4px var(--dsfr-focus-default)',
   // Compatibilité Tailwind standard
   sm: '0 1px 2px 0 rgba(0, 0, 18, 0.08)',
-  DEFAULT: '0 2px 6px 0 rgba(0, 0, 18, 0.16)',
-  md: '0 4px 12px 0 rgba(0, 0, 18, 0.16)',
-  lg: '0 6px 18px 0 rgba(0, 0, 18, 0.16)',
-  xl: '0 12px 32px 0 rgba(0, 0, 18, 0.16)',
+  DEFAULT: 'var(--raised-shadow, 0 1px 3px rgba(0, 0, 18, 0.16))',
+  md: 'var(--overlap-shadow, 0 2px 6px rgba(0, 0, 18, 0.16))',
+  lg: 'var(--overlap-shadow, 0 2px 6px rgba(0, 0, 18, 0.16))',
+  xl: 'var(--lifted-shadow, 0 3px 9px rgba(0, 0, 18, 0.16))',
   '2xl': '0 16px 48px 0 rgba(0, 0, 18, 0.24)',
 } as const
 

@@ -6,12 +6,12 @@ const ConsentBanner = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
     <div
       ref={ref}
       className={cn(
-        'fixed bottom-0 left-0 w-full z-50 bg-background elevation-raised py-6 shadow-[0_-4px_8px_rgba(0,0,0,0.1)]',
+        'fixed bottom-0 left-0 z-50 max-h-[calc(100%_-_8rem)] w-full overflow-auto border border-border bg-background-alt-overlap p-4 elevation-overlap md:bottom-10 md:left-10 md:max-h-[calc(100%_-_5rem)] md:max-w-[40rem] md:p-8',
         className
       )}
       {...props}
     >
-      <div className="fr-container">{children}</div>
+      {children}
     </div>
   )
 )
@@ -21,13 +21,17 @@ const ConsentBannerTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
-  <h2 ref={ref} className={cn('text-lg font-bold mb-4', className)} {...props} />
+  <h2
+    ref={ref}
+    className={cn('mb-4 text-lg font-bold leading-6 md:text-xl md:leading-7', className)}
+    {...props}
+  />
 ))
 ConsentBannerTitle.displayName = 'ConsentBannerTitle'
 
 const ConsentBannerContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('text-sm mb-6', className)} {...props} />
+    <div ref={ref} className={cn('mb-6 text-base leading-6', className)} {...props} />
   )
 )
 ConsentBannerContent.displayName = 'ConsentBannerContent'

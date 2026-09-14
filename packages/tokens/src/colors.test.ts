@@ -14,6 +14,7 @@ describe('DSFR Colors', () => {
     expect(colors.success).toBeDefined()
     expect(colors.warning).toBeDefined()
     expect(colors.error).toBeDefined()
+    expect(colors.info[975]).toBe('#f4f6ff')
   })
 
   it('should expose the decision color tree', () => {

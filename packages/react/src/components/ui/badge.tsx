@@ -28,7 +28,7 @@ const badgeVariants = cva(
         // Error : fond rouge clair, texte rouge (DSFR)
         error: 'bg-destructive-background text-destructive',
         // New : fond jaune, texte jaune foncé
-        new: 'bg-yellow-tournesol-950 text-yellow-tournesol-main',
+        new: 'bg-yellow-moutarde-950 text-yellow-moutarde-main',
         // Primary : fond bleu france (adaptatif via token sémantique)
         primary: 'bg-primary text-primary-foreground',
         // Secondary : fond rouge marianne (adaptatif via token sémantique)
@@ -173,13 +173,17 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
       } else if (DefaultIcon) {
         // Use standard DSFR sizes for badge icons: sm -> 12px (w-3), md -> 16px (w-4)
         const iconSizeClass = size === 'sm' ? 'w-3 h-3' : 'w-4 h-4'
-        iconToRender = <DefaultIcon className={iconSizeClass} />
+        iconToRender = <DefaultIcon className={iconSizeClass} aria-hidden="true" />
       }
     }
 
     return (
       <span ref={ref} className={cn(badgeVariants({ variant, size, className }))} {...props}>
-        {iconToRender && <span className="mr-1 -ml-0.5">{iconToRender}</span>}
+        {iconToRender && (
+          <span className="mr-1 -ml-0.5" aria-hidden="true">
+            {iconToRender}
+          </span>
+        )}
         {children}
       </span>
     )

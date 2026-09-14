@@ -28,8 +28,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
             'text-4xl': String(size) === '8',
             'text-5xl': String(size) === '9',
 
-            'font-light': weight === 'light',
-            'font-normal': weight === 'regular',
+            'font-normal': weight === 'light' || weight === 'regular',
             'font-medium': weight === 'medium',
             'font-bold': weight === 'bold',
           },

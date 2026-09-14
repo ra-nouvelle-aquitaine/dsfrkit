@@ -23,7 +23,11 @@ const meta = {
 `,
       },
     },
-    layout: 'centered',
+    // `padded` plutôt que `centered` : ce composant occupe toute la largeur
+    // disponible. La mise en page centrée de Storybook place la story dans un
+    // élément flex ajusté au contenu, ce qui faisait varier sa largeur selon
+    // le contenu affiché au lieu de rester stable.
+    layout: 'padded',
   },
   tags: ['autodocs'],
   argTypes: {
@@ -120,7 +124,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <Box style={{ width: '320px' }}>
+      <Box className="w-full max-w-[320px]">
         <Story />
       </Box>
     ),
@@ -383,7 +387,7 @@ const textareaMeta = {
   },
   decorators: [
     (Story) => (
-      <Box style={{ width: '400px' }}>
+      <Box className="w-full max-w-[400px]">
         <Story />
       </Box>
     ),

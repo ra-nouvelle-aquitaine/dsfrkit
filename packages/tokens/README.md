@@ -46,7 +46,8 @@ Puis importez-le depuis vos fichiers CSS :
 
 ## Contenu
 
-- **colors** - Palette de couleurs complète du DSFR
+- **colors** - Sous-ensemble typé des couleurs DSFR les plus utilisées
+- **theme.css** - Variables de décision et palette CSS complète, synchronisées depuis le paquet officiel
 - **typography** - Police Marianne, tailles, poids
 - **spacing** - Échelle d'espacements
 - **borderRadius** - Rayons de bordure

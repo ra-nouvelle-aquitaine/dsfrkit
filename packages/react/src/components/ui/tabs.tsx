@@ -16,7 +16,10 @@ const Tabs = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
 >(({ className, ...props }, ref) => (
-  <TabsPrimitive.Root ref={ref} className={cn(className)} {...props} />
+  // `min-w-0` autorise la racine à se réduire dans un parent flex : sans lui,
+  // la largeur minimale des onglets se propage vers le haut et provoque un
+  // débordement horizontal en mobile, malgré le défilement de la liste.
+  <TabsPrimitive.Root ref={ref} className={cn('min-w-0', className)} {...props} />
 ))
 Tabs.displayName = TabsPrimitive.Root.displayName
 
@@ -31,7 +34,7 @@ const TabsList = React.forwardRef<
       // ── Horizontal (défaut) ──────────────────────────────────────────────
       'data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-nowrap data-[orientation=horizontal]:items-end data-[orientation=horizontal]:justify-start',
       'data-[orientation=horizontal]:w-full data-[orientation=horizontal]:overflow-x-auto',
-      'data-[orientation=horizontal]:px-4',
+      'data-[orientation=horizontal]:px-3',
       'data-[orientation=horizontal]:shadow-[inset_0_-1px_0_0_var(--border-default-grey)]',
       // ── Vertical ────────────────────────────────────────────────────────
       'data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-stretch data-[orientation=vertical]:justify-start',
@@ -57,12 +60,12 @@ const TabsTrigger = React.forwardRef<
     ref={ref}
     className={cn(
       // ── Base commune ────────────────────────────────────────────────────
-      'inline-flex items-center whitespace-nowrap px-4 py-2 text-base font-medium transition-colors shrink-0',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-france-sun-113-625)] focus-visible:ring-offset-2 focus-visible:z-10',
+      'inline-flex shrink-0 items-center whitespace-nowrap px-4 py-2 text-base font-bold transition-colors motion-reduce:transition-none',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:z-10',
       'disabled:pointer-events-none disabled:opacity-50',
 
       // ── Horizontal ──────────────────────────────────────────────────────
-      'data-[orientation=horizontal]:justify-center data-[orientation=horizontal]:min-h-[48px]',
+      'data-[orientation=horizontal]:min-h-10 data-[orientation=horizontal]:justify-center',
       'data-[orientation=horizontal]:border-x data-[orientation=horizontal]:border-t-2 data-[orientation=horizontal]:border-b-0 data-[orientation=horizontal]:border-transparent',
       'data-[orientation=horizontal]:bg-[var(--background-action-low-blue-france)]',
       'data-[orientation=horizontal]:text-[var(--text-action-high-grey)]',
@@ -70,7 +73,6 @@ const TabsTrigger = React.forwardRef<
       // Actif horizontal
       'data-[orientation=horizontal]:data-[state=active]:bg-background',
       'data-[orientation=horizontal]:data-[state=active]:text-[var(--text-active-blue-france)]',
-      'data-[orientation=horizontal]:data-[state=active]:font-bold',
       'data-[orientation=horizontal]:data-[state=active]:border-x-[var(--border-default-grey)]',
       'data-[orientation=horizontal]:data-[state=active]:border-t-[var(--border-active-blue-france)]',
       // Le shadow de bg-background masque la bordure de TabsList
@@ -86,7 +88,6 @@ const TabsTrigger = React.forwardRef<
       'data-[orientation=vertical]:data-[state=active]:-mr-[1px]',
       'data-[orientation=vertical]:data-[state=active]:bg-background',
       'data-[orientation=vertical]:data-[state=active]:text-[var(--text-active-blue-france)]',
-      'data-[orientation=vertical]:data-[state=active]:font-bold',
       'data-[orientation=vertical]:data-[state=active]:border-y-[var(--border-default-grey)]',
       'data-[orientation=vertical]:data-[state=active]:border-l-[var(--border-active-blue-france)]',
       'data-[orientation=vertical]:data-[state=active]:shadow-[1px_0_0_0_var(--background-default-grey)]',
@@ -105,8 +106,8 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-france-sun-113-625)] focus-visible:ring-offset-2',
-      'p-4 md:p-8 border-b border-x border-border',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'border-x border-b border-border p-4',
       'data-[orientation=vertical]:border data-[orientation=vertical]:border-l-0 data-[orientation=vertical]:border-[var(--border-default-grey)]',
       className
     )}

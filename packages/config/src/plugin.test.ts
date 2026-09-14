@@ -72,7 +72,27 @@ describe('DSFR Tailwind Preset', () => {
     const container = dsfrPreset.theme?.extend?.container as any
     expect(container).toBeDefined()
     expect(container.center).toBe(true)
-    expect(container.padding).toBeDefined()
+    expect(container.screens).toEqual({ xl: '78rem' })
+    expect(container.padding).toEqual({ DEFAULT: '1rem', lg: '1.5rem', xl: '1.5rem' })
+  })
+
+  it('should generate the official 12-column grid and responsive gutters', async () => {
+    const config: Config = {
+      presets: [dsfrPreset as Config],
+      content: [{ raw: 'fr-container fr-grid-row fr-grid-row--gutters fr-col-12 fr-col-md-8' }],
+      corePlugins: { preflight: false },
+    }
+
+    const result = await postcss([tailwindcss(config)]).process('@tailwind components;', {
+      from: undefined,
+    })
+
+    expect(result.css).toContain('.fr-container')
+    expect(result.css).toContain('max-width: 78rem')
+    expect(result.css).toContain('.fr-grid-row--gutters')
+    expect(result.css).toContain('.fr-col-12')
+    expect(result.css).toContain('.fr-col-md-8')
+    expect(result.css).toContain('@media (min-width: 48em)')
   })
 
   it('should inject plugins', () => {

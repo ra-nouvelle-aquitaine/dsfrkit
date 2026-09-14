@@ -70,12 +70,12 @@ export const Hierarchy: Story = {
         <Heading as="h1" size="6">
           Titre principal de la page (H1)
         </Heading>
-        <Box className="space-y-4">
-          <Heading as="h2" size="5" className="text-primary">
+        <Box>
+          <Heading as="h2" size="5">
             Section majeure (H2)
           </Heading>
           <Text as="p">Un peu de contenu texte pour l'introduction de cette section.</Text>
-          <Heading as="h3" size="4" weight="medium">
+          <Heading as="h3" size="4">
             Sous-section (H3)
           </Heading>
           <Text as="p">Détails spécifiques à la sous-section.</Text>

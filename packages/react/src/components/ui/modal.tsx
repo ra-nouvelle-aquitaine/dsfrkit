@@ -24,7 +24,7 @@ const ModalOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 z-50 bg-overlay data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 motion-reduce:animate-none',
       className
     )}
     {...props}
@@ -33,7 +33,7 @@ const ModalOverlay = React.forwardRef<
 ModalOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const modalContentVariants = cva(
-  'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg max-h-[85vh] overflow-y-auto translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background-elevated text-foreground p-6 elevation-lifted duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] border-border',
+  'fixed inset-x-0 bottom-0 z-50 grid w-full max-h-[calc(100vh-2rem)] overflow-y-auto gap-4 border border-border bg-background-lifted text-foreground p-4 elevation-lifted duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 motion-reduce:animate-none md:left-1/2 md:top-1/2 md:bottom-auto md:w-[calc(100%-3rem)] md:max-h-[80vh] md:-translate-x-1/2 md:-translate-y-1/2 md:p-8',
   {
     variants: {
       size: {
@@ -62,6 +62,7 @@ const ModalContent = React.forwardRef<
     <ModalOverlay />
     <DialogPrimitive.Content
       ref={ref}
+      aria-modal="true"
       className={cn(modalContentVariants({ size, className }))}
       {...props}
     >
@@ -112,10 +113,7 @@ const ModalTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      'text-2xl font-bold leading-none tracking-tight text-foreground-title',
-      className
-    )}
+    className={cn('text-h4 font-bold text-foreground-title', className)}
     {...props}
   />
 ))
@@ -127,7 +125,7 @@ const ModalDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
+    className={cn('text-base leading-6 text-muted-foreground', className)}
     {...props}
   />
 ))

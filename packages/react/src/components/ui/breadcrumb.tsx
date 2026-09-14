@@ -58,7 +58,7 @@ const BreadcrumbLink = React.forwardRef<
 >(({ asChild = false, className, children, ...props }, ref) => {
   const router = useRouter()
   const classes = cn(
-    'text-muted hover:text-foreground underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded',
+    'text-muted hover:text-foreground underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
     className
   )
 
@@ -90,16 +90,7 @@ BreadcrumbLink.displayName = 'BreadcrumbLink'
 
 const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
   ({ className, ...props }, ref) => (
-    // biome-ignore lint/a11y/useFocusableInteractive: indicateur de page actuelle, non interactif
-    // biome-ignore lint/a11y/useSemanticElements: Design pattern DSFR
-    <span
-      ref={ref}
-      role="link"
-      aria-disabled="true"
-      aria-current="page"
-      className={cn('text-muted', className)}
-      {...props}
-    />
+    <span ref={ref} aria-current="page" className={cn('text-muted', className)} {...props} />
   )
 )
 BreadcrumbPage.displayName = 'BreadcrumbPage'

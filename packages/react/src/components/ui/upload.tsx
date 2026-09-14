@@ -38,27 +38,53 @@ export interface UploadProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
 }
 
 const Upload = React.forwardRef<HTMLInputElement, UploadProps>(
-  ({ className, label, hint, error, success, containerClassName, id, ...props }, ref) => {
+  (
+    {
+      className,
+      label,
+      hint,
+      error,
+      success,
+      containerClassName,
+      id,
+      'aria-describedby': ariaDescribedBy,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = React.useId()
     const inputId = id || generatedId
     const inputOrGeneratedId = inputId
     const hasError = Boolean(error)
     const hasSuccess = Boolean(success) && !hasError
+    const hintId = `${inputOrGeneratedId}-hint`
+    const errorId = `${inputOrGeneratedId}-error`
+    const successId = `${inputOrGeneratedId}-success`
+    const describedBy = [
+      ariaDescribedBy,
+      hint ? hintId : undefined,
+      hasError ? errorId : undefined,
+      hasSuccess ? successId : undefined,
+    ]
+      .filter(Boolean)
+      .join(' ')
 
     return (
-      <div className={cn('fr-upload-group flex flex-col gap-1', containerClassName)}>
+      <div className={cn('fr-upload-group flex flex-col', containerClassName)}>
         {/* Label */}
-        <label htmlFor={inputId} className="text-sm font-bold leading-6 text-foreground-title">
+        <label htmlFor={inputId} className="text-base leading-6 text-foreground-title">
           {label}
           {props.required && (
             <span className="ml-1 text-destructive" aria-hidden="true">
               *
             </span>
           )}
+          {hint && (
+            <span id={hintId} className="mt-3 block text-xs leading-5 text-muted-foreground">
+              {hint}
+            </span>
+          )}
         </label>
-
-        {/* Hint */}
-        {hint && <p className="text-sm text-muted-foreground leading-5">{hint}</p>}
 
         {/* Input file */}
         <input
@@ -66,37 +92,26 @@ const Upload = React.forwardRef<HTMLInputElement, UploadProps>(
           id={inputId}
           type="file"
           className={cn(
-            // Base DSFR file input styles
-            'w-full text-sm text-foreground',
-            'file:mr-4 file:py-1.5 file:px-4',
-            'file:border-0 file:font-medium file:text-sm',
-            'file:bg-background-contrast file:text-foreground file:cursor-pointer',
-            'file:hover:bg-muted',
-            'file:transition-colors',
-            // State borders
-            hasError && 'border-b-2 border-b-destructive',
-            hasSuccess && 'border-b-2 border-b-success',
+            // .fr-upload laisse le bouton natif du navigateur ; on lui applique
+            // ici l'habillage d'un bouton tertiaire DSFR au gabarit `sm`
+            // (fond transparent, filet interne 1px, texte Bleu France,
+            // 14/24, hauteur 32px, retrait 4px/12px, sans rayon).
+            'mt-4 inline-flex w-full text-sm leading-6 text-foreground',
+            'file:mr-2 file:min-h-8 file:cursor-pointer file:appearance-none file:rounded-none',
+            'file:border-0 file:bg-transparent file:px-3 file:py-1',
+            'file:font-medium file:text-sm file:leading-6 file:text-primary',
+            'file:shadow-[inset_0_0_0_1px_theme(colors.border)]',
+            'file:transition-colors hover:file:bg-background-contrast',
             className
           )}
-          aria-describedby={
-            [
-              hint ? `${inputOrGeneratedId}-hint` : null,
-              error ? `${inputOrGeneratedId}-error` : null,
-              success ? `${inputOrGeneratedId}-success` : null,
-            ]
-              .filter(Boolean)
-              .join(' ') || undefined
-          }
+          aria-invalid={hasError ? 'true' : undefined}
+          aria-describedby={describedBy || undefined}
           {...props}
         />
 
         {/* Error */}
         {hasError && (
-          <p
-            id={`${inputOrGeneratedId}-error`}
-            className="text-sm text-destructive leading-5"
-            role="alert"
-          >
+          <p id={errorId} className="mt-2 text-xs text-destructive leading-5" role="alert">
             <span className="font-bold">Erreur — </span>
             {error}
           </p>
@@ -104,7 +119,7 @@ const Upload = React.forwardRef<HTMLInputElement, UploadProps>(
 
         {/* Success */}
         {hasSuccess && (
-          <p id={`${inputOrGeneratedId}-success`} className="text-sm text-success leading-5">
+          <p id={successId} className="mt-2 text-xs text-success leading-5" role="status">
             {success}
           </p>
         )}

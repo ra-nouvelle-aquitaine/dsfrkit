@@ -149,7 +149,7 @@ export const WithImage: Story = {
       <Tile
         title="Parc naturel régional"
         description="Découvrez les espaces naturels protégés de votre région."
-        imageSrc="https://picsum.photos/seed/nature/400/200"
+        imageSrc="https://picsum.photos/seed/nature/200/200"
         imageAlt="Paysage naturel"
         href="#"
       />

@@ -45,6 +45,7 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
     const menuId = React.useId()
     const containerRef = React.useRef<HTMLDivElement>(null)
     const menuRef = React.useRef<HTMLUListElement>(null)
+    const triggerRef = React.useRef<HTMLButtonElement>(null)
 
     // Close menu on outside click
     React.useEffect(() => {
@@ -54,7 +55,17 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
         }
       }
       document.addEventListener('mousedown', handleClickOutside)
-      return () => document.removeEventListener('mousedown', handleClickOutside)
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          setIsOpen(false)
+          triggerRef.current?.focus()
+        }
+      }
+      document.addEventListener('keydown', handleEscape)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+        document.removeEventListener('keydown', handleEscape)
+      }
     }, [])
 
     // Dynamic horizontal alignment to prevent overflow
@@ -82,21 +93,24 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
           else if (ref) ref.current = el
           ;(containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el
         }}
-        className={cn('fr-translate relative inline-block', className)}
+        className={cn('fr-translate relative block w-full lg:inline-block lg:w-auto', className)}
         {...props}
       >
         {/* Trigger button */}
         <button
+          ref={triggerRef}
           type="button"
-          aria-haspopup="listbox"
           aria-expanded={isOpen}
           aria-controls={menuId}
+          title="Sélectionner une langue"
           onClick={() => setIsOpen((v) => !v)}
           className={cn(
-            'inline-flex items-center gap-2 px-3 py-2 text-sm font-bold',
+            'inline-flex min-h-12 w-full max-w-full items-center gap-2 px-4 py-2 text-base leading-6 font-medium',
+            'lg:min-h-0 lg:w-auto lg:px-3 lg:py-1 lg:text-sm lg:leading-6',
             'text-foreground bg-transparent border-0 cursor-pointer',
-            'hover:bg-accent hover:text-accent-foreground',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            'hover:bg-background-overlap-hover',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+            isOpen && 'bg-background-open-blue-france text-primary'
           )}
         >
           {/* Translate Icon */}
@@ -119,7 +133,10 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
             <path d="m22 22-5-10-5 10" />
             <path d="M14 18h6" />
           </svg>
-          <span>{current?.nativeLabel ?? currentLanguage.toUpperCase()}</span>
+          <span>
+            {current?.nativeLabel ?? currentLanguage.toUpperCase()}
+            {current?.label && <span className="lg:hidden">&nbsp;- {current.label}</span>}
+          </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -129,7 +146,10 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
             stroke="currentColor"
             strokeWidth="2"
             aria-hidden="true"
-            className={cn('transition-transform', isOpen && 'rotate-180')}
+            className={cn(
+              'transition-transform motion-reduce:transition-none',
+              isOpen && 'rotate-180'
+            )}
           >
             <polyline points="6 9 12 15 18 9" />
           </svg>
@@ -144,24 +164,27 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
             className={cn(
               'absolute top-full z-50 mt-1 min-w-[10rem] m-0',
               alignment,
-              'bg-popover text-popover-foreground border shadow-md',
+              'bg-popover text-popover-foreground border-t border-background-open-blue-france elevation-overlap',
               'py-1 list-none p-0'
             )}
           >
             {languages.map((lang) => {
               const isActive = lang.code === currentLanguage
               return (
-                <li key={lang.code} aria-current={isActive ? 'true' : undefined}>
+                <li key={lang.code}>
                   {lang.href ? (
                     <RouterAnchor
                       href={lang.href}
                       hrefLang={lang.code}
                       lang={lang.code}
+                      aria-current={isActive ? 'page' : undefined}
+                      onClick={() => setIsOpen(false)}
                       className={cn(
                         'flex items-center px-4 py-2 text-sm no-underline',
-                        'text-foreground hover:bg-accent hover:text-accent-foreground',
+                        'text-foreground hover:bg-background-overlap-hover',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
                         isActive &&
-                          'font-bold text-primary shadow-[inset_2px_0_0_0_theme(colors.primary.DEFAULT)]'
+                          'hidden font-bold text-primary relative before:absolute before:left-0 before:top-1/2 before:-mt-3 before:h-6 before:w-0.5 before:bg-primary before:content-[""] lg:flex'
                       )}
                     >
                       <span>
@@ -172,6 +195,7 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
                     <button
                       type="button"
                       lang={lang.code}
+                      aria-current={isActive ? 'true' : undefined}
                       onClick={() => {
                         onLanguageChange?.(lang.code)
                         setIsOpen(false)
@@ -179,9 +203,10 @@ const Translate = React.forwardRef<HTMLDivElement, TranslateProps>(
                       className={cn(
                         'flex w-full items-center px-4 py-2 text-sm m-0',
                         'text-foreground bg-transparent border-0 cursor-pointer',
-                        'hover:bg-accent hover:text-accent-foreground',
+                        'hover:bg-background-overlap-hover',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring',
                         isActive &&
-                          'font-bold text-primary shadow-[inset_2px_0_0_0_theme(colors.primary.DEFAULT)]'
+                          'hidden font-bold text-primary relative before:absolute before:left-0 before:top-1/2 before:-mt-3 before:h-6 before:w-0.5 before:bg-primary before:content-[""] lg:flex'
                       )}
                     >
                       <span>

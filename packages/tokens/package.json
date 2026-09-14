@@ -33,12 +33,12 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup && npx tsx scripts/copy-assets.ts",
-    "dev": "npx tsx scripts/copy-assets.ts && tsup --watch",
+    "build": "tsup && jiti scripts/copy-assets.ts",
+    "dev": "jiti scripts/copy-assets.ts && tsup --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "sync:dsfr": "npx tsx scripts/sync-dsfr.ts",
+    "sync:dsfr": "jiti scripts/sync-dsfr.ts",
     "clean": "rm -rf dist"
   },
   "keywords": [
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.6.0",
+    "jiti": "^1.21.7",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   }

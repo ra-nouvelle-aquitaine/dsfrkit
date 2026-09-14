@@ -34,7 +34,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         ),
         month_grid: 'w-full border-collapse',
         weekdays: 'flex',
-        weekday: 'text-foreground-muted w-9 font-normal text-[0.8rem] text-center',
+        weekday: 'w-9 text-center text-xs font-normal text-foreground-muted',
         week: 'flex w-full mt-1',
         day: cn(
           'h-9 w-9 p-0 text-center text-sm relative group',

@@ -25,13 +25,13 @@ const radioVariants = cva(
       variant: {
         // Default : bordure bleue france
         default:
-          'border-primary text-primary focus-visible:ring-primary data-[state=checked]:border-primary',
+          'border-primary text-primary focus-visible:ring-ring data-[state=checked]:border-primary',
         // Error : bordure rouge
         error:
-          'border-destructive text-destructive focus-visible:ring-destructive data-[state=checked]:border-destructive',
+          'border-destructive text-destructive focus-visible:ring-ring data-[state=checked]:border-destructive',
         // Success : bordure verte
         success:
-          'border-success text-success focus-visible:ring-success data-[state=checked]:border-success',
+          'border-success text-success focus-visible:ring-ring data-[state=checked]:border-success',
       },
       size: {
         // SM : 16px (1rem)
@@ -103,17 +103,17 @@ const RadioGroupItem = React.forwardRef<
   return (
     <div className="flex items-start gap-3">
       {radio}
-      <div className="grid gap-1 leading-none">
+      <div className="grid gap-1">
         {label && (
           <label
             htmlFor={radioId}
-            className="text-sm font-medium text-foreground cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            className="cursor-pointer text-base leading-6 text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             {label}
           </label>
         )}
         {hint && (
-          <p id={hintId} className="text-sm text-muted-foreground">
+          <p id={hintId} className="text-xs leading-5 text-muted-foreground">
             {hint}
           </p>
         )}

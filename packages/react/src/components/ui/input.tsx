@@ -10,7 +10,7 @@ import { cn } from '../../lib/utils'
  */
 const inputVariants = cva(
   // Base DSFR : fond adaptatif, bordure inférieure
-  'flex w-full rounded-none border-0 text-base leading-6 transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground placeholder:italic focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  'flex w-full rounded-t rounded-b-none border-0 text-base leading-6 transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground placeholder:italic focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -65,8 +65,6 @@ export interface InputProps
   /** Élément décoratif absolu injecté dans la zone de saisie */
   inputOverlay?: React.ReactNode
 }
-
-import { EyeIcon, EyeOffIcon } from '@dsfrkit/icons'
 
 function SuccessIcon(props: React.ComponentProps<'svg'>) {
   return (
@@ -150,6 +148,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       position = 'end',
       inputOverlay,
       id,
+      'aria-describedby': ariaDescribedBy,
       ...props
     },
     ref
@@ -182,32 +181,49 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           : isInfo
             ? 'info'
             : variant
+    const stateDescriptionId = isError
+      ? errorId
+      : isSuccess
+        ? successId
+        : isWarning
+          ? warningId
+          : isInfo
+            ? infoId
+            : undefined
+    const describedBy = [ariaDescribedBy, hint ? hintId : undefined, stateDescriptionId]
+      .filter(Boolean)
+      .join(' ')
 
     return (
       <div
         className={cn(
           'w-full space-y-2 relative transition-colors',
-          (isError || isSuccess || isWarning || isInfo) && 'pl-4 -ml-[18px] border-l-2',
+          (isError || isSuccess || isWarning || isInfo) &&
+            'before:absolute before:inset-y-0 before:-left-3 before:w-0.5',
           isError
-            ? 'border-l-destructive'
+            ? 'before:bg-destructive'
             : isSuccess
-              ? 'border-l-success'
+              ? 'before:bg-success'
               : isWarning
-                ? 'border-l-warning'
+                ? 'before:bg-warning'
                 : isInfo
-                  ? 'border-l-info'
+                  ? 'before:bg-info'
                   : ''
         )}
       >
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-foreground">
+          <label htmlFor={inputId} className="block text-base leading-6 text-foreground">
             {label}
-            {props.required && <span className="text-error ml-1">*</span>}
+            {props.required && (
+              <span className="text-error ml-1" aria-hidden="true">
+                *
+              </span>
+            )}
           </label>
         )}
 
-        {hint && !isError && !isSuccess && !isWarning && !isInfo && (
-          <p id={hintId} className="text-sm text-muted-foreground">
+        {hint && (
+          <p id={hintId} className="text-xs leading-5 text-muted-foreground">
             {hint}
           </p>
         )}
@@ -240,19 +256,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               )}
               ref={ref}
               aria-invalid={isError ? 'true' : 'false'}
-              aria-describedby={
-                isError
-                  ? errorId
-                  : isSuccess
-                    ? successId
-                    : isWarning
-                      ? warningId
-                      : isInfo
-                        ? infoId
-                        : hint
-                          ? hintId
-                          : undefined
-              }
+              aria-describedby={describedBy || undefined}
               {...props}
             />
 
@@ -274,7 +278,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {isError && (
-          <p id={errorId} className="text-sm text-error font-medium flex items-center space-x-1">
+          <p
+            id={errorId}
+            className="text-xs leading-5 text-error flex items-center space-x-1"
+            role="alert"
+          >
             <SystemErrorIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{error}</span>
           </p>
@@ -283,7 +291,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {isSuccess && (
           <p
             id={successId}
-            className="text-sm text-success font-medium flex items-center space-x-1"
+            className="text-xs leading-5 text-success flex items-center space-x-1"
+            role="status"
           >
             <SuccessIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{success}</span>
@@ -291,17 +300,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {isWarning && (
-          <p
-            id={warningId}
-            className="text-sm text-warning font-medium flex items-center space-x-1"
-          >
+          <p id={warningId} className="text-xs leading-5 text-warning flex items-center space-x-1">
             <WarningIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{warning}</span>
           </p>
         )}
 
         {isInfo && (
-          <p id={infoId} className="text-sm text-info font-medium flex items-center space-x-1">
+          <p id={infoId} className="text-xs leading-5 text-info flex items-center space-x-1">
             <SystemInfoIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{info}</span>
           </p>
@@ -319,7 +325,7 @@ Input.displayName = 'Input'
  */
 const textareaVariants = cva(
   // Base DSFR : fond adaptatif, bordure inférieure
-  'flex min-h-[120px] w-full rounded-none border-0 text-base leading-6 transition-colors placeholder:text-muted-foreground placeholder:italic focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-y',
+  'flex min-h-[120px] w-full rounded-t rounded-b-none border-0 text-base leading-6 transition-colors placeholder:text-muted-foreground placeholder:italic focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-y',
   {
     variants: {
       variant: {
@@ -357,7 +363,22 @@ export interface TextareaProps
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, variant, label, error, success, info, warning, hint, id, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      label,
+      error,
+      success,
+      info,
+      warning,
+      hint,
+      id,
+      'aria-describedby': ariaDescribedBy,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = React.useId()
     const textareaId = id || generatedId
     const inputOrGeneratedId = textareaId
@@ -381,32 +402,49 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           : isInfo
             ? 'info'
             : variant
+    const stateDescriptionId = isError
+      ? errorId
+      : isSuccess
+        ? successId
+        : isWarning
+          ? warningId
+          : isInfo
+            ? infoId
+            : undefined
+    const describedBy = [ariaDescribedBy, hint ? hintId : undefined, stateDescriptionId]
+      .filter(Boolean)
+      .join(' ')
 
     return (
       <div
         className={cn(
           'w-full space-y-2 relative transition-colors',
-          (isError || isSuccess || isWarning || isInfo) && 'pl-4 -ml-[18px] border-l-2',
+          (isError || isSuccess || isWarning || isInfo) &&
+            'before:absolute before:inset-y-0 before:-left-3 before:w-0.5',
           isError
-            ? 'border-l-destructive'
+            ? 'before:bg-destructive'
             : isSuccess
-              ? 'border-l-success'
+              ? 'before:bg-success'
               : isWarning
-                ? 'border-l-warning'
+                ? 'before:bg-warning'
                 : isInfo
-                  ? 'border-l-info'
+                  ? 'before:bg-info'
                   : ''
         )}
       >
         {label && (
-          <label htmlFor={textareaId} className="block text-sm font-medium text-foreground">
+          <label htmlFor={textareaId} className="block text-base leading-6 text-foreground">
             {label}
-            {props.required && <span className="text-error ml-1">*</span>}
+            {props.required && (
+              <span className="text-error ml-1" aria-hidden="true">
+                *
+              </span>
+            )}
           </label>
         )}
 
-        {hint && !isError && !isSuccess && !isWarning && !isInfo && (
-          <p id={hintId} className="text-sm text-muted-foreground">
+        {hint && (
+          <p id={hintId} className="text-xs leading-5 text-muted-foreground">
             {hint}
           </p>
         )}
@@ -416,24 +454,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={cn(textareaVariants({ variant: inputStateVariant, className }), 'px-4 py-2')}
           ref={ref}
           aria-invalid={isError ? 'true' : 'false'}
-          aria-describedby={
-            isError
-              ? errorId
-              : isSuccess
-                ? successId
-                : isWarning
-                  ? warningId
-                  : isInfo
-                    ? infoId
-                    : hint
-                      ? hintId
-                      : undefined
-          }
+          aria-describedby={describedBy || undefined}
           {...props}
         />
 
         {isError && (
-          <p id={errorId} className="text-sm text-error font-medium flex items-center space-x-1">
+          <p
+            id={errorId}
+            className="text-xs leading-5 text-error flex items-center space-x-1"
+            role="alert"
+          >
             <SystemErrorIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{error}</span>
           </p>
@@ -442,7 +472,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {isSuccess && (
           <p
             id={successId}
-            className="text-sm text-success font-medium flex items-center space-x-1"
+            className="text-xs leading-5 text-success flex items-center space-x-1"
+            role="status"
           >
             <SuccessIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{success}</span>
@@ -450,17 +481,14 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
 
         {isWarning && (
-          <p
-            id={warningId}
-            className="text-sm text-warning font-medium flex items-center space-x-1"
-          >
+          <p id={warningId} className="text-xs leading-5 text-warning flex items-center space-x-1">
             <WarningIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{warning}</span>
           </p>
         )}
 
         {isInfo && (
-          <p id={infoId} className="text-sm text-info font-medium flex items-center space-x-1">
+          <p id={infoId} className="text-xs leading-5 text-info flex items-center space-x-1">
             <SystemInfoIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{info}</span>
           </p>
@@ -476,9 +504,25 @@ Textarea.displayName = 'Textarea'
  * Composant PasswordInput DSFR
  * Champ mot de passe avec bouton "Afficher/Masquer" intégré
  */
-const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
+export interface PasswordInputProps
+  extends Omit<InputProps, 'type' | 'icon' | 'addon' | 'action' | 'position' | 'inputOverlay'> {}
+
+const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   (
-    { className, variant, inputSize, label, error, success, info, warning, hint, id, ...props },
+    {
+      className,
+      variant,
+      inputSize,
+      label,
+      error,
+      success,
+      info,
+      warning,
+      hint,
+      id,
+      'aria-describedby': ariaDescribedBy,
+      ...props
+    },
     ref
   ) => {
     const generatedId = React.useId()
@@ -489,6 +533,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
     const infoId = `${inputOrGeneratedId}-info`
     const warningId = `${inputOrGeneratedId}-warning`
     const hintId = `${inputOrGeneratedId}-hint`
+    const toggleId = `${inputOrGeneratedId}-show`
     const [showPassword, setShowPassword] = React.useState(false)
 
     const isError = !!error
@@ -505,76 +550,92 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           : isInfo
             ? 'info'
             : variant
+    const stateDescriptionId = isError
+      ? errorId
+      : isSuccess
+        ? successId
+        : isWarning
+          ? warningId
+          : isInfo
+            ? infoId
+            : undefined
+    const describedBy = [ariaDescribedBy, hint ? hintId : undefined, stateDescriptionId]
+      .filter(Boolean)
+      .join(' ')
 
     return (
       <div
         className={cn(
           'w-full space-y-2 relative transition-colors',
-          (isError || isSuccess || isWarning || isInfo) && 'pl-4 -ml-[18px] border-l-2',
+          (isError || isSuccess || isWarning || isInfo) &&
+            'before:absolute before:inset-y-0 before:-left-3 before:w-0.5',
           isError
-            ? 'border-l-destructive'
+            ? 'before:bg-destructive'
             : isSuccess
-              ? 'border-l-success'
+              ? 'before:bg-success'
               : isWarning
-                ? 'border-l-warning'
+                ? 'before:bg-warning'
                 : isInfo
-                  ? 'border-l-info'
+                  ? 'before:bg-info'
                   : ''
         )}
       >
-        {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-foreground">
-            {label}
-            {props.required && <span className="text-error ml-1">*</span>}
+        <div className="flex items-end gap-4">
+          {label && (
+            <label
+              htmlFor={inputId}
+              className="block min-w-0 flex-1 text-base leading-6 text-foreground"
+            >
+              {label}
+              {props.required && (
+                <span className="text-error ml-1" aria-hidden="true">
+                  *
+                </span>
+              )}
+            </label>
+          )}
+          <label
+            htmlFor={toggleId}
+            className="inline-flex min-h-8 shrink-0 cursor-pointer items-center gap-2 text-sm leading-6 text-foreground"
+          >
+            <input
+              id={toggleId}
+              type="checkbox"
+              checked={showPassword}
+              onChange={(event) => setShowPassword(event.currentTarget.checked)}
+              aria-label="Afficher le mot de passe"
+              className="h-4 w-4 accent-primary"
+            />
+            Afficher
           </label>
-        )}
+        </div>
 
-        {hint && !isError && !isSuccess && !isWarning && !isInfo && (
-          <p id={hintId} className="text-sm text-muted-foreground">
+        {hint && (
+          <p id={hintId} className="text-xs leading-5 text-muted-foreground">
             {hint}
           </p>
         )}
 
-        <div className="relative">
+        <div>
           <input
             id={inputId}
             type={showPassword ? 'text' : 'password'}
-            className={cn(
-              inputVariants({ variant: inputStateVariant, inputSize }),
-              'pr-24', // Padding for the button
-              className
-            )}
+            className={cn(inputVariants({ variant: inputStateVariant, inputSize }), className)}
             ref={ref}
             aria-invalid={isError ? 'true' : 'false'}
-            aria-describedby={
-              isError
-                ? errorId
-                : isSuccess
-                  ? successId
-                  : isWarning
-                    ? warningId
-                    : isInfo
-                      ? infoId
-                      : hint
-                        ? hintId
-                        : undefined
-            }
+            aria-describedby={describedBy || undefined}
+            autoCapitalize="off"
+            autoCorrect="off"
             {...props}
           />
-          <button
-            type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-none text-primary hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            onClick={() => setShowPassword((prev) => !prev)}
-            aria-controls={inputId}
-            title={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
-          >
-            <span className="sr-only">{showPassword ? 'Masquer' : 'Afficher'}</span>
-            {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
-          </button>
         </div>
 
         {isError && (
-          <p id={errorId} className="text-sm text-error font-medium flex items-center space-x-1">
+          <p
+            id={errorId}
+            className="text-xs leading-5 text-error flex items-center space-x-1"
+            role="alert"
+          >
             <SystemErrorIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{error}</span>
           </p>
@@ -583,7 +644,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
         {isSuccess && (
           <p
             id={successId}
-            className="text-sm text-success font-medium flex items-center space-x-1"
+            className="text-xs leading-5 text-success flex items-center space-x-1"
+            role="status"
           >
             <SuccessIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{success}</span>
@@ -591,17 +653,14 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {isWarning && (
-          <p
-            id={warningId}
-            className="text-sm text-warning font-medium flex items-center space-x-1"
-          >
+          <p id={warningId} className="text-xs leading-5 text-warning flex items-center space-x-1">
             <WarningIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{warning}</span>
           </p>
         )}
 
         {isInfo && (
-          <p id={infoId} className="text-sm text-info font-medium flex items-center space-x-1">
+          <p id={infoId} className="text-xs leading-5 text-info flex items-center space-x-1">
             <SystemInfoIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{info}</span>
           </p>

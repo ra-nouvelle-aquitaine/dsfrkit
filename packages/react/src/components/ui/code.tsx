@@ -14,7 +14,7 @@ const Code = React.forwardRef<HTMLElement, CodeProps>(
       <Comp
         ref={ref}
         className={cn(
-          'relative rounded font-mono text-[0.875em] font-medium leading-none whitespace-nowrap px-[0.3em] py-[0.2em]',
+          'relative rounded font-mono text-[0.875em] font-medium leading-none break-words px-[0.3em] py-[0.2em]',
           {
             'bg-muted text-muted-foreground': variant === 'soft',
             'bg-foreground text-background': variant === 'solid',

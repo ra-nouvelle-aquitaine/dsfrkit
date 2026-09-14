@@ -7,17 +7,15 @@ import { cn } from '../../lib/utils'
  * Variants du bandeau d'information DSFR
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/bandeau-d-information
  */
-const noticeVariants = cva('relative w-full py-4 px-6 flex items-start gap-4', {
+const noticeVariants = cva('relative flex w-full items-start gap-2 px-4 py-4 lg:px-6', {
   variants: {
     variant: {
-      // DSFR: bordure gauche 4px + fond sémantique (même logique qu'Alert)
-      info: 'border-l-4 border-l-info bg-info-background text-foreground',
-      success: 'border-l-4 border-l-success bg-success-background text-foreground',
-      warning: 'border-l-4 border-l-warning bg-warning-background text-foreground',
-      error: 'border-l-4 border-l-destructive bg-destructive-background text-foreground',
-      neutral: 'border-l-4 border-l-border-contrast bg-accent text-accent-foreground',
-      // Variante "weather" DSFR — fond neutre
-      weather: 'bg-muted text-foreground border-b border-border',
+      info: 'bg-info-background text-info',
+      success: 'bg-success-background text-success',
+      warning: 'bg-warning-background text-warning',
+      error: 'bg-destructive-background text-destructive',
+      neutral: 'bg-background-contrast text-foreground-title',
+      weather: 'bg-warning-background text-warning',
     },
     closable: {
       true: 'pr-12',
@@ -30,7 +28,7 @@ const noticeVariants = cva('relative w-full py-4 px-6 flex items-start gap-4', {
   },
 })
 
-const noticeIconVariants = cva('flex-shrink-0 mt-0.5', {
+const noticeIconVariants = cva('flex-shrink-0', {
   variants: {
     variant: {
       info: 'text-info',
@@ -117,29 +115,32 @@ const Notice = React.forwardRef<HTMLDivElement, NoticeProps>(
     ref
   ) => {
     const displayIcon = icon ?? (variant ? defaultIcons[variant] : null)
+    const [dismissed, setDismissed] = React.useState(false)
+
+    const handleClose = () => {
+      setDismissed(true)
+      onClose?.()
+    }
+
+    if (dismissed) return null
 
     return (
-      <div
-        ref={ref}
-        role="status"
-        className={cn(noticeVariants({ variant, closable, className }))}
-        {...props}
-      >
+      <div ref={ref} className={cn(noticeVariants({ variant, closable, className }))} {...props}>
         {!hideIcon && displayIcon && (
           <span className={cn(noticeIconVariants({ variant }))}>{displayIcon}</span>
         )}
-        <div className="flex-1 min-w-0">
-          {title && <div className="font-semibold text-base mb-1">{title}</div>}
-          <div className="text-sm">{children}</div>
+        <div className="min-w-0 flex-1 text-sm leading-6">
+          {title && <div className="font-bold">{title}</div>}
+          <div>{children}</div>
         </div>
-        {closable && onClose && (
+        {closable && (
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className={cn(
-              'absolute right-4 top-4 p-1 rounded-md',
-              'hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-current',
-              'transition-colors'
+              'absolute right-4 top-3 flex size-8 items-center justify-center',
+              'hover:bg-background-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring',
+              'transition-colors motion-reduce:transition-none'
             )}
             aria-label="Fermer"
           >

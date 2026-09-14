@@ -42,14 +42,14 @@ export default {
 </div>
 
 // Typographie Marianne
-<h1 className="font-marianne text-4xl font-bold">
+<h1 className="font-marianne text-h1 md:text-h1-desktop font-bold">
   Titre principal
 </h1>
 
 // Container DSFR
 <div className="fr-container">
-  <div className="fr-grid-row">
-    <div className="fr-col">
+  <div className="fr-grid-row fr-grid-row--gutters">
+    <div className="fr-col-12 fr-col-md-8">
       Contenu
     </div>
   </div>

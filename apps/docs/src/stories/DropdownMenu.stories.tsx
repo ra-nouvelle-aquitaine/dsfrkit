@@ -72,7 +72,7 @@ export const Default: Story = {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive focus:text-destructive hover:bg-destructive hover:text-destructive-foreground focus:bg-destructive-background focus:text-destructive-foreground">
+          <DropdownMenuItem className="text-destructive hover:bg-destructive-background focus:bg-destructive-background focus:text-destructive">
             Se déconnecter
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>

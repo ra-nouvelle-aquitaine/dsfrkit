@@ -26,8 +26,13 @@ export const cssVariables = {
     hover: alphaColor('--background-default-grey-hover'),
     active: alphaColor('--background-default-grey-active'),
     alt: alphaColor('--background-alt-grey'),
+    'alt-blue-france': alphaColor('--background-alt-blue-france'),
+    'alt-overlap': alphaColor('--background-alt-overlap-grey'),
     contrast: alphaColor('--background-contrast-grey'),
     elevated: alphaColor('--background-raised-grey'),
+    overlap: alphaColor('--background-overlap-grey'),
+    'overlap-hover': alphaColor('--background-overlap-grey-hover'),
+    lifted: alphaColor('--background-lifted-grey'),
     'open-blue-france': alphaColor('--background-open-blue-france'),
   },
   foreground: {
@@ -91,16 +96,26 @@ export const cssVariables = {
     'background-hover': alphaColor('--error-950-100-hover'),
     'background-active': alphaColor('--error-950-100-active'),
   },
+  /**
+   * Voile des surfaces modales. La variable porte déjà son alpha : on ne passe
+   * donc pas par `alphaColor`, qui le remplacerait par celui de Tailwind.
+   */
+  overlay: {
+    DEFAULT: 'var(--dsfr-overlay)',
+  },
   focus: {
-    DEFAULT: alphaColor('--blue-france-sun-113-625'),
-    offset: alphaColor('--background-default-grey'),
+    // Indicateur de focus DSFR : couleur unique, indépendante de la palette et
+    // identique en thème clair et sombre. Le DSFR la code en dur dans ses
+    // règles outline-color ; elle est exposée comme jeton par theme.css.
+    DEFAULT: alphaColor('--dsfr-focus-default'),
+    offset: alphaColor('--dsfr-focus-offset'),
   },
   card: {
     DEFAULT: alphaColor('--background-default-grey'),
     foreground: alphaColor('--text-default-grey'),
   },
   popover: {
-    DEFAULT: alphaColor('--background-raised-grey'),
+    DEFAULT: alphaColor('--background-overlap-grey'),
     foreground: alphaColor('--text-default-grey'),
   },
   input: alphaColor('--border-default-grey'),

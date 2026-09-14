@@ -25,7 +25,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      'flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none focus:bg-background-contrast data-[state=open]:bg-background-contrast',
+      'flex cursor-default select-none items-center px-2 py-1.5 text-sm outline-none focus:bg-background-overlap-hover data-[state=open]:bg-background-overlap-hover',
       inset && 'pl-8',
       className
     )}
@@ -43,6 +43,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
       strokeLinecap="round"
       strokeLinejoin="round"
       className="ml-auto h-4 w-4"
+      aria-hidden="true"
     >
       <path d="m9 18 6-6-6-6" />
     </svg>
@@ -57,7 +58,7 @@ const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      'z-50 min-w-[8rem] overflow-hidden border border-border bg-background-elevated p-1 text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+      'z-50 min-w-[8rem] overflow-hidden border border-border bg-background-overlap p-1 text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 motion-reduce:animate-none',
       className
     )}
     {...props}
@@ -74,7 +75,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[8rem] overflow-hidden border border-border bg-background-elevated p-1 text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        'z-50 min-w-[8rem] overflow-hidden border border-border bg-background-overlap p-1 text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 motion-reduce:animate-none',
         className
       )}
       {...props}
@@ -92,7 +93,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center px-2 py-1.5 text-sm outline-none transition-colors hover:bg-background-overlap-hover focus:bg-background-overlap-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
       className
     )}
@@ -108,7 +109,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-background-overlap-hover focus:bg-background-overlap-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     checked={checked}
@@ -127,6 +128,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
           strokeLinecap="round"
           strokeLinejoin="round"
           className="h-4 w-4"
+          aria-hidden="true"
         >
           <polyline points="20 6 9 17 4 12" />
         </svg>
@@ -144,7 +146,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      'relative flex cursor-pointer select-none items-center py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex cursor-pointer select-none items-center py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-background-overlap-hover focus:bg-background-overlap-hover data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     {...props}
@@ -162,6 +164,7 @@ const DropdownMenuRadioItem = React.forwardRef<
           strokeLinecap="round"
           strokeLinejoin="round"
           className="h-2 w-2 fill-current"
+          aria-hidden="true"
         >
           <circle cx="12" cy="12" r="10" />
         </svg>
@@ -181,7 +184,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      'px-2 py-1.5 text-sm font-semibold text-foreground-title',
+      'px-2 py-1.5 text-sm font-bold text-foreground-title',
       inset && 'pl-8',
       className
     )}

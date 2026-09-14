@@ -17,7 +17,7 @@ const SelectValue = SelectPrimitive.Value
 
 const selectTriggerVariants = cva(
   // Base DSFR : même style que l'input (fond adaptatif, bordure inférieure)
-  'flex h-10 w-full items-center justify-between rounded-none border-0 bg-muted px-4 py-2 text-base leading-6 text-foreground ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  'flex h-10 w-full items-center justify-between rounded-t border-0 bg-muted px-4 py-2 text-base leading-6 text-foreground ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -61,6 +61,7 @@ const SelectTrigger = React.forwardRef<
         strokeLinecap="round"
         strokeLinejoin="round"
         className="h-4 w-4 opacity-50"
+        aria-hidden="true"
       >
         <path d="m6 9 6 6 6-6" />
       </svg>
@@ -89,6 +90,7 @@ const SelectScrollUpButton = React.forwardRef<
       strokeLinecap="round"
       strokeLinejoin="round"
       className="h-4 w-4"
+      aria-hidden="true"
     >
       <path d="m18 15-6-6-6 6" />
     </svg>
@@ -116,6 +118,7 @@ const SelectScrollDownButton = React.forwardRef<
       strokeLinecap="round"
       strokeLinejoin="round"
       className="h-4 w-4"
+      aria-hidden="true"
     >
       <path d="m6 9 6 6 6-6" />
     </svg>
@@ -132,7 +135,7 @@ const SelectContent = React.forwardRef<
       ref={ref}
       className={cn(
         // DSFR : fond adaptatif, bordure grise, pas de border-radius
-        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden border border-border bg-background text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden border border-border bg-background-overlap text-foreground elevation-overlap data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 motion-reduce:animate-none',
         position === 'popper' &&
           'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
         className
@@ -162,7 +165,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-sm font-semibold text-foreground', className)}
+    className={cn('px-2 py-1.5 text-sm font-bold text-foreground', className)}
     {...props}
   />
 ))
@@ -176,7 +179,7 @@ const SelectItem = React.forwardRef<
     ref={ref}
     className={cn(
       // DSFR : pas de border-radius, fond adaptatif au focus
-      'relative flex w-full cursor-default select-none items-center py-2 pl-10 pr-4 text-base leading-6 outline-none focus:bg-muted focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'relative flex w-full cursor-default select-none items-center py-2 pl-10 pr-4 text-base leading-6 outline-none focus:bg-background-overlap-hover focus:text-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       className
     )}
     {...props}
@@ -194,6 +197,7 @@ const SelectItem = React.forwardRef<
           strokeLinecap="round"
           strokeLinejoin="round"
           className="h-4 w-4 text-primary"
+          aria-hidden="true"
         >
           <path d="M20 6 9 17l-5-5" />
         </svg>

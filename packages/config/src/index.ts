@@ -94,6 +94,7 @@ const dsfrPreset: Partial<Config> = {
           foreground: cssVariables.foreground.DEFAULT,
         },
         ring: cssVariables.focus.DEFAULT,
+        overlay: cssVariables.overlay.DEFAULT,
         card: cssVariables.card,
         popover: cssVariables.popover,
         input: cssVariables.input,
@@ -120,11 +121,13 @@ const dsfrPreset: Partial<Config> = {
       // Container pour suivre les breakpoints DSFR
       container: {
         center: true,
+        screens: {
+          xl: '78rem',
+        },
         padding: {
           DEFAULT: '1rem',
-          sm: '2rem',
-          lg: '4rem',
-          xl: '5rem',
+          lg: '1.5rem',
+          xl: '1.5rem',
         },
       },
 
@@ -151,6 +154,25 @@ const dsfrPreset: Partial<Config> = {
   plugins: [
     plugin(({ addBase, addComponents, addUtilities, theme }) => {
       const themeColor = (path: string) => toSolidColor(theme(path))
+      const gridComponents: Record<string, Record<string, unknown>> = {}
+
+      for (let column = 1; column <= 12; column++) {
+        const size = `calc(${column} * 100% / 12)`
+        const columnRule = { flex: `0 0 ${size}`, width: size, maxWidth: size }
+        const offsetRule = { marginLeft: size }
+
+        gridComponents[`.fr-col-${column}`] = columnRule
+        gridComponents[`.fr-col-offset-${column}`] = offsetRule
+
+        for (const breakpoint of ['sm', 'md', 'lg', 'xl']) {
+          gridComponents[`.fr-col-${breakpoint}-${column}`] = {
+            [`@screen ${breakpoint}`]: columnRule,
+          }
+          gridComponents[`.fr-col-offset-${breakpoint}-${column}`] = {
+            [`@screen ${breakpoint}`]: offsetRule,
+          }
+        }
+      }
 
       // Styles de base DSFR
       addBase({
@@ -173,31 +195,34 @@ const dsfrPreset: Partial<Config> = {
           marginRight: 'auto',
           paddingLeft: theme('spacing.4'),
           paddingRight: theme('spacing.4'),
-          '@screen sm': {
-            maxWidth: '540px',
-          },
-          '@screen md': {
-            maxWidth: '720px',
-          },
           '@screen lg': {
-            maxWidth: '960px',
+            paddingLeft: theme('spacing.6'),
+            paddingRight: theme('spacing.6'),
           },
           '@screen xl': {
-            maxWidth: '1140px',
+            maxWidth: '78rem',
           },
         },
         '.fr-grid-row': {
           display: 'flex',
           flexWrap: 'wrap',
-          marginLeft: `-${theme('spacing.2')}`,
-          marginRight: `-${theme('spacing.2')}`,
+        },
+        '.fr-grid-row--gutters': {
+          margin: `-${theme('spacing.2')}`,
+          '& > [class^="fr-col-"], & > [class*=" fr-col-"], & > .fr-col': {
+            padding: theme('spacing.2'),
+          },
+          '@screen lg': {
+            margin: `-${theme('spacing.3')}`,
+            '& > [class^="fr-col-"], & > [class*=" fr-col-"], & > .fr-col': {
+              padding: theme('spacing.3'),
+            },
+          },
         },
         '.fr-col': {
-          flex: '0 0 100%',
-          maxWidth: '100%',
-          paddingLeft: theme('spacing.2'),
-          paddingRight: theme('spacing.2'),
+          flex: '1',
         },
+        ...gridComponents,
         /* Utilitaires globaux DSFR (liens, boutons, textes) */
         '.fr-link': {
           color: themeColor('colors.primary.DEFAULT'),

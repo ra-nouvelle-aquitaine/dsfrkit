@@ -55,22 +55,21 @@ function AlertErrorIcon(props: React.ComponentProps<'svg'>) {
  * L'alerte DSFR a une bordure gauche épaisse colorée et des bordures fines sur les autres côtés
  */
 const alertVariants = cva(
-  // Base: bordure gauche très épaisse (44px) pour contenir l'icône
-  'relative w-full border border-border border-l-[44px] text-foreground transition-all duration-200',
+  // La bande de 40 px porte l'icône ; le contenu conserve le fond de page.
+  'relative w-full border border-l-[40px] bg-background text-foreground',
   {
     variants: {
       variant: {
         // Default : variant gris (DSFR base)
-        default: 'border-l-border bg-muted',
-        // DSFR : bordure gauche colorée + fond coloré léger (utilisant les variables CSS du thème)
-        info: 'border-l-info bg-info-background',
-        success: 'border-l-success bg-success-background',
-        warning: 'border-l-warning bg-warning-background',
-        error: 'border-l-destructive bg-destructive-background',
+        default: 'border-border',
+        info: 'border-info',
+        success: 'border-success',
+        warning: 'border-warning',
+        error: 'border-destructive',
       },
       size: {
-        sm: 'py-2 pr-12 pl-4',
-        md: 'py-4 pr-12 pl-4',
+        sm: 'pb-1 pl-2 pr-9 pt-2',
+        md: 'pb-3 pl-4 pr-9 pt-4',
       },
     },
     defaultVariants: {
@@ -157,7 +156,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         {Icon && (
           <div
             className={cn(
-              'absolute left-[-34px]',
+              'absolute left-[-32px]',
               size === 'sm' ? 'top-2' : 'top-4',
               'text-background'
             )}
@@ -178,7 +177,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
           <button
             type="button"
             onClick={handleClose}
-            className="absolute right-4 top-4 opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 text-foreground p-1 hover:bg-muted"
+            className="absolute right-1 top-1 flex size-8 items-center justify-center text-foreground opacity-70 ring-offset-background transition-opacity hover:bg-background-hover hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 motion-reduce:transition-none"
             title={closeLabel}
             aria-label={closeLabel}
           >
@@ -192,6 +191,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />

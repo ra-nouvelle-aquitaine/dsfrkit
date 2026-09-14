@@ -71,16 +71,12 @@ const Quote = React.forwardRef<HTMLElement, QuoteProps>(
 
           <blockquote cite={cite} className="m-0 mb-4 p-0">
             {/* Texte de citation DSFR : grand, gras, sans italique */}
-            <p className="m-0 text-xl font-bold text-foreground leading-relaxed">« {children} »</p>
+            <p className="m-0 text-xl font-bold text-foreground">« {children} »</p>
           </blockquote>
 
           {hasCaption && (
             <figcaption className="flex flex-col m-0 p-0 text-sm">
-              {author && (
-                <p className="m-0 mb-1 font-bold text-foreground text-base tracking-tight">
-                  {author}
-                </p>
-              )}
+              {author && <p className="m-0 mb-1 font-bold text-foreground text-base">{author}</p>}
 
               {sourceItems && sourceItems.length > 0 && (
                 <ul className="flex flex-wrap gap-2 m-0 p-0 list-none italic text-xs text-muted-foreground">
@@ -118,7 +114,7 @@ const Quote = React.forwardRef<HTMLElement, QuoteProps>(
             <img
               src={imageUrl}
               alt={imageAlt}
-              className="w-20 h-20 rounded-full object-cover shadow-sm bg-muted"
+              className="size-20 rounded-full bg-muted object-cover"
             />
           </div>
         )}

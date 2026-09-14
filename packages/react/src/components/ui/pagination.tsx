@@ -64,23 +64,34 @@ export interface PaginationLinkProps extends React.AnchorHTMLAttributes<HTMLAnch
  * Lien de pagination
  */
 const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLinkProps>(
-  ({ className, asChild = false, isActive, disabled, children, ...props }, ref) => {
+  (
+    { className, asChild = false, isActive, disabled, children, onClick, tabIndex, ...props },
+    ref
+  ) => {
     const router = useRouter()
     const classes = cn(
-      'inline-flex h-10 min-w-10 items-center justify-center rounded-md px-3 text-sm font-medium transition-colors',
+      'inline-flex h-10 min-w-10 items-center justify-center px-3 text-sm font-medium transition-colors',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
       isActive ? 'bg-primary text-primary-foreground' : 'text-primary hover:bg-muted',
-      disabled && 'pointer-events-none opacity-50',
+      disabled && 'cursor-not-allowed opacity-50',
       className
     )
     const sharedProps = {
       'aria-current': isActive ? ('page' as const) : undefined,
-      'aria-disabled': disabled,
+      'aria-disabled': disabled || undefined,
+      tabIndex: disabled ? -1 : tabIndex,
+      onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
+        if (disabled) {
+          event.preventDefault()
+          return
+        }
+        onClick?.(event)
+      },
     }
 
     if (asChild) {
       return (
-        <Slot ref={ref} className={classes} {...sharedProps} {...props}>
+        <Slot ref={ref} className={classes} {...props} {...sharedProps}>
           {children}
         </Slot>
       )
@@ -90,14 +101,14 @@ const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLinkProps>(
       const { href: hrefProp, ...restProps } = props
       const adaptedProps = router.linkPropsAdapter({ href: hrefProp, ...restProps })
       return (
-        <router.Link ref={ref} className={classes} {...sharedProps} {...adaptedProps}>
+        <router.Link ref={ref} className={classes} {...adaptedProps} {...sharedProps}>
           {children}
         </router.Link>
       )
     }
 
     return (
-      <a ref={ref} className={classes} {...sharedProps} {...props}>
+      <a ref={ref} className={classes} {...props} {...sharedProps}>
         {children}
       </a>
     )

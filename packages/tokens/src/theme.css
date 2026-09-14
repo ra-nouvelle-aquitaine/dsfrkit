@@ -1,5 +1,39 @@
 @import './dsfr-variables.css';
 
+/* Jetons de focus DSFR.
+  Le DSFR fixe la couleur de focus à #0a76f6 directement dans les règles
+  outline-color de core.css, sans l'exposer comme variable CSS. On la
+  déclare donc ici comme jeton unique du design system, afin qu'aucun
+  composant ne porte de couleur codée en dur et que la valeur reste
+  surchargeable. Elle est volontairement identique en thème clair et sombre.
+*/
+:root {
+  --dsfr-focus-default: #0a76f6;
+  --dsfr-focus-offset: var(--background-default-grey);
+
+  /* Voile des surfaces modales (.fr-modal), également codé en dur par le
+     DSFR et identique dans les deux thèmes. */
+  --dsfr-overlay: rgba(22, 22, 22, 0.64);
+
+  /* Fait suivre le thème aux contrôles natifs du navigateur : bouton de
+     sélection de fichier, ascenseurs, sélecteurs de date. Sans cette
+     déclaration ils restent clairs en thème sombre, car ils suivent le
+     réglage du système et non l'attribut de thème de la page. */
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"],
+[data-fr-theme="dark"] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not([data-theme="light"]):not([data-fr-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
 /* Polices DSFR (générées par sync-dsfr) */
 
 /* Marianne - Regular */
@@ -82,10 +116,12 @@
   font-display: swap;
 }
 
-/* 
-  DSFR Artwork support 
-  These classes are used within DSFR SVG icons via <use className="..."> 
-  to automatically adapt stroke/fill colors to light/dark themes.
+/*
+  Support des artworks DSFR.
+  Ces classes sont utilisées dans les SVG DSFR via <use className="...">
+  pour adapter automatiquement les couleurs aux thèmes clair et sombre.
+  Elles ne proviennent pas du CSS officiel : elles doivent être conservées
+  à chaque régénération.
 */
 .fr-artwork-decorative {
   fill: var(--artwork-decorative-blue-france);

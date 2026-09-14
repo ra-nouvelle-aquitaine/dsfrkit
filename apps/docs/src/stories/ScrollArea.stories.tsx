@@ -74,7 +74,7 @@ export const Horizontal: Story = {
 
 export const Both: Story = {
   render: () => (
-    <ScrollArea className="h-72 w-96 rounded-none border border-border">
+    <ScrollArea className="h-72 w-full max-w-96 rounded-none border border-border">
       <Box className="p-4 w-[600px]">
         <Text weight="bold" className="mb-4 block">
           Tableau large

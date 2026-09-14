@@ -5,6 +5,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
+  CardImage,
   CardTitle,
   Text,
 } from '@dsfrkit/react'
@@ -88,6 +89,27 @@ export const Ghost: Story = {
       </CardHeader>
       <CardContent>
         <Text as="p">Cette carte n'a pas de bordure visible.</Text>
+      </CardContent>
+    </Card>
+  ),
+}
+
+// ── Avec image ────────────────────────────────────────────────────────────────
+export const WithImage: Story = {
+  render: () => (
+    <Card className="max-w-sm">
+      <CardImage>
+        <img src="https://picsum.photos/seed/nature/800/450" alt="Paysage naturel" />
+      </CardImage>
+      <CardHeader>
+        <CardTitle>Parc naturel régional</CardTitle>
+        <CardDescription>Découvrez les espaces naturels protégés de votre région.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Text>
+          Le DSFR réserve la photographie à la carte : l'image occupe toute la largeur dans un
+          rapport 16/9. La tuile, elle, n'accueille qu'une vignette carrée de 80 px.
+        </Text>
       </CardContent>
     </Card>
   ),

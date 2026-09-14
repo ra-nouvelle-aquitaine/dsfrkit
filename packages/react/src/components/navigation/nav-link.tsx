@@ -1,13 +1,13 @@
 'use client'
 
-import { Slot } from '@radix-ui/react-slot'
+import { Slot, Slottable } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 import { cn } from '../../lib/utils'
 import { useRouter } from '../../providers/router-provider'
 
 const navLinkVariants = cva(
-  'inline-flex items-center gap-2 relative font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary',
+  'inline-flex items-center gap-2 relative font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring',
   {
     variants: {
       variant: {
@@ -107,7 +107,17 @@ const NavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps>(
     if (asChild) {
       return (
         <Slot ref={ref} {...sharedProps} {...props}>
-          {children}
+          {icon && iconPosition === 'start' && (
+            <span className="flex-shrink-0 flex items-center justify-center" aria-hidden="true">
+              {icon}
+            </span>
+          )}
+          <Slottable>{children}</Slottable>
+          {icon && iconPosition === 'end' && (
+            <span className="flex-shrink-0 flex items-center justify-center" aria-hidden="true">
+              {icon}
+            </span>
+          )}
         </Slot>
       )
     }

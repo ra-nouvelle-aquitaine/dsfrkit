@@ -282,7 +282,11 @@ function ConsentModal() {
 export const ModalePersonnalisation: Story = {
   name: 'Modale de personnalisation',
   parameters: {
-    layout: 'centered',
+    // `padded` plutôt que `centered` : ce composant occupe toute la largeur
+    // disponible. La mise en page centrée de Storybook place la story dans un
+    // élément flex ajusté au contenu, ce qui faisait varier sa largeur selon
+    // le contenu affiché au lieu de rester stable.
+    layout: 'padded',
     docs: {
       description: {
         story: `Panneau de gestion des cookies avec contrôle par finalité et par service.

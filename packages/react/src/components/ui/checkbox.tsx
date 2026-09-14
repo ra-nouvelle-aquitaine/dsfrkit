@@ -18,11 +18,11 @@ const checkboxVariants = cva(
     variants: {
       variant: {
         // Default : bordure bleue france
-        default: 'border-primary data-[state=checked]:bg-primary focus-visible:ring-primary',
+        default: 'border-primary data-[state=checked]:bg-primary focus-visible:ring-ring',
         // Error : bordure rouge
-        error: 'border-error data-[state=checked]:bg-error focus-visible:ring-error',
+        error: 'border-error data-[state=checked]:bg-error focus-visible:ring-ring',
         // Success : bordure verte
-        success: 'border-success data-[state=checked]:bg-success focus-visible:ring-success',
+        success: 'border-success data-[state=checked]:bg-success focus-visible:ring-ring',
       },
       size: {
         // SM : 16px (1rem)
@@ -60,12 +60,28 @@ export interface CheckboxProps
  * ```
  */
 const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
-  ({ className, variant, size, label, hint, error, id, ...props }, ref) => {
+  (
+    {
+      className,
+      variant,
+      size,
+      label,
+      hint,
+      error,
+      id,
+      'aria-describedby': ariaDescribedBy,
+      ...props
+    },
+    ref
+  ) => {
     const generatedId = React.useId()
     const checkboxId = id || generatedId
     const inputOrGeneratedId = checkboxId
     const hintId = `${inputOrGeneratedId}-hint`
     const errorId = `${inputOrGeneratedId}-error`
+    const describedBy = [ariaDescribedBy, hint ? hintId : undefined, error ? errorId : undefined]
+      .filter(Boolean)
+      .join(' ')
 
     const checkbox = (
       <CheckboxPrimitive.Root
@@ -73,7 +89,7 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
         id={checkboxId}
         className={cn(checkboxVariants({ variant: error ? 'error' : variant, size, className }))}
         aria-invalid={error ? 'true' : undefined}
-        aria-describedby={error ? errorId : hint ? hintId : undefined}
+        aria-describedby={describedBy || undefined}
         {...props}
       >
         <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
@@ -105,29 +121,30 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
     return (
       <div
         className={cn(
-          'flex gap-3',
+          'relative flex gap-3',
+          error && 'before:absolute before:inset-y-0 before:-left-3 before:w-0.5 before:bg-error',
           size === 'sm' && 'items-center',
           size === 'md' && 'items-start',
           !size && 'items-start'
         )}
       >
         {checkbox}
-        <div className="grid gap-1 leading-none">
+        <div className="grid gap-1">
           {label && (
             <label
               htmlFor={checkboxId}
-              className="text-sm font-medium text-foreground cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="cursor-pointer text-base leading-6 text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {label}
             </label>
           )}
-          {hint && !error && (
-            <p id={hintId} className="text-sm text-muted-foreground">
+          {hint && (
+            <p id={hintId} className="text-xs leading-5 text-muted-foreground">
               {hint}
             </p>
           )}
           {error && (
-            <p id={errorId} className="text-sm text-error font-medium">
+            <p id={errorId} className="text-xs leading-5 text-error" role="alert">
               {error}
             </p>
           )}

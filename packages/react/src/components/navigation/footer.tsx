@@ -35,8 +35,10 @@ const Footer = React.forwardRef<HTMLElement, FooterProps>(
     return (
       <footer
         ref={ref}
-        id="footer"
-        className={cn('w-full bg-background-alt border-t border-border', className)}
+        className={cn(
+          'w-full bg-background pt-8 shadow-[inset_0_2px_0_0_var(--border-plain-blue-france),inset_0_-1px_0_0_var(--border-default-grey)]',
+          className
+        )}
         {...props}
       >
         {children}
@@ -54,7 +56,7 @@ const FooterBody = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn('fr-container py-8 md:py-12 flex flex-col md:flex-row gap-8', className)}
+      className={cn('fr-container flex flex-col gap-8 pb-4 md:flex-row', className)}
       {...props}
     />
   )
@@ -123,7 +125,7 @@ export interface FooterLinksProps extends React.HTMLAttributes<HTMLDivElement> {
 const FooterLinks = React.forwardRef<HTMLDivElement, FooterLinksProps>(
   ({ className, title, children, ...props }, ref) => (
     <div ref={ref} className={cn('flex flex-col gap-2', className)} {...props}>
-      {title && <h3 className="font-semibold text-foreground-title mb-2">{title}</h3>}
+      {title && <h3 className="mb-2 text-sm font-bold leading-6 text-foreground-title">{title}</h3>}
       <nav aria-label={title || 'Navigation'} className="flex flex-col gap-1 text-sm">
         {children}
       </nav>
@@ -138,8 +140,12 @@ FooterLinks.displayName = 'FooterLinks'
  */
 const FooterBottom = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('border-t border-border bg-background', className)} {...props}>
-      <div className="fr-container py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-foreground-muted">
+    <div
+      ref={ref}
+      className={cn('mt-4 border-t border-border bg-background', className)}
+      {...props}
+    >
+      <div className="fr-container flex flex-col items-start justify-between gap-4 py-2 text-xs leading-5 text-foreground-muted md:flex-row">
         {props.children}
       </div>
     </div>
@@ -156,7 +162,10 @@ const FooterLegalLinks = React.forwardRef<HTMLUListElement, React.HTMLAttributes
     return (
       <ul
         ref={ref}
-        className={cn('flex flex-wrap items-center gap-4 text-sm', className)}
+        className={cn(
+          'flex flex-wrap items-center gap-y-2 text-xs leading-5 [&>li:not(:first-child)]:ml-2 [&>li:not(:first-child)]:border-l [&>li:not(:first-child)]:border-border [&>li:not(:first-child)]:pl-2',
+          className
+        )}
         {...props}
       >
         {React.Children.map(children, (child) => {

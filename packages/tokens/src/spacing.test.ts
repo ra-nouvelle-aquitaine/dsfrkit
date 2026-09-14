@@ -6,9 +6,11 @@ describe('DSFR Dimension & Layout Tokens', () => {
     expect(spacing['1v']).toBe('0.25rem') // 4px
     expect(spacing['1w']).toBe('0.5rem') // 8px (alias)
     expect(spacing['3v']).toBe('0.75rem') // 12px
-    expect(spacing['3w']).toBe('1rem') // 16px (alias)
-    expect(spacing['5w']).toBe('1.5rem') // 24px (alias)
+    expect(spacing['2w']).toBe('1rem') // 16px (alias)
+    expect(spacing['3w']).toBe('1.5rem') // 24px (alias)
+    expect(spacing['5w']).toBe('2.5rem') // 40px (alias)
     expect(spacing['8v']).toBe('2rem') // 32px
+    expect(spacing['16w']).toBe('8rem') // 128px (alias)
   })
 
   it('should validate official DSFR corner radius values', () => {
@@ -19,9 +21,9 @@ describe('DSFR Dimension & Layout Tokens', () => {
   it('should map semantic DSFR elevation shadow layers', () => {
     // Must respect exact overlap specifications
     expect(boxShadow.raised).toBeDefined()
-    expect(boxShadow.overlap).toBe('0 6px 18px 0 rgba(0, 0, 18, 0.16)')
+    expect(boxShadow.overlap).toBe('var(--overlap-shadow, 0 2px 6px rgba(0, 0, 18, 0.16))')
     expect(boxShadow.sticky).toBeDefined()
-    expect(boxShadow.lifted).toContain('rgba(0, 0, 18, 0.16)')
+    expect(boxShadow.lifted).toContain('var(--lifted-shadow')
     // Outline focus dsfr
     expect(boxShadow.focus).toContain('var(--dsfr-focus')
   })

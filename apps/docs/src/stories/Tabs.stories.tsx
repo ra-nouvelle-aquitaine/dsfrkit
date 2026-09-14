@@ -23,7 +23,11 @@ const meta: Meta<typeof Tabs> = {
 `,
       },
     },
-    layout: 'centered',
+    // `padded` plutôt que `centered` : les onglets occupent toute la largeur
+    // disponible. La mise en page centrée de Storybook place la story dans un
+    // élément flex non rétractable, ce qui masquait le défilement horizontal
+    // de la liste d'onglets en mobile.
+    layout: 'padded',
   },
   tags: ['autodocs'],
   argTypes: {

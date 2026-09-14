@@ -74,22 +74,36 @@ const Range = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, Ra
         )}
       >
         {label && (
-          <label htmlFor={inputId} className="text-sm font-bold text-foreground-title">
+          <label htmlFor={inputId} className="text-base leading-6 text-foreground-title">
             {label}
           </label>
         )}
 
         {hint && (
-          <p id={hintId} className="text-sm text-foreground-muted">
+          <p id={hintId} className="text-xs leading-5 text-foreground-muted">
             {hint}
           </p>
         )}
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-1">
+          {showValue && (
+            <span
+              aria-hidden="true"
+              className={cn(
+                'self-end min-w-6 text-center text-xs leading-5 tabular-nums',
+                error ? 'text-destructive' : 'text-primary'
+              )}
+            >
+              {displayValue.length === 1
+                ? formatValue(displayValue[0])
+                : `${formatValue(displayValue[0])} – ${formatValue(displayValue[displayValue.length - 1])}`}
+            </span>
+          )}
+
           <SliderPrimitive.Root
             ref={ref}
             id={inputId}
-            className="relative flex min-w-0 flex-1 touch-none select-none items-center h-5"
+            className="relative flex h-6 min-w-0 flex-1 touch-none select-none items-center"
             onValueChange={handleValueChange}
             min={min}
             max={max}
@@ -100,7 +114,7 @@ const Range = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, Ra
             {...sliderProps}
             {...props}
           >
-            <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-border">
+            <SliderPrimitive.Track className="relative h-3 w-full grow overflow-hidden rounded-full border border-primary bg-transparent">
               <SliderPrimitive.Range
                 className={cn('absolute h-full bg-primary', error && 'bg-destructive')}
               />
@@ -109,40 +123,35 @@ const Range = React.forwardRef<React.ElementRef<typeof SliderPrimitive.Root>, Ra
               <SliderPrimitive.Thumb
                 // biome-ignore lint/suspicious/noArrayIndexKey: les curseurs sont positionnels et ne sont jamais réordonnés
                 key={index}
-                aria-label={label || 'Curseur'}
+                aria-label={
+                  displayValue.length > 1
+                    ? `${label || 'Curseur'} — ${index === 0 ? 'minimum' : 'maximum'}`
+                    : label || 'Curseur'
+                }
+                aria-describedby={
+                  [hint ? hintId : '', error ? errorId : ''].filter(Boolean).join(' ') || undefined
+                }
+                aria-invalid={error ? 'true' : undefined}
                 className={cn(
-                  'block h-5 w-5 rounded-full border-2 bg-background shadow-sm',
+                  'block size-6 rounded-full border bg-background elevation-raised',
                   error ? 'border-destructive' : 'border-primary',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                  error ? 'focus-visible:ring-destructive' : 'focus-visible:ring-primary',
+                  error ? 'focus-visible:ring-ring' : 'focus-visible:ring-ring',
                   'disabled:pointer-events-none',
-                  'cursor-grab active:cursor-grabbing transition-colors'
+                  'cursor-grab transition-colors active:cursor-grabbing motion-reduce:transition-none'
                 )}
               />
             ))}
           </SliderPrimitive.Root>
-
-          {showValue && (
-            <span
-              className={cn(
-                'min-w-[3rem] text-right text-sm font-medium tabular-nums',
-                error ? 'text-destructive' : 'text-foreground'
-              )}
-            >
-              {displayValue.length === 1
-                ? formatValue(displayValue[0])
-                : `${formatValue(displayValue[0])} – ${formatValue(displayValue[displayValue.length - 1])}`}
-            </span>
-          )}
         </div>
 
         <div className="flex justify-between text-xs text-foreground-muted">
-          <span>{formatValue(min)}</span>
-          <span>{formatValue(max)}</span>
+          <span aria-hidden="true">{formatValue(min)}</span>
+          <span aria-hidden="true">{formatValue(max)}</span>
         </div>
 
         {error && (
-          <p id={errorId} className="text-sm text-destructive" role="alert">
+          <p id={errorId} className="text-xs leading-5 text-destructive" role="alert">
             {error}
           </p>
         )}

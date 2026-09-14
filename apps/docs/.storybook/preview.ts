@@ -90,7 +90,7 @@ const ThemeSync = ({
     )
   }
 
-  return React.createElement(React.Fragment, null, children)
+  return React.createElement('main', { id: 'storybook-preview-main' }, children)
 }
 
 const RealThemeWrapper = ({ children, context }: { children: React.ReactNode; context: any }) => {
@@ -182,14 +182,14 @@ const preview: Preview = {
     // ... viewport and controls ...
     viewport: {
       options: {
-        xs: { name: 'Phone - Breakpoint XS', styles: { width: '375px', height: '667px' } },
+        xs: { name: 'Téléphone étroit', styles: { width: '320px', height: '667px' } },
         sm: { name: 'Phablet - Breakpoint SM', styles: { width: '576px', height: '1024px' } },
         md: { name: 'Tablette - Breakpoint MD', styles: { width: '768px', height: '1024px' } },
         lg: {
           name: 'Tablette horizontale - Breakpoint LG',
-          styles: { width: '1024px', height: '768px' },
+          styles: { width: '992px', height: '768px' },
         },
-        xl: { name: 'Desktop - Breakpoint XL', styles: { width: '100%', height: '100%' } },
+        xl: { name: 'Desktop - Breakpoint XL', styles: { width: '1248px', height: '900px' } },
       },
     },
     controls: {

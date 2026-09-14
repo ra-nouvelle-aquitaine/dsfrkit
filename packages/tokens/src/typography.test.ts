@@ -14,7 +14,10 @@ describe('DSFR Typography Tokens', () => {
     expect(typography.fontSize.base[1].lineHeight).toBe('1.5rem')
     // 20px is 1.25rem
     expect(typography.fontSize.xl[0]).toBe('1.25rem')
-    expect(typography.fontSize.xl[1].lineHeight).toBe('1.75rem')
+    expect(typography.fontSize.xl[1].lineHeight).toBe('2rem')
+    expect(typography.fontSize.h1).toEqual(['2rem', { lineHeight: '2.5rem' }])
+    expect(typography.fontSize['h1-desktop']).toEqual(['2.5rem', { lineHeight: '3rem' }])
+    expect(typography.fontSize.h6).toEqual(['1.125rem', { lineHeight: '1.5rem' }])
   })
 
   it('should define absolute DSFR font weights (400, 500, 700)', () => {

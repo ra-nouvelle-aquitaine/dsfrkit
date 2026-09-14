@@ -116,10 +116,12 @@ export { Callout, calloutVariants } from './components/ui/callout'
 export type { CardProps } from './components/ui/card'
 export {
   Card,
+  CardBody,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
+  CardImage,
   CardTitle,
   cardVariants,
 } from './components/ui/card'

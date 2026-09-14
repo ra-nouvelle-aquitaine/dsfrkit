@@ -1,6 +1,6 @@
 'use client'
 
-import { Slot } from '@radix-ui/react-slot'
+import { Slot, Slottable } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 import { cn } from '../../lib/utils'
@@ -11,7 +11,7 @@ import { useRouter } from '../../providers/router-provider'
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/lien
  */
 const linkVariants = cva(
-  'inline-flex items-center gap-1 font-medium underline-offset-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary rounded',
+  'inline-flex items-center gap-1 font-medium underline-offset-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring',
   {
     variants: {
       variant: {
@@ -135,29 +135,45 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       showExternalIcon = false,
       underline,
       children,
+      target,
+      rel,
       ...props
     },
     ref
   ) => {
     const router = useRouter()
-    const externalProps = external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+    const resolvedTarget = external ? '_blank' : target
+    const resolvedRel = external ? ['noopener', 'noreferrer', rel].filter(Boolean).join(' ') : rel
+    const content = (
+      <>
+        <Slottable>{children}</Slottable>
+        {showExternalIcon && <ExternalIcon />}
+        {external && <span className="sr-only"> (nouvelle fenêtre)</span>}
+      </>
+    )
 
     // Priorité : asChild > RouterProvider > <a> natif
     if (asChild) {
+      const slotLinkProps = {
+        target: resolvedTarget,
+        rel: resolvedRel,
+        ...props,
+      }
+
       return (
         <Slot
           ref={ref}
           className={cn(linkVariants({ variant, size, underline, className }))}
-          {...externalProps}
-          {...props}
+          {...slotLinkProps}
         >
-          {children}
+          <Slottable>{children}</Slottable>
           {showExternalIcon && <ExternalIcon />}
+          {external && <span className="sr-only"> (nouvelle fenêtre)</span>}
         </Slot>
       )
     }
 
-    if (router && !external) {
+    if (router && !external && !target) {
       const { href: hrefProp, ...restProps } = props
       const adaptedProps = router.linkPropsAdapter({ href: hrefProp, ...restProps })
       return (
@@ -166,8 +182,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
           className={cn(linkVariants({ variant, size, underline, className }))}
           {...adaptedProps}
         >
-          {children}
-          {showExternalIcon && <ExternalIcon />}
+          {content}
         </router.Link>
       )
     }
@@ -176,11 +191,11 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       <a
         ref={ref}
         className={cn(linkVariants({ variant, size, underline, className }))}
-        {...externalProps}
+        target={resolvedTarget}
+        rel={resolvedRel}
         {...props}
       >
-        {children}
-        {showExternalIcon && <ExternalIcon />}
+        {content}
       </a>
     )
   }

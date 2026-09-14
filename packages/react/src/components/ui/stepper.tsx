@@ -2,6 +2,8 @@ import * as React from 'react'
 import { cn } from '../../lib/utils'
 
 export interface StepperStep {
+  /** Identifiant stable, recommandé lorsque plusieurs étapes portent le même titre. */
+  id?: React.Key
   title: string
   description?: string
   /** Couleur de l'étape une fois complétée (par défaut: 'primary') */
@@ -45,6 +47,8 @@ const variantColorMap: Record<string, string> = {
 const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
   ({ className, steps, currentStep, stepLabel, orientation = 'horizontal', ...props }, ref) => {
     const total = steps.length
+    if (total === 0) return null
+
     const current = Math.max(1, Math.min(currentStep, total))
     const currentStepData = steps[current - 1]
 
@@ -52,29 +56,21 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
       <div
         ref={ref}
         className={cn(
-          'fr-stepper flex gap-3',
+          'fr-stepper mb-8 flex gap-3',
           orientation === 'horizontal' ? 'flex-col w-full' : 'flex-row items-stretch',
           className
         )}
         {...props}
       >
         {/* Contenu textuel */}
-        <div className={cn('flex flex-col gap-1', orientation === 'vertical' && 'order-2')}>
-          {/* En-tête : étape X sur N */}
-          <p className="text-sm font-bold text-muted-foreground">
-            {stepLabel ?? `Étape ${current} sur ${total}`}
-          </p>
-
-          {/* Titre de l'étape courante */}
+        <div className={cn('flex flex-col', orientation === 'vertical' && 'order-2')}>
           {currentStepData && (
-            <h2 className="text-xl font-bold text-foreground-title leading-6">
+            <h2 className="mb-3 flex flex-col text-lg font-bold leading-6 text-foreground-title">
               {currentStepData.title}
+              <span className="order-first mb-1 text-sm font-normal leading-6 text-muted-foreground">
+                {stepLabel ?? `Étape ${current} sur ${total}`}
+              </span>
             </h2>
-          )}
-
-          {/* Description optionnelle */}
-          {currentStepData?.description && (
-            <p className="text-sm text-muted-foreground">{currentStepData.description}</p>
           )}
         </div>
 
@@ -102,7 +98,7 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
                 : 'bg-background-contrast'
             return (
               <div
-                key={step.title}
+                key={step.id ?? step.title}
                 className={cn(
                   'flex-1 transition-colors',
                   orientation === 'horizontal' ? 'h-2' : 'w-2',
@@ -113,6 +109,17 @@ const Stepper = React.forwardRef<HTMLDivElement, StepperProps>(
             )
           })}
         </div>
+
+        {currentStepData?.description && (
+          <p
+            className={cn(
+              'mt-3 text-xs leading-5 text-muted-foreground',
+              orientation === 'vertical' && 'order-3'
+            )}
+          >
+            {currentStepData.description}
+          </p>
+        )}
       </div>
     )
   }

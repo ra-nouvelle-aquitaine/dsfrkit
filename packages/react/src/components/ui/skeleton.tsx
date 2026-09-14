@@ -5,8 +5,8 @@ import { cn } from '../../lib/utils'
 const skeletonVariants = cva('bg-muted overflow-hidden relative', {
   variants: {
     animation: {
-      pulse: 'animate-pulse',
-      wave: 'after:content-[""] after:absolute after:inset-0 after:translate-x-[-100%] after:animate-skeleton-wave after:bg-gradient-to-r after:from-transparent after:via-muted-foreground/10 after:to-transparent',
+      pulse: 'animate-pulse motion-reduce:animate-none',
+      wave: 'after:content-[""] after:absolute after:inset-0 after:translate-x-[-100%] after:animate-skeleton-wave after:bg-gradient-to-r after:from-transparent after:via-muted-foreground/10 after:to-transparent motion-reduce:after:animate-none',
       none: '',
     },
   },

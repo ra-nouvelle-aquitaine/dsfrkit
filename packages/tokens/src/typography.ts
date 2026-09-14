@@ -23,12 +23,26 @@ export const typography = {
     sm: ['0.875rem', { lineHeight: '1.5rem' }], // 14px
     base: ['1rem', { lineHeight: '1.5rem' }], // 16px
     lg: ['1.125rem', { lineHeight: '1.75rem' }], // 18px
-    xl: ['1.25rem', { lineHeight: '1.75rem' }], // 20px
+    xl: ['1.25rem', { lineHeight: '2rem' }], // 20px — texte chapô
     '2xl': ['1.5rem', { lineHeight: '2rem' }], // 24px
-    '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 30px
-    '4xl': ['2.25rem', { lineHeight: '2.5rem' }], // 36px
-    '5xl': ['3rem', { lineHeight: '1' }], // 48px
-    '6xl': ['3.75rem', { lineHeight: '1' }], // 60px
+    '3xl': ['1.75rem', { lineHeight: '2.25rem' }], // 28px
+    '4xl': ['2rem', { lineHeight: '2.5rem' }], // 32px
+    '5xl': ['2.5rem', { lineHeight: '3rem' }], // 40px
+    '6xl': ['3rem', { lineHeight: '3.5rem' }], // 48px
+
+    // Échelle sémantique des titres DSFR — mobile puis variante desktop (>= md).
+    h6: ['1.125rem', { lineHeight: '1.5rem' }],
+    'h6-desktop': ['1.25rem', { lineHeight: '1.75rem' }],
+    h5: ['1.25rem', { lineHeight: '1.75rem' }],
+    'h5-desktop': ['1.375rem', { lineHeight: '1.75rem' }],
+    h4: ['1.375rem', { lineHeight: '1.75rem' }],
+    'h4-desktop': ['1.5rem', { lineHeight: '2rem' }],
+    h3: ['1.5rem', { lineHeight: '2rem' }],
+    'h3-desktop': ['1.75rem', { lineHeight: '2.25rem' }],
+    h2: ['1.75rem', { lineHeight: '2.25rem' }],
+    'h2-desktop': ['2rem', { lineHeight: '2.5rem' }],
+    h1: ['2rem', { lineHeight: '2.5rem' }],
+    'h1-desktop': ['2.5rem', { lineHeight: '3rem' }],
   },
 
   fontWeight: {

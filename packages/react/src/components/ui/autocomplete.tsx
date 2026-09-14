@@ -615,12 +615,21 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                   {showClearButton && (
                     <button
                       type="button"
-                      tabIndex={-1}
                       aria-label={clearLabel}
                       title={clearLabel}
-                      className="pointer-events-auto flex items-center justify-center rounded-full p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="pointer-events-auto flex size-6 items-center justify-center rounded-full p-0.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none"
                       onMouseDown={(event) => event.preventDefault()}
-                      onClick={handleClear}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          event.stopPropagation()
+                          handleClear()
+                        }
+                      }}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleClear()
+                      }}
                     >
                       <CloseIcon className="w-4 h-4" aria-hidden="true" />
                     </button>
@@ -660,7 +669,8 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
 
         <PopoverContent
           ref={contentRef}
-          className="w-[var(--radix-popover-trigger-width)] p-0 border border-border bg-background-elevated elevation-overlap shadow-md overflow-hidden"
+          role="presentation"
+          className="w-[var(--radix-popover-trigger-width)] overflow-hidden border border-border bg-background-overlap p-0 elevation-overlap"
           align="start"
           sideOffset={0}
           onOpenAutoFocus={(e) => e.preventDefault()}
@@ -687,7 +697,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
             {loading ? (
               <div className="p-4 text-center text-sm text-foreground-muted flex items-center justify-center gap-2">
                 <svg
-                  className="animate-spin h-4 w-4 text-primary"
+                  className="h-4 w-4 animate-spin text-primary motion-reduce:animate-none"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -751,7 +761,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                         disabled={option.disabled}
                         onSelect={() => handleSelect(option)}
                         className={cn(
-                          'group flex cursor-pointer items-center justify-between px-4 py-2.5 text-base outline-none transition-colors hover:bg-background-contrast focus:bg-background-contrast focus:text-primary aria-selected:bg-background-contrast aria-selected:text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50'
+                          'group flex cursor-pointer items-center justify-between px-4 py-2.5 text-base outline-none transition-colors hover:bg-background-overlap-hover focus:bg-background-overlap-hover focus:text-primary aria-selected:bg-background-contrast aria-selected:text-primary data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50'
                         )}
                       >
                         {renderOption ? (

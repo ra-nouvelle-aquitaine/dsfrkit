@@ -36,7 +36,7 @@ export const colors = {
     950: '#eeeeee', // grey-950-100 (light)
     925: '#e5e5e5', // grey-925-125 (light)
     900: '#dddddd', // grey-900-175 (light)
-    850: '#cecece', // approx grey-850
+    850: '#cecece', // grey-200-850 (dark)
     625: '#929292', // grey-625-425 (light)
     425: '#666666', // grey-425-625 (light)
     200: '#3a3a3a', // grey-200-850 (light)
@@ -47,7 +47,7 @@ export const colors = {
   // Info
   info: {
     950: '#e8edff', // info-950-100 (light)
-    975: '#e8edff', // info-975-75 (light, approx)
+    975: '#f4f6ff', // info-975-75 (light)
     625: '#518fff', // info-425-625 (dark)
     425: '#0063cb', // info-425-625 (light)
   },

@@ -25,7 +25,7 @@ Cette documentation couvre l'implémentation locale (React / Tailwind / CSS) du 
 
 L'intégration du DSFR repose sur six piliers fondamentaux :
 
-1. **Accessibilité RGAA "By Design"** : Chaque composant doit être pensé, conçu et testé pour valider le niveau AA du RGAA.
+1. **Accessibilité RGAA "By Design"** : Chaque composant doit faciliter la conformité au RGAA 4.1.2. La bibliothèque seule ne peut pas garantir la conformité d'un service complet.
 2. **Lisibilité et Typographie** : Utilisation stricte des polices officielles (Marianne / Spectral) avec un rythme typographique respectant l'échelle modulaire.
 3. **Hiérarchie visuelle** : Guider l'utilisateur par les contrastes, la taille des typographies et les espacements (loi de proximité).
 4. **Responsive et Mobile-First** : Expérience fluide adaptée aux écrans tactiles, gestion fine des densités d'informations sur mobile.
@@ -62,12 +62,13 @@ L'utilisation des couleurs est strictement conditionnée par la notion de **toke
 
 ### Hiérarchie et Taille des textes
 L'échelle typographique du DSFR est fixe. Les classes utilitaires (ex: `fr-text`, `fr-text--lg`, `text-lg`) ou les variables Tailwind doivent correspondre exactement aux rem/px du DSFR :
-* **Texte courant (body)** : 1rem (16px) ou 1.125rem (18px) sur desktop.
-* **H1 à H6** : Espacements natifs inclus (margin-bottom), gestion stricte de la balise par rapport à sa classe visuelle.
+* **Texte courant** : `md` 1rem/1.5rem (16/24px), `lg` 1.125rem/1.75rem (18/28px), `xl` 1.25rem/2rem (20/32px).
+* **Titres mobiles H1 à H6** : 32/40, 28/36, 24/32, 22/28, 20/28 et 18/24px.
+* **Titres desktop H1 à H6** : 40/48, 32/40, 28/36, 24/32, 22/28 et 20/28px.
 
 > [!TIP]
 > **Lisibilité Mobile**
-> En mobile, la taille minimale des textes cliquables (liens, boutons) doit garantir une cible tactile suffisante sans que le texte lui-même soit inférieur à 14px (`0.875rem`).
+> La taille du texte et celle de la cible sont deux sujets distincts. Respectez la typographie du composant et conservez sa surface interactive officielle.
 
 ---
 
@@ -80,7 +81,7 @@ Les valeurs autorisées suivent l'échelle (ex: 1w = 8px, 2w = 16px, 3w = 24px, 
 ### Marges et Padding
 L'utilisation de Tailwind (`p-4`, `m-2`) est mappée sur ces valeurs (`1rem`, `0.5rem`).
 * Évitez les espacements arbitraires (ex: `p-[10px]`).
-* Le padding interne des composants interactifs (boutons, inputs) est immuable pour garantir la surface de clic (minimum 44x44 px en tactile).
+* Le padding interne des composants interactifs suit les dimensions publiées par le DSFR ; il ne doit pas être modifié arbitrairement.
 
 ---
 
@@ -114,14 +115,14 @@ Chaque composant suit des directives strictes.
 Le DSFR Kit implémente les tokens natifs du design system via la configuration globale (`@dsfrkit/tokens`).
 
 * **Couleurs** : `theme('colors.blue-france.sun-113-625')`, `theme('colors.grey.50')`
-* **Radius** : Le DSFR n'utilise **pas** de border-radius sur ses composants de base. Les bordures sont droites (`radius: 0`). 
+* **Radius** : la plupart des surfaces ont des angles droits, mais les arrondis officiels doivent être conservés (4px en haut des champs et listes déroulantes, cases à cocher, badges, tags, interrupteurs, curseurs, etc.).
 * **Shadows** : Utilisation stricte du système d'élévation DSFR (`elevation-raised`, `elevation-overlap`, `elevation-sticky`, `elevation-lifted`).
 * **Typography** : `font-marianne`, `font-spectral`.
 * **Breakpoints** :
   * `sm`: 576px
   * `md`: 768px
   * `lg`: 992px
-  * `xl`: 1200px
+  * `xl`: 1248px
 
 ---
 
@@ -151,14 +152,14 @@ Les 6 règles d'or du projet pour le maintien de l'accessibilité :
 Ce projet suit des règles de design strictes (DSFR + architecture Shadcn). Si vous êtes un assistant IA chargé de créer ou de modifier des composants, vous **devez** valider cette checklist avant toute génération de code :
 
 ### ❌ Anti-patterns absolus (À NE JAMAIS FAIRE)
-- **Ne jamais** utiliser de classes `rounded-*` (ex: `rounded-md`, `rounded-full`). Le DSFR exige des angles stricts à 90°.
+- **Ne jamais** ajouter un arrondi générique sans correspondance avec le composant DSFR concerné.
 - **Ne jamais** utiliser d'ombres standards Tailwind (ex: `shadow-md`, `shadow-lg`).
 - **Ne jamais** utiliser de couleurs hexadécimales en dur (ex: `bg-[#000091]`).
 - **Ne jamais** créer une dépendance au package `@dsfrkit/icons` pour les icônes *systèmes* critiques (succès, erreur, info, warning).
 
 ### ✅ Règles d'or (À TOUJOURS FAIRE)
 - **Élévations** : Utilisez exclusivement les tokens DSFR pour la profondeur (`elevation-overlap`, `elevation-raised`, `elevation-lifted`).
-- **Géométrie** : Laissez les bords carrés (pas de classe `rounded-*`).
+- **Géométrie** : appliquez la géométrie du composant officiel ; ne généralisez ni les angles carrés ni les arrondis.
 - **Autonomie (Shadcn-style)** : Intégrez les SVG *systèmes* géométriques (cercle, carré, triangle, octogone) directement en inline dans le composant (via une fonction `SystemIcon`).
 - **CVA & cn** : Structurez toujours les variantes via `class-variance-authority` (cva) et fusionnez les classes avec `cn()`.
 

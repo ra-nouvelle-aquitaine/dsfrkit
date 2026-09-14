@@ -66,7 +66,7 @@ describe('RouterAnchor', () => {
   it('should leave a link opening another tab to the browser', () => {
     withRouter(<Tile title="Document" href="/document.pdf" target="_blank" />)
 
-    const link = screen.getByRole('link', { name: 'Document' })
+    const link = screen.getByRole('link', { name: 'Document (nouvelle fenêtre)' })
     expect(link).not.toHaveAttribute('data-router')
     expect(link).toHaveAttribute('target', '_blank')
   })

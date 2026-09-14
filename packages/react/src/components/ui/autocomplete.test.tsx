@@ -434,6 +434,27 @@ describe('Component: Autocomplete (DSFR)', () => {
     expect(input).toHaveValue('')
   })
 
+  it('should clear with the keyboard without selecting the first suggestion', async () => {
+    const user = userEvent.setup()
+    const onValueChange = vi.fn()
+    render(
+      <Autocomplete
+        label="Pays"
+        options={defaultOptions}
+        defaultValue="be"
+        onValueChange={onValueChange}
+      />
+    )
+
+    const clearButton = screen.getByRole('button', { name: 'Effacer la sélection' })
+    clearButton.focus()
+    await user.keyboard('{Enter}')
+
+    expect(onValueChange).toHaveBeenCalledTimes(1)
+    expect(onValueChange).toHaveBeenLastCalledWith('')
+    expect(screen.getByRole('combobox')).toHaveValue('')
+  })
+
   it('should not render a clear button when there is no value', () => {
     render(<Autocomplete label="Pays" options={defaultOptions} />)
 
@@ -574,7 +595,7 @@ describe('Component: Autocomplete (DSFR)', () => {
 
       // Sans ouvrir le menu, les tags sont déjà rendus
       const franceTag = screen.getByText('France').closest('span') as HTMLElement
-      const dismissButton = within(franceTag).getByRole('button', { name: 'Supprimer' })
+      const dismissButton = within(franceTag).getByRole('button', { name: 'Supprimer France' })
       await user.click(dismissButton)
 
       expect(onValueChange).toHaveBeenLastCalledWith(['be'])

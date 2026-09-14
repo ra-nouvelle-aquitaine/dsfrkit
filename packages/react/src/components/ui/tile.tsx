@@ -9,15 +9,15 @@ import { cn } from '../../lib/utils'
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/tuile
  *
  * Structure DSFR :
- *  - Zone image en haut (optionnelle)
+ *  - Pictogramme ou image avant le corps (optionnel)
  *  - Corps (titre + description) en bas
  *  - Lien couvre toute la carte (via position absolute)
  *  - Pas de border-radius
- *  - Fond gris clair --background-contrast-grey
+ *  - Fond par défaut et bordure fine
  *
  * Variantes :
  *  - default   : tuile verticale standard
- *  - horizontal : tuile horizontale (image à droite selon DSFR)
+ *  - horizontal : tuile horizontale (média à gauche selon DSFR)
  *  - download  : variante teléchargement (icône dédiée)
  *
  * Tailles :
@@ -103,14 +103,14 @@ export interface TileProps {
 // ── Tailles ────────────────────────────────────────────────────────────────────
 const titleSizes = {
   sm: 'text-base font-bold leading-6',
-  md: 'text-lg font-bold leading-7',
-  lg: 'text-xl font-bold leading-8',
+  md: 'text-lg font-bold leading-6 md:text-xl md:leading-7',
+  lg: 'text-h4 font-bold',
 }
 
 const descriptionSizes = {
-  sm: 'text-xs',
-  md: 'text-sm',
-  lg: 'text-base',
+  sm: 'text-sm leading-6',
+  md: 'text-base leading-6',
+  lg: 'text-lg leading-7',
 }
 
 // ── Composant principal ────────────────────────────────────────────────────────
@@ -153,6 +153,8 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
     const isHorizontal = variant === 'horizontal'
     const isDownload = variant === 'download'
     const isClickable = !!href && !disabled
+    const resolvedRel =
+      target === '_blank' ? ['noopener', 'noreferrer', rel].filter(Boolean).join(' ') : rel
 
     // ── Icône download par défaut ─────────────────────────────────────────
     const resolvedIcon = isDownload && !icon ? <DownloadIcon className="w-8 h-8" /> : icon
@@ -160,25 +162,55 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
     // ── Zone image/icône ──────────────────────────────────────────────────
     const hasMedia = !!(resolvedIcon || imageSrc)
 
+    // La tuile horizontale adopte une mise en page dense, propre à dsfrkit :
+    // la zone média occupe un panneau pleine hauteur à fleur des bords et la
+    // racine ne porte pas de retrait. C'est une adaptation assumée : le DSFR
+    // prévoit un retrait de 2rem et un pictogramme de 4rem centré.
+    // En vertical, la photographie occupe toute la largeur en tête de tuile,
+    // tandis qu'un pictogramme conserve la vignette de 5rem de `.fr-tile__img`.
+    const media = {
+      sm: { panel: 'w-24', bleed: '-mx-6 -mt-6 mb-6' },
+      md: { panel: 'w-28', bleed: '-mx-8 -mt-8 mb-6' },
+      lg: { panel: 'w-32', bleed: '-mx-10 -mt-10 mb-6' },
+    }[size ?? 'md']
+
     const mediaZone = hasMedia && (
       <div
         className={cn(
-          'flex items-center justify-center overflow-hidden',
-          // Zone média : fond alt (f6f6f6 en light, #1e1e1e en dark)
-          'bg-[var(--background-alt-grey)]',
+          'flex shrink-0 items-center justify-center overflow-hidden',
           isHorizontal
-            ? 'w-28 flex-shrink-0 self-stretch border-l border-[var(--border-default-grey)]'
-            : 'w-full',
-          isHorizontal ? '' : size === 'sm' ? 'h-24' : size === 'lg' ? 'h-40' : 'h-32'
+            ? cn(
+                'self-stretch border-r border-border',
+                media.panel,
+                !imageSrc && 'bg-background-alt'
+              )
+            : imageSrc
+              ? cn('aspect-video w-auto', media.bleed)
+              : // .fr-tile__img : vignette de 5rem centrée, marge basse 1.5rem.
+                size === 'sm'
+                ? 'mb-6 h-14 w-14 self-center'
+                : 'mb-6 h-20 w-20 self-center'
         )}
       >
         {imageSrc ? (
-          <img src={imageSrc} alt={imageAlt} className="w-full h-full object-cover" />
+          <img src={imageSrc} alt={imageAlt} className="h-full w-full object-cover" />
         ) : (
           <span
             className={cn(
               'text-[var(--artwork-minor-blue-france)]',
-              size === 'sm' ? 'text-3xl' : size === 'lg' ? 'text-5xl' : 'text-4xl'
+              // Dans le panneau horizontal, le pictogramme est dimensionné pour
+              // l'occuper réellement ; en vertical il garde l'échelle DSFR.
+              isHorizontal
+                ? size === 'sm'
+                  ? 'text-4xl'
+                  : size === 'lg'
+                    ? 'text-6xl'
+                    : 'text-5xl'
+                : size === 'sm'
+                  ? 'text-3xl'
+                  : size === 'lg'
+                    ? 'text-5xl'
+                    : 'text-4xl'
             )}
           >
             {resolvedIcon}
@@ -191,8 +223,10 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
     const body = (
       <div
         className={cn(
-          'flex flex-col flex-1',
-          isHorizontal ? 'p-4' : size === 'sm' ? 'p-3' : size === 'lg' ? 'p-6' : 'p-4'
+          'flex min-w-0 flex-1 flex-col',
+          isHorizontal
+            ? cn('items-start', size === 'sm' ? 'p-3' : size === 'lg' ? 'p-6' : 'p-4')
+            : 'items-center text-center'
         )}
       >
         {badge && <div className="mb-2">{badge}</div>}
@@ -210,14 +244,15 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
             <RouterAnchor
               href={href}
               target={target}
-              rel={rel}
+              rel={resolvedRel}
               className={cn(
                 'underline-offset-4 decoration-transparent transition-colors',
-                'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)]',
+                'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                 "after:absolute after:inset-0 after:content-['']"
               )}
             >
               {title}
+              {target === '_blank' && <span className="sr-only"> (nouvelle fenêtre)</span>}
             </RouterAnchor>
           ) : (
             title
@@ -249,7 +284,9 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
           'flex-shrink-0 flex items-center',
           // --dsfr-blue-france-sun : bleu france adapté light/dark (#000091 → #6a6af4)
           'text-[var(--text-action-high-blue-france)]',
-          isHorizontal ? 'pr-4 self-center' : 'px-4 pb-4 self-end'
+          isHorizontal
+            ? cn('self-center', size === 'sm' ? 'pr-3' : size === 'lg' ? 'pr-6' : 'pr-4')
+            : 'mt-4 self-end'
         )}
       >
         {isDownload ? (
@@ -263,9 +300,9 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
     return (
       <div
         ref={ref}
-        aria-disabled={disabled ? true : undefined}
         className={cn(
           'group/tile relative flex overflow-hidden',
+          !isHorizontal && 'p-8 pb-9',
           // --dsfr-background-default : blanc (#fff) en light, sombre (#161616) en dark
           'bg-[var(--background-default-grey)]',
           // --dsfr-border-default : #ddd en light, #353535 en dark
@@ -273,24 +310,15 @@ const Tile = React.forwardRef<HTMLDivElement, TileProps>(
           isClickable &&
             !disabled && ['transition-colors', 'hover:bg-[var(--background-default-grey-hover)]'],
           disabled && 'opacity-50 cursor-not-allowed',
-          isHorizontal ? 'flex-row' : 'flex-col',
+          !isHorizontal && size === 'sm' && 'p-6 pb-7',
+          !isHorizontal && size === 'lg' && 'p-10 pb-11',
+          isHorizontal ? 'flex-row items-stretch text-left' : 'flex-col',
           className
         )}
       >
-        {/* Horizontal : image/icône à gauche (start), corps au centre, indicateur à droite */}
-        {isHorizontal ? (
-          <>
-            {mediaZone}
-            {body}
-            {indicator}
-          </>
-        ) : (
-          <>
-            {mediaZone}
-            {body}
-            {indicator}
-          </>
-        )}
+        {mediaZone}
+        {body}
+        {indicator}
       </div>
     )
   }
