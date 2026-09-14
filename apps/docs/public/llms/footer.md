@@ -20,10 +20,15 @@ Pied de page DSFR (`fr-footer`).
 
 Les liens ne sont soulignés qu'au survol, comme dans le DSFR.
 
+**Liens d'évitement :** `Footer` porte `id="footer"` par défaut, cible de « Aller au pied de page » dans `SkipLinks`.
+
+**Composition 1.2 :** des `FooterLinks` placés dans `FooterContent` restent affichés en colonnes espacées ; préférez `FooterTop` pour suivre le DSFR.
+
 ## Documentation et exemples
  Liens institutionnels que le DSFR fait figurer dans tout pied de page.
 
-Conteneur principal du Footer DSFR
+Conteneur principal du Footer DSFR. Porte `id="footer"` par défaut, cible du
+lien d'évitement « Aller au pied de page » de `SkipLinks` (remplaçable via `id`).
 
 @example
 ```tsx
@@ -50,6 +55,9 @@ Corps principal du Footer : bloc-marque et contenu.
 Zone de marque du Footer
 
 Zone de contenu du Footer, à droite du bloc-marque à partir de `lg`.
+
+Composition 1.2 toujours prise en charge : des `FooterLinks` placés ici sont
+disposés en colonnes espacées. Pour suivre le DSFR, préférer `FooterTop`.
 
 Catégorie de liens (`fr-footer__top-cat` + `fr-footer__top-list`), à placer
 dans `FooterTop`. Chaque enfant est rendu dans un élément de liste.

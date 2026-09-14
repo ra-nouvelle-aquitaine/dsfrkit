@@ -33,6 +33,15 @@ type FollowContextValue = { split: boolean }
 
 const FollowContext = React.createContext<FollowContextValue>({ split: false })
 
+/** Enfants à plat : fragments dépliés, valeurs vides retirées. */
+function flattenChildren(children: React.ReactNode): React.ReactNode[] {
+  return React.Children.toArray(children).flatMap((child) =>
+    React.isValidElement<{ children?: React.ReactNode }>(child) && child.type === React.Fragment
+      ? flattenChildren(child.props.children)
+      : [child]
+  )
+}
+
 const isFollowBlock = (child: React.ReactNode) => {
   if (!React.isValidElement(child)) return false
   const name = (child.type as { displayName?: string }).displayName
@@ -329,12 +338,19 @@ export interface FollowSocialProps extends Omit<React.HTMLAttributes<HTMLDivElem
 const FollowSocial = React.forwardRef<HTMLDivElement, FollowSocialProps>(
   ({ className, title, titleAs, children, ...props }, ref) => {
     const { split } = React.useContext(FollowContext)
-    // Composition historique : titre et boutons fournis tels quels en enfants.
-    const hasTitleChild = React.Children.toArray(children).some(
-      (child) =>
-        React.isValidElement(child) &&
-        (child.type as { displayName?: string }).displayName === 'FollowTitle'
-    )
+    const items = flattenChildren(children)
+    // Titre par défaut et liste seulement pour la composition 1.3 : des
+    // `FollowSocialLink` en enfants, ou `title` / `titleAs` explicites. Toute autre
+    // composition (1.2 : titre et boutons fournis en enfants) est rendue telle quelle.
+    const isLinkList =
+      title !== undefined ||
+      titleAs !== undefined ||
+      (items.length > 0 &&
+        items.every(
+          (child) =>
+            React.isValidElement(child) &&
+            (child.type as { displayName?: string }).displayName === 'FollowSocialLink'
+        ))
 
     return (
       <div ref={ref} className={cn('w-full', split && 'md:w-4/12', className)} {...props}>
@@ -345,9 +361,7 @@ const FollowSocial = React.forwardRef<HTMLDivElement, FollowSocialProps>(
             !split && 'md:flex-row md:items-center md:justify-between md:[&>h2]:mb-0 md:[&>h3]:mb-0'
           )}
         >
-          {hasTitleChild ? (
-            children
-          ) : (
+          {isLinkList ? (
             <>
               {title !== null && (
                 <FollowTitle as={titleAs} className="mb-3">
@@ -360,13 +374,19 @@ const FollowSocial = React.forwardRef<HTMLDivElement, FollowSocialProps>(
                 </FollowTitle>
               )}
               <ul className="-mx-2 -mb-4 m-0 flex list-none flex-wrap p-0">
-                {React.Children.map(children, (child) =>
-                  child === null || child === undefined || child === false ? null : (
-                    <li className="inline-flex max-w-full flex-wrap">{child}</li>
-                  )
-                )}
+                {items.map((child, index) => (
+                  <li
+                    // biome-ignore lint/suspicious/noArrayIndexKey: les clés des enfants dépliés depuis des fragments peuvent se répéter ; l'ordre des liens est fixe.
+                    key={index}
+                    className="inline-flex max-w-full flex-wrap"
+                  >
+                    {child}
+                  </li>
+                ))}
               </ul>
             </>
+          ) : (
+            children
           )}
         </div>
       </div>

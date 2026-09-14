@@ -7,6 +7,7 @@ import {
   FollowNewsletterForm,
   FollowSocial,
   FollowSocialLink,
+  FollowTitle,
 } from './follow'
 
 describe('Component: Follow (fr-follow)', () => {
@@ -59,5 +60,54 @@ describe('Component: Follow (fr-follow)', () => {
     const link = screen.getByRole('link', { name: 'LinkedIn' })
     expect(link).toHaveAttribute('target', '_blank')
     expect(link).toHaveAttribute('title', 'LinkedIn - nouvelle fenêtre')
+  })
+
+  it('should list social links passed through a fragment', () => {
+    render(
+      <FollowSocial>
+        {/* biome-ignore lint/complexity/noUselessFragments: vérifie le dépliage des fragments */}
+        <>
+          <FollowSocialLink network="linkedin" href="https://www.linkedin.com" />
+          <FollowSocialLink network="youtube" href="https://www.youtube.com" />
+        </>
+      </FollowSocial>
+    )
+
+    expect(screen.getByRole('heading', { name: /Suivez-nous/ })).toBeInTheDocument()
+    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+  })
+
+  it.each([
+    ['a direct FollowTitle', <FollowTitle key="t">Suivez-nous</FollowTitle>],
+    ['a custom heading', <h2 key="t">Suivez-nous</h2>],
+    [
+      'a FollowTitle inside a wrapper',
+      <div key="t">
+        <FollowTitle>Suivez-nous</FollowTitle>
+      </div>,
+    ],
+  ])('should not add a second title to a 1.2 composition with %s', (_, heading) => {
+    render(
+      <FollowSocial>
+        {heading}
+        <a href="https://social.numerique.gouv.fr/@service">Mastodon</a>
+      </FollowSocial>
+    )
+
+    expect(screen.getAllByRole('heading')).toHaveLength(1)
+    expect(screen.getByRole('heading', { name: 'Suivez-nous' })).toBeInTheDocument()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+  })
+
+  it('should render the title and list when title is explicit, whatever the children', () => {
+    const CustomLink = () => <a href="https://www.linkedin.com">LinkedIn</a>
+    render(
+      <FollowSocial title="Retrouvez-nous">
+        <CustomLink />
+      </FollowSocial>
+    )
+
+    expect(screen.getByRole('heading', { name: 'Retrouvez-nous' })).toBeInTheDocument()
+    expect(screen.getAllByRole('listitem')).toHaveLength(1)
   })
 })

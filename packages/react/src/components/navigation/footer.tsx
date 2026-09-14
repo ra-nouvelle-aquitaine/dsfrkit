@@ -47,10 +47,20 @@ function toListItems(children: React.ReactNode, className?: string) {
   })
 }
 
+/** Vrai si des `FooterLinks` figurent parmi les enfants, fragments compris. */
+function containsFooterLinks(children: React.ReactNode): boolean {
+  return React.Children.toArray(children).some((child) => {
+    if (!React.isValidElement<{ children?: React.ReactNode }>(child)) return false
+    if (child.type === React.Fragment) return containsFooterLinks(child.props.children)
+    return (child.type as { displayName?: string }).displayName === 'FooterLinks'
+  })
+}
+
 export interface FooterProps extends React.HTMLAttributes<HTMLElement> {}
 
 /**
- * Conteneur principal du Footer DSFR
+ * Conteneur principal du Footer DSFR. Porte `id="footer"` par défaut, cible du
+ * lien d'évitement « Aller au pied de page » de `SkipLinks` (remplaçable via `id`).
  *
  * @example
  * ```tsx
@@ -74,6 +84,7 @@ const Footer = React.forwardRef<HTMLElement, FooterProps>(
     return (
       <footer
         ref={ref}
+        id="footer"
         className={cn(
           'w-full bg-background pt-8 shadow-[inset_0_2px_0_0_var(--border-plain-blue-france),inset_0_-1px_0_0_var(--border-default-grey)]',
           className
@@ -198,11 +209,37 @@ export interface FooterContentProps extends React.HTMLAttributes<HTMLDivElement>
 
 /**
  * Zone de contenu du Footer, à droite du bloc-marque à partir de `lg`.
+ *
+ * Composition 1.2 toujours prise en charge : des `FooterLinks` placés ici sont
+ * disposés en colonnes espacées. Pour suivre le DSFR, préférer `FooterTop`.
  */
 const FooterContent = React.forwardRef<HTMLDivElement, FooterContentProps>(
   ({ className, description, links, children, ...props }, ref) => {
     const hasChildren = React.Children.count(children) > 0
     const resolvedLinks = links ?? (hasChildren ? false : footerInstitutionalLinks)
+
+    if (containsFooterLinks(children)) {
+      return (
+        <div
+          ref={ref}
+          className={cn(
+            'mt-6 basis-full lg:mt-0 lg:ml-8 lg:flex-1 lg:basis-0 lg:self-start',
+            className
+          )}
+          {...props}
+        >
+          {description && (
+            <p className="m-0 mb-6 w-full text-sm leading-6 text-foreground">{description}</p>
+          )}
+          <div
+            data-footer-columns=""
+            className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-3 lg:grid-cols-4"
+          >
+            {children}
+          </div>
+        </div>
+      )
+    }
 
     return (
       <div

@@ -50,7 +50,8 @@ const meta = {
     },
     children: {
       control: 'text',
-      description: 'Description affichée à la suite du titre.',
+      description:
+        'Description affichée à la suite du titre. Accepte du texte ou du contenu en blocs (`<p>`, listes).',
       table: { type: { summary: 'ReactNode' } },
     },
     link: {

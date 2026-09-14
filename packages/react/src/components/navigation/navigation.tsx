@@ -206,6 +206,8 @@ const Navigation = React.forwardRef<HTMLElement, NavigationProps>(
       <NavigationContext.Provider value={contextValue}>
         <nav
           ref={setRefs}
+          // Menu principal de l'en-tête : cible du lien d'évitement « Aller à la navigation ».
+          id={inHeader && !isVertical ? 'main-navigation' : undefined}
           aria-label={ariaLabel || (isVertical ? 'Menu latéral' : 'Menu principal')}
           data-orientation={orientation}
           className={cn(

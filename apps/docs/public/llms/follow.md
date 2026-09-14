@@ -17,6 +17,8 @@ Lettre d'information et réseaux sociaux (`fr-follow`) : bandeau bleu clair plac
 
 Les deux blocs côte à côte occupent 8 et 4 colonnes, séparés par un filet. Seul, un bloc prend toute la largeur avec l'accroche à gauche et l'action à droite.
 
+**Titre des réseaux sociaux :** `FollowSocial` ajoute « Suivez-nous sur les réseaux sociaux » quand ses enfants sont des `FollowSocialLink` (`title` pour le changer, `title={null}` pour le retirer). Une composition libre (titre et boutons fournis en enfants, comme en 1.2) est rendue telle quelle.
+
 ## Documentation et exemples
  Titre d'un bloc, au style `fr-h5`.
 

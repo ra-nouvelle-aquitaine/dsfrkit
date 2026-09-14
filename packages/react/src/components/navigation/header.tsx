@@ -290,6 +290,7 @@ const HeaderNav = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement
     return (
       <nav
         ref={ref}
+        id="main-navigation"
         aria-label="Navigation principale"
         className={cn('relative w-full', className)}
         {...props}

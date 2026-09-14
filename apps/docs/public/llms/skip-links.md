@@ -11,6 +11,13 @@ import type { SkipLink, SkipLinksProps } from '@dsfrkit/react'
 ## Usage recommandé
 Liens d'évitement au début du document améliorant grandement l'accessibilité pour la navigation au clavier.
 
+**Cibles par défaut :**
+- `#main-content` — à poser sur `<main id="main-content" tabIndex={-1}>` ;
+- `#main-navigation` — posé automatiquement sur la navigation principale de l'en-tête (`Navigation` ou `HeaderNav` dans un `Header`) ;
+- `#footer` — posé automatiquement par `Footer`.
+
+Si une cible n'existe pas dans la page, passez vos propres liens avec `links`.
+
 ## Documentation et exemples
 Composant SkipLinks (Liens d'évitement) DSFR
 

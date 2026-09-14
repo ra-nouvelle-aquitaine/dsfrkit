@@ -133,6 +133,51 @@ Chaque composant est présenté avec ses variantes et ses props dans le [Storybo
 
 Les composants reposent sur des primitives Radix (clavier, focus, attributs ARIA) et appliquent les règles du DSFR : libellés visibles, messages d'erreur liés par `aria-describedby`, focus visible, `aria-current` sur la page courante. Ils facilitent la conformité RGAA 4.1 sans la garantir : elle dépend aussi du contenu et de l'assemblage de vos pages.
 
+## Migration depuis la 1.2
+
+La 1.3 aligne plusieurs composants sur le DSFR 1.15. Les compositions de la 1.2 restent prises en charge depuis la 1.3.2 ; les points ci-dessous changent le rendu et méritent une vérification.
+
+### SkipLinks
+
+Depuis la 1.3.2, les cibles par défaut existent sans configuration : `Footer` porte `id="footer"`, et la navigation principale de l'en-tête (`Navigation` ou `HeaderNav` dans un `Header`) porte `id="main-navigation"`. Seul `id="main-content"` reste à poser sur `<main>`.
+
+### Footer
+
+- `Footer` porte de nouveau `id="footer"` par défaut, retiré par erreur en 1.3.0 et 1.3.1.
+- Des `FooterLinks` placés dans `FooterContent` (composition 1.2) sont disposés en colonnes espacées. La structure DSFR les place dans `FooterTop`, bandeau gris au-dessus du bloc-marque :
+
+  ```tsx
+  <Footer>
+    <FooterTop>
+      <FooterLinks title="Démarches" titleAs="h2">…</FooterLinks>
+    </FooterTop>
+    <FooterBody>
+      <FooterBrand logo={<Logo size="lg" />} />
+      <FooterContent description="Présentation du service." />
+    </FooterBody>
+    <FooterBottom copyright="…">
+      <FooterLegalLinks>…</FooterLegalLinks>
+    </FooterBottom>
+  </Footer>
+  ```
+
+- `FooterContent` sans enfants affiche les liens institutionnels obligatoires (`links={false}` pour les retirer).
+- `FooterBrand description` est déprécié : passer la description à `FooterContent`.
+- `FooterLinks` rend une liste (`ul`) et non plus un `nav` par colonne.
+
+### Follow
+
+- `FollowSocial` ajoute le titre « Suivez-nous sur les réseaux sociaux » et une liste **uniquement** quand ses enfants sont des `FollowSocialLink`, ou quand `title` / `titleAs` est fourni. Une composition 1.2 (titre et boutons en enfants) est rendue telle quelle, sans titre en double.
+- `FollowTitle` rend un `h2` par défaut (`h5` en 1.2) : passer `as="h5"` pour conserver l'ancien niveau.
+
+### Notice
+
+- Types DSFR : `info`, `warning`, `alert`, `weather-orange`, `weather-red`, `weather-purple`, `witness`, `kidnapping`, `attack`, `cyberattack`, `neutral`. `error` et `weather` restent acceptés comme alias de `alert` et `weather-orange` ; `success` est déprécié (utiliser `Alert`).
+- Le bandeau inclut son propre `fr-container` : le placer pleine largeur, hors d'un conteneur, sous l'en-tête.
+- `closable` affiche le bouton « Masquer le message » même sans `onClose`, et le bandeau se masque seul au clic.
+- `role="status"` n'est plus posé, comme dans le DSFR.
+- Titre et description acceptent du contenu en blocs (`<p>`, listes) depuis la 1.3.2 ; en 1.3.0 et 1.3.1, un `<p>` passé en enfant cassait l'hydratation d'un rendu serveur.
+
 ## Licence
 
 ETALAB-2.0

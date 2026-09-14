@@ -247,9 +247,11 @@ const Notice = React.forwardRef<HTMLDivElement, NoticeProps>(
       >
         <div className="fr-container">
           <div className="relative flex flex-row items-start justify-between">
-            <p className="m-0 text-sm leading-6 md:text-base">
+            {/* <div> et non <p> comme le DSFR : titre et description acceptent du contenu
+                en blocs (<p>, listes) sans imbrication invalide ni échec d'hydratation. */}
+            <div className="m-0 text-sm leading-6 md:text-base">
               {title && (
-                <span className={cn('mr-1 block font-bold sm:inline', hasBar && 'uppercase')}>
+                <div className={cn('mr-1 block font-bold sm:inline', hasBar && 'uppercase')}>
                   {displayIcon && (
                     <span
                       className="mr-2 inline-block size-6 [&>svg]:size-6"
@@ -260,9 +262,9 @@ const Notice = React.forwardRef<HTMLDivElement, NoticeProps>(
                     </span>
                   )}
                   {title}
-                </span>
+                </div>
               )}{' '}
-              {children && <span className="mr-1 block sm:inline">{children}</span>}{' '}
+              {children && <div className="mr-1 block sm:inline">{children}</div>}{' '}
               {link && (
                 <RouterAnchor
                   href={link.href}
@@ -286,7 +288,7 @@ const Notice = React.forwardRef<HTMLDivElement, NoticeProps>(
                   )}
                 </RouterAnchor>
               )}
-            </p>
+            </div>
             {closable && (
               <button
                 type="button"

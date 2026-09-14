@@ -28,6 +28,10 @@ const meta = {
 - \`FooterBottom\` — \`FooterLegalLinks\` (plan du site, accessibilité, mentions légales, données personnelles, gestion des cookies) et \`copyright\` pour la mention de licence.
 
 Les liens ne sont soulignés qu'au survol, comme dans le DSFR.
+
+**Liens d'évitement :** \`Footer\` porte \`id="footer"\` par défaut, cible de « Aller au pied de page » dans \`SkipLinks\`.
+
+**Composition 1.2 :** des \`FooterLinks\` placés dans \`FooterContent\` restent affichés en colonnes espacées ; préférez \`FooterTop\` pour suivre le DSFR.
 `,
       },
     },

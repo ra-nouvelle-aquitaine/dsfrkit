@@ -128,6 +128,55 @@ describe('Component: Navigation (menus DSFR)', () => {
     expect(screen.getByRole('link', { name: 'Guides' })).toBeVisible()
   })
 
+  it('should expose id="main-navigation" on the Header main menu for the skip link', () => {
+    const { rerender } = render(
+      <Header>
+        <HeaderBody>
+          <HeaderNav>
+            <Navigation>
+              <NavigationItem href="#accueil">Accueil</NavigationItem>
+            </Navigation>
+          </HeaderNav>
+        </HeaderBody>
+      </Header>
+    )
+    expect(screen.getByRole('navigation', { name: 'Menu principal' })).toHaveAttribute(
+      'id',
+      'main-navigation'
+    )
+
+    // Identifiant remplaçable
+    rerender(
+      <Header>
+        <HeaderBody>
+          <HeaderNav>
+            <Navigation id="menu">
+              <NavigationItem href="#accueil">Accueil</NavigationItem>
+            </Navigation>
+          </HeaderNav>
+        </HeaderBody>
+      </Header>
+    )
+    expect(screen.getByRole('navigation', { name: 'Menu principal' })).toHaveAttribute('id', 'menu')
+  })
+
+  it('should not set the main navigation id outside the Header or on a side menu', () => {
+    render(
+      <>
+        <Navigation aria-label="Barre de liens">
+          <NavigationItem href="#a">A</NavigationItem>
+        </Navigation>
+        <Navigation orientation="vertical">
+          <NavigationItem href="#b">B</NavigationItem>
+        </Navigation>
+      </>
+    )
+
+    for (const nav of screen.getAllByRole('navigation')) {
+      expect(nav).not.toHaveAttribute('id')
+    }
+  })
+
   it('should close the open menu before the Header mobile panel on Escape', async () => {
     const user = userEvent.setup()
     render(
