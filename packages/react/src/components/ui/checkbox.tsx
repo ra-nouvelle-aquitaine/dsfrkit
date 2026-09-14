@@ -11,6 +11,18 @@ import { cn } from '../../lib/utils'
  * Le checkbox DSFR a un border-radius de 4px et une bordure bleue france
  */
 
+/** Icône `fr--error-fill` du DSFR, portée par les messages d'erreur (`fr-message--error`). */
+function ErrorFillIcon(props: React.ComponentProps<'svg'>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="currentColor"
+        d="M17.5,2.5h-11L1,12l5.5,9.5h11L23,12L17.5,2.5z M16.2,14.8l-1.4,1.4L12,13.4l-2.8,2.8l-1.4-1.4l2.8-2.8L7.8,9.2l1.4-1.4l2.8,2.8l2.8-2.8l1.4,1.4L13.4,12L16.2,14.8z"
+      />
+    </svg>
+  )
+}
+
 const checkboxVariants = cva(
   // Base DSFR : border-radius 4px, bordure bleue france
   'peer shrink-0 rounded border bg-background ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:text-foreground-inverted transition-colors',
@@ -119,36 +131,52 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
     }
 
     return (
+      // Structure `fr-checkbox-group` : la barre d'erreur longe tout le groupe et
+      // le message d'erreur repart sous la case, aligné à gauche, icône en tête.
       <div
         className={cn(
-          'relative flex gap-3',
-          error && 'before:absolute before:inset-y-0 before:-left-3 before:w-0.5 before:bg-error',
-          size === 'sm' && 'items-center',
-          size === 'md' && 'items-start',
-          !size && 'items-start'
+          'relative',
+          error && 'before:absolute before:inset-y-0 before:-left-3 before:w-0.5 before:bg-error'
         )}
       >
-        {checkbox}
-        <div className="grid gap-1">
-          {label && (
-            <label
-              htmlFor={checkboxId}
-              className="cursor-pointer text-base leading-6 text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              {label}
-            </label>
+        <div
+          className={cn(
+            'flex gap-2',
+            size === 'sm' && 'items-center',
+            size === 'md' && 'items-start',
+            !size && 'items-start'
           )}
-          {hint && (
-            <p id={hintId} className="text-xs leading-5 text-muted-foreground">
-              {hint}
-            </p>
-          )}
-          {error && (
-            <p id={errorId} className="text-xs leading-5 text-error" role="alert">
-              {error}
-            </p>
-          )}
+        >
+          {checkbox}
+          <div className="grid">
+            {label && (
+              <label
+                htmlFor={checkboxId}
+                className={cn(
+                  'cursor-pointer text-base leading-6 peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+                  error ? 'text-error' : 'text-foreground'
+                )}
+              >
+                {label}
+              </label>
+            )}
+            {hint && (
+              <p id={hintId} className="text-xs leading-5 text-muted-foreground">
+                {hint}
+              </p>
+            )}
+          </div>
         </div>
+        {error && (
+          <p
+            id={errorId}
+            className="mt-4 flex items-start gap-1 text-xs leading-5 text-error"
+            role="alert"
+          >
+            <ErrorFillIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+            <span>{error}</span>
+          </p>
+        )}
       </div>
     )
   }

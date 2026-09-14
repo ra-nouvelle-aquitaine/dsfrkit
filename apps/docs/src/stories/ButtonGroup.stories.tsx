@@ -48,7 +48,7 @@ export const Single: Story = {
 }
 
 export const Multiple: Story = {
-  args: { type: 'multiple', defaultValue: ['bold'], legend: 'Mise en forme' },
+  args: { type: 'multiple', defaultValue: ['bold', 'italic'], legend: 'Mise en forme' },
   render: (args) => (
     <ButtonGroup {...args}>
       <ButtonGroupItem value="bold">Gras</ButtonGroupItem>

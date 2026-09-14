@@ -32,7 +32,23 @@ describe('Component: Checkbox (DSFR/Radix)', () => {
     const checkbox = screen.getByRole('checkbox')
     expect(checkbox).toHaveAttribute('aria-invalid', 'true')
 
-    const errorMessage = screen.getByText('Vous devez accepter pour continuer')
+    const errorMessage = screen.getByRole('alert')
+    expect(errorMessage).toHaveTextContent('Vous devez accepter pour continuer')
     expect(errorMessage).toHaveClass('text-error')
+    expect(checkbox).toHaveAccessibleDescription('Vous devez accepter pour continuer')
+  })
+
+  it('should render the error message like fr-message--error: icon first, outside the label column', () => {
+    render(<Checkbox label="Acceptation GCG" error="Vous devez accepter pour continuer" />)
+
+    const errorMessage = screen.getByRole('alert')
+    const label = screen.getByText('Acceptation GCG')
+
+    // L'icône d'erreur précède le texte du message.
+    expect(errorMessage.firstElementChild?.tagName.toLowerCase()).toBe('svg')
+    expect(errorMessage.firstElementChild).toHaveAttribute('aria-hidden', 'true')
+    // Le message repart sous la case, aligné à gauche : il ne partage pas la colonne du libellé.
+    expect(label.parentElement?.contains(errorMessage)).toBe(false)
+    expect(label).toHaveClass('text-error')
   })
 })

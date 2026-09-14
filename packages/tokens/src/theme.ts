@@ -34,6 +34,8 @@ export const cssVariables = {
     'overlap-hover': alphaColor('--background-overlap-grey-hover'),
     lifted: alphaColor('--background-lifted-grey'),
     'open-blue-france': alphaColor('--background-open-blue-france'),
+    'open-blue-france-hover': alphaColor('--background-open-blue-france-hover'),
+    'open-blue-france-active': alphaColor('--background-open-blue-france-active'),
   },
   foreground: {
     DEFAULT: alphaColor('--text-default-grey'),

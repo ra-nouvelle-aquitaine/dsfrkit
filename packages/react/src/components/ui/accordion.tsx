@@ -7,11 +7,12 @@ import { cn } from '../../lib/utils'
  * Utilise Radix UI Accordion pour l'accessibilité
  * Conforme au design system : https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/accordeon
  *
- * Styles DSFR :
+ * Styles DSFR (`fr-accordion`) :
  * - Bordure séparatrice entre chaque item (border-bottom)
  * - Premier item avec bordure en haut
- * - Titre : texte --text-action-high-blue-france, fond --background-open-blue-france au survol/ouvert
- * - Contenu : texte --text-default-grey, fond --background-default-grey, padding 0 2rem 2rem
+ * - Titre : texte --text-action-high-blue-france, padding 0.75rem 1rem ; une fois ouvert,
+ *   fond --background-open-blue-france (et ses déclinaisons -hover / -active)
+ * - Contenu : texte --text-default-grey, padding 1rem 1rem 1.5rem
  * - Chevron bleu france, rotation 180° à l'ouverture
  */
 
@@ -81,10 +82,14 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between min-h-12 py-3 px-4 md:px-8',
+        'flex flex-1 items-center justify-between min-h-12 py-3 px-4 text-left',
         'text-base leading-6 font-medium text-primary',
-        'transition-all cursor-pointer bg-transparent',
+        'transition-colors motion-reduce:transition-none cursor-pointer bg-transparent',
         'hover:bg-background-hover active:bg-background-active',
+        // Section ouverte : le DSFR teinte le titre en bleu (`[aria-expanded=true]`)
+        'data-[state=open]:bg-background-open-blue-france',
+        'data-[state=open]:hover:bg-background-open-blue-france-hover',
+        'data-[state=open]:active:bg-background-open-blue-france-active',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
         '[&[data-state=open]>svg]:rotate-180',
         className
@@ -102,7 +107,7 @@ const AccordionTrigger = React.forwardRef<
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="size-4 shrink-0 ml-4 text-primary transition-transform duration-200"
+        className="size-4 shrink-0 ml-4 text-primary transition-transform duration-300 motion-reduce:transition-none"
         aria-hidden="true"
       >
         <path d="m6 9 6 6 6-6" />
@@ -121,7 +126,7 @@ const AccordionContent = React.forwardRef<
     className="overflow-hidden text-base leading-6 text-foreground bg-background transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    <div className={cn('px-4 md:px-8 pb-8 pt-4', className)}>{children}</div>
+    <div className={cn('px-4 pt-4 pb-6', className)}>{children}</div>
   </AccordionPrimitive.Content>
 ))
 AccordionContent.displayName = AccordionPrimitive.Content.displayName

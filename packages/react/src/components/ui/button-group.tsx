@@ -123,7 +123,14 @@ const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>((props, r
     <ButtonGroupContext.Provider value={contextValue}>
       <ToggleGroupPrimitive.Root
         ref={ref}
-        className={cn(buttonGroupVariants({ size, className }))}
+        className={cn(
+          buttonGroupVariants({ size }),
+          // Le contrôle segmenté DSFR ne coche qu'un segment à la fois. En sélection
+          // multiple, deux segments voisins cochés collaient leurs cadres bleus en
+          // un seul bloc aux coins arrondis entrecroisés : 4px les gardent distincts.
+          props.type === 'multiple' && 'gap-1',
+          className
+        )}
         role={props.type === 'single' ? 'radiogroup' : 'group'}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy ?? (legend ? legendId : undefined)}

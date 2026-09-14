@@ -53,4 +53,24 @@ describe('Component: Accordion (DSFR/Radix)', () => {
     expect(screen.getByRole('button', { name: 'T1' })).toHaveAttribute('aria-expanded', 'true')
     expect(screen.getByRole('button', { name: 'T2' })).toHaveAttribute('aria-expanded', 'true')
   })
+
+  it('should tint the trigger of an open section like fr-accordion__btn[aria-expanded=true]', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <Accordion>
+        <AccordionItem value="s1">
+          <AccordionTrigger>Section</AccordionTrigger>
+          <AccordionContent>Contenu</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    )
+
+    const trigger = screen.getByRole('button', { name: 'Section' })
+    expect(trigger).toHaveClass('data-[state=open]:bg-background-open-blue-france')
+    expect(trigger).toHaveAttribute('data-state', 'closed')
+
+    await user.click(trigger)
+    expect(trigger).toHaveAttribute('data-state', 'open')
+  })
 })
