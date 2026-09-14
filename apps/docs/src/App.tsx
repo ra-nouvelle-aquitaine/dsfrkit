@@ -14,7 +14,6 @@ import {
   FooterBottom,
   FooterBrand,
   FooterContent,
-  FooterLinks,
   Header,
   HeaderActions,
   HeaderBody,
@@ -399,40 +398,24 @@ function AppContent() {
               setActiveSection('')
             }}
           />
-          <FooterContent>
-            <FooterLinks title="Ressources">
-              <Link
-                href="https://www.systeme-de-design.gouv.fr/"
-                external
-                showExternalIcon
-                className="font-normal text-foreground w-fit text-sm"
-              >
-                DSFR Officiel
-              </Link>
-              <Link
-                href={storybookUrl}
-                external
-                showExternalIcon
-                className="font-normal text-foreground w-fit text-sm"
-              >
-                Storybook
-              </Link>
-            </FooterLinks>
-            <FooterLinks title="Code source">
-              <Link
-                href="https://github.com/ra-nouvelle-aquitaine/dsfrkit"
-                external
-                showExternalIcon
-                className="font-normal text-foreground w-fit text-sm"
-              >
-                GitHub
-              </Link>
-            </FooterLinks>
-          </FooterContent>
+          <FooterContent
+            description="Composants React accessibles et conformes au Système de Design de l'État, construits sur Radix UI et Tailwind CSS."
+            links={[
+              {
+                label: 'DSFR officiel',
+                href: 'https://www.systeme-de-design.gouv.fr/',
+                external: true,
+              },
+              { label: 'Storybook', href: storybookUrl, external: true },
+              {
+                label: 'GitHub',
+                href: 'https://github.com/ra-nouvelle-aquitaine/dsfrkit',
+                external: true,
+              },
+            ]}
+          />
         </FooterBody>
-        <FooterBottom>
-          <Text>Fait avec ❤️ par la DSI de la Région académique Nouvelle-Aquitaine</Text>
-        </FooterBottom>
+        <FooterBottom copyright="Fait avec ❤️ par la DSI de la Région académique Nouvelle-Aquitaine" />
       </Footer>
     </Box>
   )
