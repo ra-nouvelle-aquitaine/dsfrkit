@@ -36,10 +36,12 @@ const ThemeSync = ({
   children,
   isDark,
   viewMode,
+  layout,
 }: {
   children: React.ReactNode
   isDark: boolean
   viewMode: string
+  layout?: string
 }) => {
   const { resolvedTheme, setTheme } = useTheme()
 
@@ -69,13 +71,30 @@ const ThemeSync = ({
 
   // En mode Docs, le body est la page entière, donc on l'isole localement dans un cadre
   if (viewMode === 'docs') {
+    const colors = {
+      backgroundColor: isThemeDark ? '#161616' : '#ffffff',
+      color: isThemeDark ? '#cecece' : '#161616',
+    }
+
+    // Les stories `fullscreen` (en-tête, pied de page, bandeaux, navigation) occupent
+    // toute la largeur de l'aperçu : pas de centrage flex, qui les rétrécirait à la
+    // largeur de leur contenu, ni de marge négative, qui déborderait de l'aperçu
+    // (Storybook ne lui ajoute aucun retrait dans ce layout) et ferait apparaître
+    // des barres de défilement.
+    if (layout === 'fullscreen') {
+      return React.createElement(
+        'div',
+        { 'data-fr-theme': isThemeDark ? 'dark' : 'light', style: colors },
+        children
+      )
+    }
+
     return React.createElement(
       'div',
       {
         'data-fr-theme': isThemeDark ? 'dark' : 'light',
         style: {
-          backgroundColor: isThemeDark ? '#161616' : '#ffffff',
-          color: isThemeDark ? '#cecece' : '#161616',
+          ...colors,
           padding: '2rem',
           margin: '-1rem',
           borderRadius: '4px',
@@ -102,7 +121,11 @@ const RealThemeWrapper = ({ children, context }: { children: React.ReactNode; co
       defaultTheme: 'system',
       disableTransitionOnChange: true,
     } as any, // Bypass strict type checking for children in createElement
-    React.createElement(ThemeSync, { isDark, viewMode: context.viewMode } as any, children)
+    React.createElement(
+      ThemeSync,
+      { isDark, viewMode: context.viewMode, layout: context.parameters?.layout } as any,
+      children
+    )
   )
 }
 

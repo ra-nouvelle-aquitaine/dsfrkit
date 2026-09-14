@@ -40,3 +40,18 @@
     @apply text-primary !important;
   }
 }
+
+/*
+ * Aperçus du mode Docs : le bloc Zoom de Storybook recopie la hauteur de la
+ * story via un ResizeObserver puis un setState, donc une frame plus tard.
+ * Pendant cette frame, un contenu qui grandit (accordéon, menu, onglet…)
+ * déborde de `.docs-story` (overflow: auto) et fait clignoter une barre de
+ * défilement. La hauteur naturelle suit le contenu sans ce décalage.
+ *
+ * Hors `@layer` : Tailwind 3 purge les règles de layer dont les classes
+ * n'apparaissent pas dans les fichiers analysés, ce qui est le cas des classes
+ * internes de Storybook.
+ */
+.docs-story > div:has(> .innerZoomElementWrapper) {
+  height: auto !important;
+}
