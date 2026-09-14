@@ -1,14 +1,9 @@
 import {
-  RiFacebookCircleFillIcon,
-  RiInstagramFillIcon,
   RiLayoutLeftLineIcon,
-  RiLinkedinBoxFillIcon,
   RiMenuLineIcon,
   RiMore2LineIcon,
   RiNotification3LineIcon,
   RiSearch2LineIcon,
-  RiTwitterXFillIcon,
-  RiYoutubeFillIcon,
 } from '@dsfrkit/icons'
 import {
   Accordion,
@@ -58,10 +53,10 @@ import {
   DropdownMenuTrigger,
   Flex,
   Follow,
-  FollowDescription,
   FollowNewsletter,
+  FollowNewsletterForm,
   FollowSocial,
-  FollowTitle,
+  FollowSocialLink,
   Footer,
   FooterBody,
   FooterBottom,
@@ -69,6 +64,7 @@ import {
   FooterContent,
   FooterLegalLinks,
   FooterLinks,
+  FooterTop,
   Grid,
   HeaderBrand,
   Heading,
@@ -806,107 +802,44 @@ function StandardDemo() {
       </main>
 
       <Follow>
-        <FollowNewsletter>
-          <FollowTitle>Abonnez-vous à notre lettre d'information</FollowTitle>
-          <FollowDescription>
-            Vous recevrez chaque semaine les dernières actualités.
-          </FollowDescription>
-          <Flex className="w-full mt-4 gap-2">
-            <Input
-              type="email"
-              placeholder="Votre adresse courriel"
-              className="flex-1 max-w-sm"
-              aria-label="Votre adresse courriel"
-            />
-            <Button>S'abonner</Button>
-          </Flex>
+        <FollowNewsletter
+          title="Abonnez-vous à notre lettre d'information"
+          description="Vous recevrez chaque semaine les dernières actualités."
+        >
+          <FollowNewsletterForm onSubmit={() => undefined} />
         </FollowNewsletter>
         <FollowSocial>
-          <FollowTitle>Suivez-nous sur les réseaux sociaux</FollowTitle>
-          <Flex className="gap-4 mt-2">
-            <Button
-              variant="tertiary"
-              icon={<RiFacebookCircleFillIcon aria-hidden="true" />}
-              aria-label="Facebook"
-            />
-            <Button
-              variant="tertiary"
-              icon={<RiTwitterXFillIcon aria-hidden="true" />}
-              aria-label="X (Twitter)"
-            />
-            <Button
-              variant="tertiary"
-              icon={<RiInstagramFillIcon aria-hidden="true" />}
-              aria-label="Instagram"
-            />
-            <Button
-              variant="tertiary"
-              icon={<RiLinkedinBoxFillIcon aria-hidden="true" />}
-              aria-label="LinkedIn"
-            />
-            <Button
-              variant="tertiary"
-              icon={<RiYoutubeFillIcon aria-hidden="true" />}
-              aria-label="YouTube"
-            />
-          </Flex>
+          <FollowSocialLink network="facebook" href="https://www.facebook.com" />
+          <FollowSocialLink network="twitter-x" href="https://x.com" />
+          <FollowSocialLink network="instagram" href="https://www.instagram.com" />
+          <FollowSocialLink network="linkedin" href="https://www.linkedin.com" />
+          <FollowSocialLink network="youtube" href="https://www.youtube.com" />
         </FollowSocial>
       </Follow>
 
       <Footer>
+        <FooterTop>
+          <FooterLinks title="À propos">
+            <a href="#missions">Missions</a>
+            <a href="#organisation">Organisation</a>
+            <a href="#budget">Budget</a>
+          </FooterLinks>
+          <FooterLinks title="Aide">
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
+            <a href="#accessibilite">Accessibilité</a>
+          </FooterLinks>
+        </FooterTop>
         <FooterBody>
-          <FooterBrand
-            logo={<Logo size="md" />}
-            description="Service public de délivrance des titres d'identité."
-            href="/"
-          />
-          <FooterContent>
-            <FooterLinks title="À propos">
-              <Link href="#" className="text-sm">
-                Missions
-              </Link>
-              <Link href="#" className="text-sm">
-                Organisation
-              </Link>
-              <Link href="#" className="text-sm">
-                Budget
-              </Link>
-            </FooterLinks>
-            <FooterLinks title="Aide">
-              <Link href="#" className="text-sm">
-                FAQ
-              </Link>
-              <Link href="#" className="text-sm">
-                Contact
-              </Link>
-              <Link href="#" className="text-sm">
-                Accessibilité
-              </Link>
-            </FooterLinks>
-            <FooterLinks title="Liens utiles">
-              <Link href="#" className="text-sm">
-                service-public.gouv.fr
-              </Link>
-              <Link href="#" className="text-sm">
-                data.gouv.fr
-              </Link>
-            </FooterLinks>
-          </FooterContent>
+          <FooterBrand logo={<Logo size="lg" />} href="/" />
+          <FooterContent description="Service public de délivrance des titres d'identité." />
         </FooterBody>
-        <FooterBottom>
+        <FooterBottom copyright="Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de ce site sont proposés sous licence etalab-2.0">
           <FooterLegalLinks>
-            <Link href="#" className="text-xs">
-              Plan du site
-            </Link>
-            <Link href="#" className="text-xs">
-              Mentions légales
-            </Link>
-            <Link href="#" className="text-xs">
-              Données personnelles
-            </Link>
-            <Link href="#" className="text-xs">
-              Accessibilité : partiellement conforme
-            </Link>
+            <a href="#plan">Plan du site</a>
+            <a href="#accessibilite">Accessibilité : partiellement conforme</a>
+            <a href="#mentions">Mentions légales</a>
+            <a href="#donnees">Données personnelles</a>
           </FooterLegalLinks>
         </FooterBottom>
       </Footer>

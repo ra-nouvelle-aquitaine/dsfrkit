@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { RouterAnchor } from '../../lib/router-anchor'
 import { cn } from '../../lib/utils'
+import { HeaderNavigationContext } from './navigation'
 
 // ─── Internal context for mobile menu state ──────────────────────────
 
@@ -82,7 +83,8 @@ const HeaderBody = React.forwardRef<
     if (!mobileOpen) return
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      // Un menu de navigation ouvert consomme Échap en premier.
+      if (event.key === 'Escape' && !event.defaultPrevented) {
         setMobileOpen(false)
         mobileButtonRef.current?.focus()
       }
@@ -147,7 +149,7 @@ const HeaderBody = React.forwardRef<
             aria-controls={mobileMenuId}
             aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             className={cn(
-              'md:hidden min-h-10 min-w-10 p-2 text-foreground order-last',
+              'lg:hidden min-h-10 min-w-10 p-2 text-foreground order-last',
               'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
             )}
           >
@@ -195,8 +197,8 @@ const HeaderBody = React.forwardRef<
           ref={mobileMenuRef}
           id={mobileMenuId}
           className={cn(
-            'border-t border-border md:border-t-0 md:shadow-[0_1px_0_0_var(--border-default-grey),0_-1px_0_0_var(--border-default-grey)]',
-            mobileOpen ? 'block' : 'hidden md:block'
+            'border-t border-border lg:border-t-0 lg:shadow-[0_1px_0_0_var(--border-default-grey),0_-1px_0_0_var(--border-default-grey)]',
+            mobileOpen ? 'block' : 'hidden lg:block'
           )}
         >
           <div
@@ -209,7 +211,9 @@ const HeaderBody = React.forwardRef<
               'max-w-full px-4 lg:px-6': size === 'full',
             })}
           >
-            {navChildren}
+            <HeaderNavigationContext.Provider value={true}>
+              {navChildren}
+            </HeaderNavigationContext.Provider>
           </div>
         </div>
       )}
@@ -264,19 +268,33 @@ HeaderBrand.displayName = 'HeaderBrand'
 
 /**
  * Zone de navigation principale du Header.
- * Sur desktop : affichée inline en flex-row.
- * Sur mobile : rendue dans le panneau burger géré par Header.
+ * À partir de `lg` : affichée en ligne. En dessous : rendue dans le panneau
+ * ouvert par le bouton burger du Header (point de rupture du DSFR).
+ * Accepte des `NavLink`, des entrées de `Navigation` ou une `Navigation` complète
+ * (menus et méga-menus).
  */
 const HeaderNav = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
   ({ className, children, ...props }, ref) => {
+    const childArray = React.Children.toArray(children)
+    const hasNavigation = childArray.some(
+      (child) =>
+        React.isValidElement(child) &&
+        (child.type as { displayName?: string }).displayName === 'Navigation'
+    )
+
+    // Une `Navigation` porte déjà son landmark `<nav>` et sa liste : pas de double enveloppe.
+    if (hasNavigation) {
+      return <>{children}</>
+    }
+
     return (
       <nav
         ref={ref}
         aria-label="Navigation principale"
-        className={cn('w-full', className)}
+        className={cn('relative w-full', className)}
         {...props}
       >
-        <ul className="flex flex-col md:flex-row items-stretch md:items-center gap-0 m-0 p-0 list-none">
+        <ul className="flex flex-col lg:flex-row items-stretch lg:items-center gap-0 m-0 p-0 list-none">
           {React.Children.map(children, (child) => {
             if (!React.isValidElement(child)) return child
 
@@ -291,13 +309,15 @@ const HeaderNav = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement
                   })
                 : child
 
-            // If child is a Navigation component, render it directly without wrapping in <li>
-            const isNavigation =
-              childType?.displayName === 'Navigation' ||
-              childType?.displayName === 'NavigationItem' ||
-              childType?.displayName === 'NavigationSection'
+            // Les entrées de Navigation (lien, menu, méga-menu) rendent déjà leur `<li>`.
+            const isNavigationEntry = [
+              'NavigationItem',
+              'NavigationSection',
+              'NavigationMenu',
+              'NavigationMegaMenu',
+            ].includes(childType?.displayName ?? '')
 
-            if (isNavigation) return patched
+            if (isNavigationEntry) return patched
 
             return <li className="list-none">{patched}</li>
           })}
@@ -335,7 +355,7 @@ const HeaderMenuButton = React.forwardRef<HTMLButtonElement, HeaderMenuButtonPro
       aria-expanded={isOpen}
       aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
       className={cn(
-        'md:hidden min-h-10 min-w-10 p-2 text-foreground',
+        'lg:hidden min-h-10 min-w-10 p-2 text-foreground',
         'hover:bg-background-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         className
       )}

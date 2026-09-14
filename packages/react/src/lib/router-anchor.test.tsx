@@ -3,7 +3,13 @@ import type * as React from 'react'
 import { describe, expect, it } from 'vitest'
 import { Footer, FooterBrand } from '../components/navigation/footer'
 import { Header, HeaderBrand } from '../components/navigation/header'
-import { Navigation, NavigationItem } from '../components/navigation/navigation'
+import {
+  Navigation,
+  NavigationItem,
+  NavigationMegaMenu,
+  NavigationMegaMenuCategory,
+  NavigationMenu,
+} from '../components/navigation/navigation'
 import { Tag } from '../components/ui/tag'
 import { Tile } from '../components/ui/tile'
 import { Translate } from '../components/ui/translate'
@@ -164,5 +170,38 @@ describe('RouterProvider coverage', () => {
     fireEvent.click(screen.getByRole('button'))
 
     expect(screen.getByRole('link', { name: /English/ })).toHaveAttribute('data-router', 'true')
+  })
+
+  it('should route the links of menus and mega menus, and close the menu on activation', () => {
+    withRouter(
+      <Navigation>
+        <NavigationMenu title="Démarches">
+          <NavigationItem href="/demarches/passeport">Passeport</NavigationItem>
+        </NavigationMenu>
+        <NavigationMegaMenu
+          title="Thématiques"
+          leader={{
+            title: 'Thématiques',
+            link: { label: 'Voir toute la rubrique', href: '/thematiques' },
+          }}
+        >
+          <NavigationMegaMenuCategory title="Famille" href="/famille">
+            <NavigationItem href="/famille/naissance">Naissance</NavigationItem>
+          </NavigationMegaMenuCategory>
+        </NavigationMegaMenu>
+      </Navigation>
+    )
+
+    const menuButton = screen.getByRole('button', { name: 'Démarches' })
+    fireEvent.click(menuButton)
+    const menuLink = screen.getByRole('link', { name: 'Passeport' })
+    expect(menuLink).toHaveAttribute('data-router', 'true')
+    fireEvent.click(menuLink)
+    expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Thématiques' }))
+    for (const name of ['Voir toute la rubrique', 'Famille', 'Naissance']) {
+      expect(screen.getByRole('link', { name })).toHaveAttribute('data-router', 'true')
+    }
   })
 })

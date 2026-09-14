@@ -1,21 +1,13 @@
 import {
-  RiFacebookCircleFillIcon,
-  RiInstagramFillIcon,
-  RiLinkedinBoxFillIcon,
-  RiTwitterXFillIcon,
-  RiYoutubeFillIcon,
-} from '@dsfrkit/icons'
-import {
   Button,
-  Flex,
   Follow,
-  FollowDescription,
   FollowNewsletter,
+  FollowNewsletterForm,
   FollowSocial,
-  FollowTitle,
-  Input,
+  FollowSocialLink,
 } from '@dsfrkit/react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import * as React from 'react'
 
 const meta = {
   title: 'Branding/Follow',
@@ -23,7 +15,13 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: `Composant de lettres d'information et réseaux sociaux incitant l'utilisateur à suivre les actualités du site.
+        component: `Lettre d'information et réseaux sociaux (\`fr-follow\`) : bandeau bleu clair placé en bas de page, avant le pied de page, qui invite à suivre l'actualité du site.
+
+**Composition :**
+- \`FollowNewsletter\` — titre, accroche et action : un bouton vers une page d'inscription, ou \`FollowNewsletterForm\` pour s'inscrire directement ;
+- \`FollowSocial\` — liste de \`FollowSocialLink\` (\`network="facebook" | "twitter-x" | "linkedin" | …\`), ouverts dans une nouvelle fenêtre.
+
+Les deux blocs côte à côte occupent 8 et 4 colonnes, séparés par un filet. Seul, un bloc prend toute la largeur avec l'accroche à gauche et l'action à droite.
 `,
       },
     },
@@ -35,54 +33,117 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const socialNetworks = [
+  { network: 'facebook', href: 'https://www.facebook.com' },
+  { network: 'twitter-x', href: 'https://x.com' },
+  { network: 'bluesky', href: 'https://bsky.app' },
+  { network: 'linkedin', href: 'https://www.linkedin.com' },
+  { network: 'instagram', href: 'https://www.instagram.com' },
+  { network: 'youtube', href: 'https://www.youtube.com' },
+] as const
+
+const socialLinks = (size?: 'md' | 'lg') =>
+  socialNetworks.map((item) => (
+    <FollowSocialLink key={item.network} network={item.network} href={item.href} size={size} />
+  ))
+
 export const Default: Story = {
+  name: 'Lettre d’information et réseaux sociaux',
   render: () => (
     <Follow>
-      <FollowNewsletter>
-        <FollowTitle>Abonnez-vous à notre lettre d’information</FollowTitle>
-        <FollowDescription>
-          Vous recevrez chaque semaine les dernières actualités du DSFR.
-        </FollowDescription>
-        <Flex className="w-full mt-4 gap-2">
-          <Input
-            type="email"
-            placeholder="Votre adresse courriel (ex: nom@domaine.fr)"
-            className="flex-1 max-w-sm"
-            aria-label="Votre adresse courriel"
-          />
-          <Button>S'abonner</Button>
-        </Flex>
+      <FollowNewsletter
+        title="Abonnez-vous à notre lettre d’information"
+        description="Recevez chaque mois les nouveautés du service et les démarches mises en ligne."
+      >
+        <Button type="button" title="S‘abonner à notre lettre d’information">
+          S'abonner
+        </Button>
       </FollowNewsletter>
-      <FollowSocial>
-        <FollowTitle>Suivez-nous sur les réseaux sociaux</FollowTitle>
-        <Flex className="gap-4 mt-2">
-          <Button
-            variant="tertiary"
-            icon={<RiFacebookCircleFillIcon aria-hidden="true" />}
-            aria-label="Facebook"
+      <FollowSocial>{socialLinks()}</FollowSocial>
+    </Follow>
+  ),
+}
+
+export const WithForm: Story = {
+  name: 'Avec formulaire d’inscription',
+  render: function WithFormRender() {
+    const [error, setError] = React.useState<string>()
+    const [success, setSuccess] = React.useState<string>()
+
+    return (
+      <Follow>
+        <FollowNewsletter
+          title="Abonnez-vous à notre lettre d’information"
+          description="Recevez chaque mois les nouveautés du service et les démarches mises en ligne."
+        >
+          <FollowNewsletterForm
+            error={error}
+            success={success}
+            onValueChange={() => {
+              setError(undefined)
+              setSuccess(undefined)
+            }}
+            onSubmit={(email) => {
+              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                setError(
+                  'Le format de l’adresse électronique est invalide. Exemple : nom@domaine.fr'
+                )
+                return
+              }
+              setSuccess('Votre inscription a bien été prise en compte.')
+            }}
           />
-          <Button
-            variant="tertiary"
-            icon={<RiTwitterXFillIcon aria-hidden="true" />}
-            aria-label="X (Twitter)"
-          />
-          <Button
-            variant="tertiary"
-            icon={<RiInstagramFillIcon aria-hidden="true" />}
-            aria-label="Instagram"
-          />
-          <Button
-            variant="tertiary"
-            icon={<RiLinkedinBoxFillIcon aria-hidden="true" />}
-            aria-label="LinkedIn"
-          />
-          <Button
-            variant="tertiary"
-            icon={<RiYoutubeFillIcon aria-hidden="true" />}
-            aria-label="YouTube"
-          />
-        </Flex>
-      </FollowSocial>
+        </FollowNewsletter>
+        <FollowSocial>{socialLinks()}</FollowSocial>
+      </Follow>
+    )
+  },
+}
+
+export const NewsletterOnly: Story = {
+  name: 'Lettre d’information seule',
+  render: () => (
+    <Follow>
+      <FollowNewsletter
+        title="Abonnez-vous à notre lettre d’information"
+        description="Recevez chaque mois les nouveautés du service et les démarches mises en ligne."
+      >
+        <Button type="button" title="S‘abonner à notre lettre d’information">
+          S'abonner
+        </Button>
+      </FollowNewsletter>
+    </Follow>
+  ),
+}
+
+export const NewsletterFormOnly: Story = {
+  name: 'Lettre d’information seule avec formulaire',
+  render: () => (
+    <Follow>
+      <FollowNewsletter
+        title="Abonnez-vous à notre lettre d’information"
+        description="Recevez chaque mois les nouveautés du service et les démarches mises en ligne."
+      >
+        <FollowNewsletterForm error="Le format de l’adresse électronique est invalide. Exemple : nom@domaine.fr" />
+      </FollowNewsletter>
+    </Follow>
+  ),
+}
+
+export const SocialOnly: Story = {
+  name: 'Réseaux sociaux seuls',
+  render: () => (
+    <Follow>
+      <FollowSocial>{socialLinks()}</FollowSocial>
+    </Follow>
+  ),
+}
+
+export const SocialLarge: Story = {
+  name: 'Réseaux sociaux, grands boutons',
+  render: () => (
+    <Follow>
+      <FollowSocial title="Suivez-nous sur les réseaux sociaux">{socialLinks('lg')}</FollowSocial>
     </Follow>
   ),
 }

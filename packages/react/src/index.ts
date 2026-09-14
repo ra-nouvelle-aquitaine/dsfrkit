@@ -4,13 +4,20 @@
  */
 
 export type {
+  FooterBottomProps,
   FooterBrandProps,
+  FooterContentLink,
+  FooterContentProps,
   FooterLinksProps,
   FooterProps,
   HeaderBrandProps,
   HeaderMenuButtonProps,
   HeaderProps,
   NavigationItemProps,
+  NavigationMegaMenuCategoryProps,
+  NavigationMegaMenuLeader,
+  NavigationMegaMenuProps,
+  NavigationMenuProps,
   NavigationProps,
   NavigationSectionProps,
   NavLinkProps,
@@ -26,6 +33,8 @@ export {
   FooterContent,
   FooterLegalLinks,
   FooterLinks,
+  FooterTop,
+  footerInstitutionalLinks,
   Header,
   HeaderActions,
   HeaderBody,
@@ -34,6 +43,9 @@ export {
   HeaderNav,
   Navigation,
   NavigationItem,
+  NavigationMegaMenu,
+  NavigationMegaMenuCategory,
+  NavigationMenu,
   NavigationSection,
   NavLink,
   navLinkVariants,
@@ -166,11 +178,21 @@ export {
   DropdownMenuTrigger,
 } from './components/ui/dropdown-menu'
 export { Flex, type FlexProps } from './components/ui/flex'
+export type {
+  FollowNewsletterFormProps,
+  FollowNewsletterProps,
+  FollowSocialLinkProps,
+  FollowSocialNetwork,
+  FollowSocialProps,
+  FollowTitleProps,
+} from './components/ui/follow'
 export {
   Follow,
   FollowDescription,
   FollowNewsletter,
+  FollowNewsletterForm,
   FollowSocial,
+  FollowSocialLink,
   FollowTitle,
 } from './components/ui/follow'
 export { Grid, type GridProps } from './components/ui/grid'
@@ -214,7 +236,7 @@ export {
   ModalTitle,
   ModalTrigger,
 } from './components/ui/modal'
-export type { NoticeProps } from './components/ui/notice'
+export type { NoticeLink, NoticeProps, NoticeVariant } from './components/ui/notice'
 // Notice (Bandeau d'information)
 export { Notice, noticeVariants } from './components/ui/notice'
 export type { PaginationLinkProps, PaginationProps } from './components/ui/pagination'
@@ -274,6 +296,9 @@ export { Skeleton } from './components/ui/skeleton'
 export type { StepperProps, StepperStep } from './components/ui/stepper'
 // Stepper
 export { Stepper } from './components/ui/stepper'
+export type { SummaryItem, SummaryProps } from './components/ui/summary'
+// Summary (Sommaire)
+export { Summary } from './components/ui/summary'
 // Table
 export {
   Table,

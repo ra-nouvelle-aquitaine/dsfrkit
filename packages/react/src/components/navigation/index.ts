@@ -1,4 +1,11 @@
-export type { FooterBrandProps, FooterLinksProps, FooterProps } from './footer'
+export type {
+  FooterBottomProps,
+  FooterBrandProps,
+  FooterContentLink,
+  FooterContentProps,
+  FooterLinksProps,
+  FooterProps,
+} from './footer'
 export {
   Footer,
   FooterBody,
@@ -7,6 +14,8 @@ export {
   FooterContent,
   FooterLegalLinks,
   FooterLinks,
+  FooterTop,
+  footerInstitutionalLinks,
 } from './footer'
 export type { HeaderBrandProps, HeaderMenuButtonProps, HeaderProps } from './header'
 export {
@@ -19,10 +28,21 @@ export {
 } from './header'
 export type { NavLinkProps } from './nav-link'
 export { NavLink, navLinkVariants } from './nav-link'
-export type { NavigationItemProps, NavigationProps, NavigationSectionProps } from './navigation'
+export type {
+  NavigationItemProps,
+  NavigationMegaMenuCategoryProps,
+  NavigationMegaMenuLeader,
+  NavigationMegaMenuProps,
+  NavigationMenuProps,
+  NavigationProps,
+  NavigationSectionProps,
+} from './navigation'
 export {
   Navigation,
   NavigationItem,
+  NavigationMegaMenu,
+  NavigationMegaMenuCategory,
+  NavigationMenu,
   NavigationSection,
 } from './navigation'
 export type { SkipLink, SkipLinksProps } from './skip-links'
