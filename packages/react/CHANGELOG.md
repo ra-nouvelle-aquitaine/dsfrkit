@@ -1,3 +1,25 @@
+# [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.3...@dsfrkit/react@1.3.0) (2026-09-14)
+
+## ✨ Nouvelles fonctionnalités
+- [`1aa3519`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/1aa3519)  ajoute sommaire et méga-menus, refond notice, follow et pied de page 
+- [`9ba8f68`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/9ba8f68)  ajoute le radio riche à pictogramme (fr-radio-rich) 
+
+## 💄 Interface & style
+- [`365aead`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/365aead)  aligne accordéon, case à cocher et contrôle segmenté sur le dsfr 
+
+## ♿ Accessibilité
+- [`a55157d`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/a55157d)  corrige les écarts d&#x27;accessibilité et de fidélité de l&#x27;audit dsfr 
+
+## 📝 Documentation
+- [`be0afc0`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/be0afc0)  met à jour les readme et corrige les fichiers de l&#x27;exemple symfony 
+- [`2a487ec`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/2a487ec)  précise que les toasts exigent un toaster monté à la racine 
+
+
+
+### Dependencies
+
+* **@dsfrkit/icons:** upgraded to 1.3.2
+
 # [v1.2.3](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.2...@dsfrkit/react@1.2.3) (2026-09-05)
 
 ## 💄 Interface & style
