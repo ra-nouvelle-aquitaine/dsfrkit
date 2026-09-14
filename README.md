@@ -92,20 +92,34 @@ export default {
 
 ## Utilisation
 
+Un seul point d'entrée monte les fournisseurs, puis les composants s'utilisent partout :
+
 ```tsx
-import { Alert, Button, ThemeProvider, Toaster, useToast } from '@dsfrkit/react'
+import {
+  Alert,
+  Button,
+  Link,
+  RouterProvider,
+  ThemeProvider,
+  Toaster,
+  useToast,
+} from '@dsfrkit/react'
+import { BrowserRouter, Link as RouterLink } from 'react-router-dom'
 
 function Page() {
   const { toast } = useToast()
 
   return (
     <>
-      <Alert variant="success" title="Succès">
-        Votre action a été effectuée avec succès.
+      <Alert variant="success" title="Demande enregistrée">
+        Vous pouvez suivre son avancement depuis votre espace.
       </Alert>
 
-      <Button variant="primary" size="lg" onClick={() => toast({ title: 'Brouillon enregistré' })}>
-        Enregistrer
+      {/* Adresse interne : navigation confiée au routeur, sans rechargement */}
+      <Link href="/mes-demarches">Voir mes démarches</Link>
+
+      <Button onClick={() => toast({ title: 'Brouillon enregistré', variant: 'success' })}>
+        Enregistrer le brouillon
       </Button>
     </>
   )
@@ -113,34 +127,15 @@ function Page() {
 
 export function App() {
   return (
-    <ThemeProvider defaultTheme="system">
-      <Page />
-      {/* Une seule fois, à la racine : sans lui, toast() n'affiche rien */}
-      <Toaster />
-    </ThemeProvider>
-  )
-}
-```
-
----
-
-## Intégration avec les routeurs
-
-DSFRKit s'intègre avec tous les routeurs React via le `RouterProvider` :
-
-```tsx
-import { RouterProvider, ThemeProvider } from '@dsfrkit/react'
-import { BrowserRouter, Link as RouterLink } from 'react-router-dom'
-
-function App() {
-  return (
     <BrowserRouter>
       <RouterProvider
         Link={RouterLink}
         linkPropsAdapter={({ href, ...rest }) => ({ to: href, ...rest })}
       >
-        <ThemeProvider>
-          <MyApp />
+        <ThemeProvider defaultTheme="system">
+          <Page />
+          {/* Une seule fois, à la racine : sans lui, toast() n'affiche rien */}
+          <Toaster />
         </ThemeProvider>
       </RouterProvider>
     </BrowserRouter>
@@ -148,9 +143,25 @@ function App() {
 }
 ```
 
-Une fois le `RouterProvider` en place, les adresses internes (`/…`) de tous les composants — `Link`, `NavigationItem`, `Breadcrumb`, `Summary`, `Tile`, `Footer`… — passent par le routeur, sans `asChild`. Les URL absolues, ancres `#` et liens `target="_blank"` restent des liens natifs.
+| Fournisseur | Rôle | Requis |
+|-------------|------|--------|
+| `ThemeProvider` | Thème clair, sombre ou système | Oui |
+| `Toaster` | Affiche les notifications de `toast()` / `useToast()` | Si l'application utilise des toasts |
+| `RouterProvider` | Navigation sans rechargement pour les liens internes | Non |
 
-Routeurs supportés : **React Router**, **TanStack Router**, **Next.js**. Voir le [guide d'installation et de routage](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/?path=/docs/installation--docs) pour les détails.
+---
+
+## Intégration avec les routeurs
+
+Avec le `RouterProvider`, les adresses internes (`/…`) de tous les composants — `Link`, `NavigationItem`, `Breadcrumb`, `Pagination`, `Summary`, `Tile`, `Footer`… — passent par le routeur, sans `asChild`. Les URL absolues, ancres `#`, protocoles (`mailto:`, `tel:`) et liens `target="_blank"` restent des liens natifs.
+
+| Routeur | Configuration |
+|---------|---------------|
+| React Router | `<RouterProvider Link={Link} linkPropsAdapter={({ href, ...rest }) => ({ to: href, ...rest })}>` avec `Link` de `react-router-dom` |
+| TanStack Router | Même adaptateur (`href` → `to`) avec `Link` de `@tanstack/react-router` |
+| Next.js | `<RouterProvider Link={NextLink}>` : `next/link` accepte `href`, aucun adaptateur |
+
+Voir le [guide d'installation et de routage](https://ra-nouvelle-aquitaine.github.io/dsfrkit/storybook/?path=/docs/installation--docs) pour les détails.
 
 ---
 

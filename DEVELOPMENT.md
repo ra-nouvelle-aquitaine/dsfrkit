@@ -18,9 +18,10 @@ dsfrkit/
 │   ├── icons/           # @dsfrkit/icons — Icônes React
 │   └── cli/             # @dsfrkit/cli — CLI
 ├── apps/
-│   ├── docs/            # Landing page + Storybook
+│   ├── docs/            # Landing page, Storybook et llms.txt
 │   └── examples/
-│       └── react-vite/  # Exemple d'intégration React + Vite
+│       ├── react-vite/  # Exemple d'intégration React + Vite
+│       └── symfony/     # Configuration d'exemple Symfony + Webpack Encore
 ```
 
 ## Commandes
@@ -30,10 +31,13 @@ pnpm install            # Installer les dépendances
 pnpm build              # Build tous les packages
 pnpm dev                # Dev (tous les packages en watch)
 pnpm storybook          # Lancer Storybook
+pnpm dev:docs           # Lancer la landing page et Storybook
 pnpm dev:example        # Lancer l'exemple React + Vite
 pnpm lint               # Lint avec Biome
 pnpm format             # Format avec Biome
 pnpm typecheck          # Vérification des types TypeScript
+pnpm test               # Tests unitaires (Vitest)
+pnpm generate:llms      # Régénérer llms.txt après un changement d'API
 ```
 
 ## CI/CD
@@ -44,42 +48,9 @@ pnpm typecheck          # Vérification des types TypeScript
 | **Release** | Push sur `main` ou `beta` | Semantic release avec gitmoji |
 | **Deploy Pages** | Push sur `main` ou `beta` | Déploiement docs + storybook + exemple sur GitHub Pages |
 
-### Conventions de commit (gitmoji)
+### Conventions de commit
 
-Ce projet utilise les [gitmoji](https://gitmoji.dev/) pour le versioning sémantique automatique :
-
-| Emoji | Signification | Version |
-|-------|--------------|---------|
-| `💥` | Breaking change | **major** |
-| `✨` | Nouvelle fonctionnalité | **minor** |
-| `🎨` | Amélioration structure/format | **minor** |
-| `♿` | Accessibilité | **minor** |
-| `🐛` | Correction de bug | patch |
-| `🩹` | Correctif simple | patch |
-| `🔒` | Sécurité | patch |
-| `⚡` | Performance | patch |
-| `💄` | UI / style | patch |
-| `♻️` | Refactoring | patch |
-| `🔧` | Configuration | patch |
-| `📝` | Documentation | patch |
-| `🏗️` | Architecture | patch |
-| `✅` | Tests | patch |
-| `🔥` | Suppression code/fichiers | patch |
-| `🚚` | Déplacement/renommage | patch |
-| `📦` | Dépendances | patch |
-| `🌐` | Internationalisation | patch |
-| `🍱` | Assets | patch |
-| `🚀` | Déploiement | patch |
-| `🔖` | Release/tag de version | patch |
-
-```bash
-# Exemples
-git commit -m "✨ ajouter composant Calendar"
-git commit -m "🐛 corriger le focus trap dans Modal"
-git commit -m "💥 refondre l'API de Select (breaking)"
-git commit -m "♿ améliorer la navigation clavier du Stepper"
-git commit -m "🔧 mettre à jour la config Tailwind"
-```
+Les messages de commit commencent par un gitmoji, qui détermine le type de version publiée par semantic-release. La table des émojis et leurs effets sont décrits dans [CONTRIBUTING.md](./CONTRIBUTING.md#conventions-de-commit) ; les règles appliquées font foi dans `.releaserc.yml`.
 
 ### Branches
 

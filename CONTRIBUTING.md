@@ -99,8 +99,10 @@ Ce projet utilise [semantic-release-gitmoji](https://github.com/momocow/semantic
 1. Créer le fichier dans `packages/react/src/components/ui/mon-composant.tsx`
 2. Exporter le composant dans `packages/react/src/index.ts`
 3. Ajouter l'entrée dans `packages/react/tsup.config.ts`
-4. Créer la story dans `apps/docs/src/stories/MonComposant.stories.tsx`
-5. Vérifier que le lint, le typecheck et le build passent
+4. Créer la story dans `apps/docs/src/stories/MonComposant.stories.tsx`, avec `component` et `parameters.docs.description.component` dans la méta (reprise dans `llms.txt`)
+5. Ajouter les tests dans `packages/react/src/components/ui/mon-composant.test.tsx`
+6. Régénérer la documentation pour les IA : `pnpm generate:llms`
+7. Vérifier que le lint, le typecheck, les tests et le build passent
 
 ### Conventions pour les composants
 

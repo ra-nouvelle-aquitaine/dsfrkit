@@ -79,17 +79,28 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 ## Utilisation
 
-```tsx
-import { Alert, Button, Input } from '@dsfrkit/react'
+Une fois les fournisseurs montés, les composants s'utilisent sans configuration supplémentaire :
 
-export function Exemple() {
+```tsx
+import { Alert, Button, Input, Link, useToast } from '@dsfrkit/react'
+
+export function Contact() {
+  const { toast } = useToast()
+
   return (
-    <form>
+    <form
+      onSubmit={(event) => {
+        event.preventDefault()
+        toast({ title: 'Message envoyé', variant: 'success' })
+      }}
+    >
       <Input label="Adresse électronique" type="email" hint="Format attendu : nom@domaine.fr" />
       <Alert variant="info" title="Information">
         Votre demande sera traitée sous 48 heures.
       </Alert>
       <Button type="submit">Envoyer</Button>
+      {/* Lien interne : suivi par le routeur grâce au RouterProvider */}
+      <Link href="/mes-demandes">Suivre mes demandes</Link>
     </form>
   )
 }
