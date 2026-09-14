@@ -1,3 +1,33 @@
+# [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.3.4...docs@1.4.0) (2026-09-14)
+
+## ✨ Nouvelles fonctionnalités
+- [`1aa3519`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/1aa3519)  ajoute sommaire et méga-menus, refond notice, follow et pied de page 
+- [`9ba8f68`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/9ba8f68)  ajoute le radio riche à pictogramme (fr-radio-rich) 
+
+## 💄 Interface & style
+- [`365aead`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/365aead)  aligne accordéon, case à cocher et contrôle segmenté sur le dsfr 
+
+## ♿ Accessibilité
+- [`a55157d`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/a55157d)  corrige les écarts d&#x27;accessibilité et de fidélité de l&#x27;audit dsfr 
+
+## 🐛 Corrections de bugs
+- [`da1791c`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/da1791c)  corrige le clignotement et les aperçus pleine largeur du storybook 
+
+## 📝 Documentation
+- [`cec0b15`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/cec0b15)  remplace les exemples flex, grid et stepper par des cas réels 
+- [`e29a9ca`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/e29a9ca)  génère llms.txt depuis les exports publics de @dsfrkit/react 
+- [`be0afc0`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/be0afc0)  met à jour les readme et corrige les fichiers de l&#x27;exemple symfony 
+- [`2a487ec`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/2a487ec)  précise que les toasts exigent un toaster monté à la racine 
+
+
+
+### Dependencies
+
+* **@dsfrkit/config:** upgraded to 1.4.0
+* **@dsfrkit/icons:** upgraded to 1.3.2
+* **@dsfrkit/react:** upgraded to 1.3.0
+* **@dsfrkit/tokens:** upgraded to 1.4.0
+
 # [v1.3.4](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.3.3...docs@1.3.4) (2026-09-05)
 
 ## 🐛 Corrections de bugs
