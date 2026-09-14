@@ -1,3 +1,14 @@
+# [v1.4.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.4.0...docs@1.4.1) (2026-09-14)
+
+## 🐛 Corrections de bugs
+- [`2ebb1d7`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/2ebb1d7)  corrige le pied de page de la page d&#x27;accueil de la documentation 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.3.1
+
 # [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.3.4...docs@1.4.0) (2026-09-14)
 
 ## ✨ Nouvelles fonctionnalités
