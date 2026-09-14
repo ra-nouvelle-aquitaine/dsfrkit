@@ -61,6 +61,7 @@ export default defineConfig({
     'src/components/ui/sheet.tsx',
     'src/components/ui/skeleton.tsx',
     'src/components/ui/stepper.tsx',
+    'src/components/ui/summary.tsx',
     'src/components/ui/table.tsx',
     'src/components/ui/tabs.tsx',
     'src/components/ui/tag.tsx',
