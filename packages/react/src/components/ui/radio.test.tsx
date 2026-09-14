@@ -46,3 +46,36 @@ describe('Component: Radio (DSFR/Radix)', () => {
     expect(matchingHint.getAttribute('id')).toBe(ariaDescribedBy)
   })
 })
+
+describe('Component: Radio riche (fr-radio-rich)', () => {
+  it('should select the option from anywhere on the card and keep the pictogram decorative', async () => {
+    const user = userEvent.setup()
+
+    render(
+      <RadioGroup aria-label="Retrait">
+        <RadioGroupItem
+          value="mairie"
+          label="En mairie"
+          hint="Sur rendez-vous"
+          pictogram={<svg data-testid="picto-mairie" />}
+        />
+        <RadioGroupItem
+          value="domicile"
+          label="À domicile"
+          pictogram={<svg data-testid="picto-domicile" />}
+        />
+      </RadioGroup>
+    )
+
+    const mairie = screen.getByRole('radio', { name: 'En mairie Sur rendez-vous' })
+    // L'aide est dans le libellé : elle n'est pas répétée en description.
+    expect(mairie).not.toHaveAttribute('aria-describedby')
+
+    const picto = screen.getByTestId('picto-domicile')
+    expect(picto.parentElement).toHaveAttribute('aria-hidden', 'true')
+
+    await user.click(screen.getByText('À domicile'))
+    expect(screen.getByRole('radio', { name: 'À domicile' })).toBeChecked()
+    expect(mairie).not.toBeChecked()
+  })
+})

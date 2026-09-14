@@ -1,4 +1,4 @@
-import { Box, Heading, RadioGroup, RadioGroupItem, Text } from '@dsfrkit/react'
+import { Artwork, Box, Heading, RadioGroup, RadioGroupItem, Text } from '@dsfrkit/react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import * as React from 'react'
 
@@ -198,44 +198,72 @@ export const SurveyExample: Story = {
   },
 }
 
-export const RichRadios: Story = {
-  render: () => (
-    <RadioGroup defaultValue="eco" className="flex flex-col sm:flex-row gap-4">
-      {/* Option 1 */}
-      <label className="relative flex cursor-pointer rounded-lg border border-border p-4 hover:bg-muted [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:ring-1 [&:has([data-state=checked])]:ring-primary transition-all w-full sm:w-64">
-        <Box className="flex items-start gap-4">
-          <RadioGroupItem value="eco" className="mt-1" />
-          <Box className="flex flex-col gap-1">
-            <Text as="span" weight="medium" className="text-foreground">
-              Économique
-            </Text>
-            <Text as="span" size="2" className="text-muted-foreground">
-              Dans 3 à 5 jours ouvrés
-            </Text>
-            <Text as="span" size="5" weight="bold" className="mt-2">
-              Gratuit
-            </Text>
-          </Box>
-        </Box>
-      </label>
+export const RichWithPictogram: Story = {
+  name: 'Radio riche avec pictogramme',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Équivalent du `fr-radio-rich` DSFR : passez un `pictogram` (généralement un `Artwork`) pour afficher l'option sous forme de carte bordée. Toute la carte est cliquable, la bordure passe en bleu à la sélection et le pictogramme reste décoratif.",
+      },
+    },
+  },
+  render: function RichWithPictogramRender() {
+    const [value, setValue] = React.useState('mairie')
 
-      {/* Option 2 */}
-      <label className="relative flex cursor-pointer rounded-lg border border-border p-4 hover:bg-muted [&:has([data-state=checked])]:border-primary [&:has([data-state=checked])]:ring-1 [&:has([data-state=checked])]:ring-primary transition-all w-full sm:w-64">
-        <Box className="flex items-start gap-4">
-          <RadioGroupItem value="express" className="mt-1" />
-          <Box className="flex flex-col gap-1">
-            <Text as="span" weight="medium" className="text-foreground">
-              Express
-            </Text>
-            <Text as="span" size="2" className="text-muted-foreground">
-              Demain avant 13h
-            </Text>
-            <Text as="span" size="5" weight="bold" className="mt-2">
-              9,90 €
-            </Text>
-          </Box>
-        </Box>
-      </label>
-    </RadioGroup>
+    return (
+      <fieldset className="m-0 w-full max-w-md border-0 p-0">
+        <legend className="mb-4 text-base leading-6 text-foreground">
+          Où souhaitez-vous récupérer votre titre d’identité ?
+        </legend>
+        <RadioGroup value={value} onValueChange={setValue} className="gap-4">
+          <RadioGroupItem
+            value="mairie"
+            label="En mairie"
+            hint="Sur rendez-vous, sous 3 semaines"
+            pictogram={<Artwork name="buildings/city-hall" size={56} />}
+          />
+          <RadioGroupItem
+            value="domicile"
+            label="À domicile"
+            hint="Envoi sécurisé en lettre recommandée"
+            pictogram={<Artwork name="buildings/house" size={56} />}
+          />
+          <RadioGroupItem
+            value="prefecture"
+            label="En préfecture"
+            hint="Service momentanément indisponible"
+            pictogram={<Artwork name="institutions/justice" size={56} />}
+            disabled
+          />
+        </RadioGroup>
+      </fieldset>
+    )
+  },
+}
+
+export const RichHorizontal: Story = {
+  name: 'Radio riche en ligne',
+  render: () => (
+    <fieldset className="m-0 border-0 p-0">
+      <legend className="mb-4 text-base leading-6 text-foreground">Mode de contact préféré</legend>
+      <RadioGroup defaultValue="courriel" className="flex flex-col gap-4 sm:flex-row">
+        <RadioGroupItem
+          value="courriel"
+          label="Courriel"
+          pictogram={<Artwork name="digital/mail-send" size={56} />}
+        />
+        <RadioGroupItem
+          value="application"
+          label="Application"
+          pictogram={<Artwork name="digital/application" size={56} />}
+        />
+        <RadioGroupItem
+          value="calendrier"
+          label="Rendez-vous"
+          pictogram={<Artwork name="digital/calendar" size={56} />}
+        />
+      </RadioGroup>
+    </fieldset>
   ),
 }
