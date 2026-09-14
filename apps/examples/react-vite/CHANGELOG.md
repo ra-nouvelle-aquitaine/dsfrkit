@@ -1,3 +1,11 @@
+# [v1.5.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.5.0...example-react-vite@1.5.1) (2026-09-14)
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.3.2
+
 # [v1.5.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.4.0...example-react-vite@1.5.0) (2026-09-14)
 
 ## ✨ Nouvelles fonctionnalités
