@@ -1,3 +1,8 @@
+# [v1.3.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.3.1...@dsfrkit/icons@1.3.2) (2026-09-14)
+
+## 📝 Documentation
+- [`be0afc0`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/be0afc0)  met à jour les readme et corrige les fichiers de l&#x27;exemple symfony
+
 # [v1.3.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/icons@1.3.0...@dsfrkit/icons@1.3.1) (2026-06-20)
 
 ## 🐛 Corrections de bugs
