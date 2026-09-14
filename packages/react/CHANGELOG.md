@@ -1,3 +1,12 @@
+# [v1.3.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.3.0...@dsfrkit/react@1.3.1) (2026-09-14)
+
+## 🐛 Corrections de bugs
+- [`5992e9b`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/5992e9b)  empêche le badge de s&#x27;étirer dans une colonne flex 
+- [`4a4857f`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/4a4857f)  publie le sommaire en point d&#x27;entrée dédié 
+
+## 📝 Documentation
+- [`3f778c2`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/3f778c2)  réunit la table gitmoji et complète les exemples d&#x27;utilisation
+
 # [v1.3.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.2.3...@dsfrkit/react@1.3.0) (2026-09-14)
 
 ## ✨ Nouvelles fonctionnalités
