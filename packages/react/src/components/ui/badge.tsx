@@ -12,8 +12,9 @@ const badgeVariants = cva(
   // largeur disponible et tronqué par des points de suspension au-delà. Sans
   // cela, un libellé un peu long — « Correction demandée » — se replie sur deux
   // lignes dans une colonne étroite, et le badge se lit comme un pavé de texte
-  // plutôt que comme une étiquette.
-  'inline-flex max-w-full items-center overflow-hidden text-ellipsis whitespace-nowrap rounded font-bold uppercase transition-colors',
+  // plutôt que comme une étiquette. `w-fit` reprend le `width: fit-content` du
+  // DSFR : sans lui, un badge placé dans une colonne flex s'étire sur toute sa largeur.
+  'inline-flex w-fit max-w-full items-center overflow-hidden text-ellipsis whitespace-nowrap rounded font-bold uppercase transition-colors',
   {
     variants: {
       variant: {

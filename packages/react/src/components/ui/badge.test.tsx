@@ -42,3 +42,11 @@ describe('Component: Badge (DSFR)', () => {
     expect(screen.getByText('Petit Badge')).toHaveClass('text-xs', 'px-1.5')
   })
 })
+
+describe('Component: Badge — dimensions DSFR', () => {
+  it('keeps the width of its content inside a flex column, like width: fit-content', () => {
+    render(<Badge variant="success">+12 %</Badge>)
+
+    expect(screen.getByText('+12 %').closest('span.inline-flex')).toHaveClass('w-fit')
+  })
+})
