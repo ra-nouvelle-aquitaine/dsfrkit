@@ -1,3 +1,14 @@
+# [v1.5.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.4.0...example-react-vite@1.5.0) (2026-09-14)
+
+## ✨ Nouvelles fonctionnalités
+- [`4b0a690`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/4b0a690)  montre menus, méga-menu et nouveaux composants dans l&#x27;exemple vitrine 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.3.1
+
 # [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/example-react-vite@1.3.4...example-react-vite@1.4.0) (2026-09-14)
 
 ## ✨ Nouvelles fonctionnalités
