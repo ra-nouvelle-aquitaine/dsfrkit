@@ -48,6 +48,7 @@ Voici la liste exhaustive des exports publics de `@dsfrkit/react`, générée de
 - [ConsentBanner](/llms/consent.md) (ConsentBanner, ConsentBannerActions, ConsentBannerContent, ConsentBannerTitle) : Gestionnaire de consentement aux cookies conforme au RGPD et aux recommandations de la CNIL.
 - [Container](/llms/container.md) : Limite la largeur maximale du contenu et le centre, assurant une lisibilité optimale sur les grands écrans.
 - [DataList](/llms/data-list.md) : Composant DataList de DSFRKit.
+- [DatePicker](/llms/date-picker.md) : Sélecteur de date : champ de saisie au format JJ/MM/AAAA et calendrier dans une fenêtre, pour une date ou une plage de dates.
 - [DropdownMenu](/llms/dropdown-menu.md) (DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger) : Menu contextuel listant des commandes ou des actions, déclenché par un clic court sur un bouton déclencheur.
 - [Flex](/llms/flex.md) : Conteneur basé sur Flexbox.
 - [Follow](/llms/follow.md) (Follow, FollowDescription, FollowNewsletter, FollowNewsletterForm, FollowSocial, FollowSocialLink, FollowTitle) : Lettre d'information et réseaux sociaux (fr-follow) : bandeau bleu clair placé en bas de page, avant le pied de page, qui invite à suivre l'actualité du site.

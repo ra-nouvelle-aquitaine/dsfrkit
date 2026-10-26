@@ -160,6 +160,15 @@ export {
 export { Container, type ContainerProps } from './components/ui/container'
 // Data Display
 export { DataList, type DataListItemProps } from './components/ui/data-list'
+export type {
+  DatePickerChangeDetails,
+  DatePickerError,
+  DatePickerProps,
+  DatePickerRangeProps,
+  DatePickerSingleProps,
+  DateRange,
+} from './components/ui/date-picker'
+export { DatePicker } from './components/ui/date-picker'
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,

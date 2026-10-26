@@ -20,7 +20,9 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: `Sélecteur de date avancé avec prise en charge complète de l'accessibilité. Utilisé pour choisir une date ou une plage de dates.`,
+        component: `Sélecteur de date avancé avec prise en charge complète de l'accessibilité. Utilisé pour choisir une date ou une plage de dates.
+
+Pour un champ de formulaire, utiliser \`DatePicker\`, qui associe ce calendrier à un champ JJ/MM/AAAA avec saisie complétée et validation.`,
       },
     },
     layout: 'centered',

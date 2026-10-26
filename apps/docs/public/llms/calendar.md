@@ -11,6 +11,8 @@ import type { CalendarProps } from '@dsfrkit/react'
 ## Usage recommandé
 Sélecteur de date avancé avec prise en charge complète de l'accessibilité. Utilisé pour choisir une date ou une plage de dates.
 
+Pour un champ de formulaire, utiliser `DatePicker`, qui associe ce calendrier à un champ JJ/MM/AAAA avec saisie complétée et validation.
+
 ## Documentation et exemples
 Composant de calendrier interactif basé sur react-day-picker v9.
 Conçu pour s'intégrer harmonieusement avec le DSFR et les DatePickers complexes.

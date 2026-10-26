@@ -34,6 +34,7 @@ export default defineConfig({
     'src/components/ui/consent.tsx',
     'src/components/ui/container.tsx',
     'src/components/ui/data-list.tsx',
+    'src/components/ui/date-picker.tsx',
     'src/components/ui/dropdown-menu.tsx',
     'src/components/ui/flex.tsx',
     'src/components/ui/follow.tsx',
