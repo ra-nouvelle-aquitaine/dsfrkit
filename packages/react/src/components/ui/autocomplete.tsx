@@ -41,6 +41,8 @@ export interface AutocompleteOptionRenderState {
   query: string
   /** Libellé prêt à l'emploi, avec la portion recherchée surlignée (selon `highlightMatches`) */
   highlightedLabel: React.ReactNode
+  /** Description surlignée comme le libellé ; `undefined` si l'option n'a pas de description */
+  highlightedDescription?: React.ReactNode
 }
 
 /** État transmis à `filterOption` pour personnaliser le filtrage des suggestions. */
@@ -85,9 +87,20 @@ interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 
    */
   highlightMatches?: boolean
   /**
+   * Ajoute un élément avant le libellé dans le rendu par défaut d'une ligne (icône,
+   * avatar, drapeau...), sans perdre la description, le surlignage ni la coche.
+   * L'élément est décoratif : il est masqué aux technologies d'assistance.
+   * Ignoré quand `renderOption` est fourni.
+   */
+  renderOptionStart?: (
+    option: AutocompleteOption,
+    state: AutocompleteOptionRenderState
+  ) => React.ReactNode
+  /**
    * Personnalise le rendu d'une ligne de suggestion (image, avatar, case à cocher...).
    * Remplace entièrement le contenu par défaut de la ligne ; le second argument fournit
-   * l'état utile (`selected`, `query`, `highlightedLabel`).
+   * l'état utile (`selected`, `query`, `highlightedLabel`, `highlightedDescription`).
+   * Pour seulement ajouter une icône ou un avatar, préférer `renderOptionStart`.
    */
   renderOption?: (
     option: AutocompleteOption,
@@ -188,22 +201,22 @@ const getReactNodeText = (node: React.ReactNode): string => {
 }
 
 /**
- * Surligne dans un libellé la portion correspondant à la recherche.
+ * Surligne dans un texte (libellé ou description) la portion correspondant à la recherche.
  * La correspondance est insensible aux accents et à la casse, tout en préservant
  * le texte d'origine (les accents restent affichés).
  */
-function renderHighlightedLabel(label: string, query: string, enabled: boolean): React.ReactNode {
-  if (!enabled) return label
+function renderHighlightedText(text: string, query: string, enabled: boolean): React.ReactNode {
+  if (!enabled) return text
 
   const normalizedQuery = normalizeSearchText(query)
-  if (!normalizedQuery) return label
+  if (!normalizedQuery) return text
 
   // Construction de la version normalisée caractère par caractère pour pouvoir
   // remonter aux index d'origine (un caractère accentué reste un caractère).
   let normalized = ''
   const indexMap: number[] = []
-  for (let i = 0; i < label.length; i++) {
-    const chunk = stripDiacritics(label[i])
+  for (let i = 0; i < text.length; i++) {
+    const chunk = stripDiacritics(text[i])
     for (const char of chunk) {
       normalized += char
       indexMap.push(i)
@@ -211,16 +224,16 @@ function renderHighlightedLabel(label: string, query: string, enabled: boolean):
   }
 
   const matchIndex = normalized.indexOf(normalizedQuery)
-  if (matchIndex === -1) return label
+  if (matchIndex === -1) return text
 
   const start = indexMap[matchIndex]
   const end = indexMap[matchIndex + normalizedQuery.length - 1] + 1
 
   return (
     <>
-      {label.slice(0, start)}
-      <mark className="bg-transparent font-bold text-primary">{label.slice(start, end)}</mark>
-      {label.slice(end)}
+      {text.slice(0, start)}
+      <mark className="bg-transparent font-bold text-primary">{text.slice(start, end)}</mark>
+      {text.slice(end)}
     </>
   )
 }
@@ -245,6 +258,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     clearLabel = 'Effacer la sélection',
     name,
     highlightMatches = true,
+    renderOptionStart,
     renderOption,
     filterOption,
     label,
@@ -748,11 +762,21 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                         option.group || ''
                       } ${groupSearchLabel || ''} ${option.keywords?.join(' ') || ''}`
                     )
-                    const highlightedLabel = renderHighlightedLabel(
-                      option.label,
+                    const optionState: AutocompleteOptionRenderState = {
+                      selected: isSelected,
                       query,
-                      highlightMatches
-                    )
+                      highlightedLabel: renderHighlightedText(
+                        option.label,
+                        query,
+                        highlightMatches
+                      ),
+                      highlightedDescription: option.description
+                        ? renderHighlightedText(option.description, query, highlightMatches)
+                        : undefined,
+                    }
+                    const optionStart = renderOption
+                      ? null
+                      : renderOptionStart?.(option, optionState)
 
                     return (
                       <CommandItem
@@ -765,22 +789,27 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                         )}
                       >
                         {renderOption ? (
-                          renderOption(option, {
-                            selected: isSelected,
-                            query,
-                            highlightedLabel,
-                          })
+                          renderOption(option, optionState)
                         ) : (
                           <>
-                            <div className="flex flex-col">
-                              <span className="font-normal text-foreground-title">
-                                {highlightedLabel}
-                              </span>
-                              {option.description && (
-                                <span className="text-xs text-foreground-muted mt-0.5">
-                                  {option.description}
+                            <div className="flex min-w-0 items-center gap-3">
+                              {optionStart != null &&
+                                typeof optionStart !== 'boolean' &&
+                                optionStart !== '' && (
+                                  <span aria-hidden="true" className="flex shrink-0 items-center">
+                                    {optionStart}
+                                  </span>
+                                )}
+                              <div className="flex min-w-0 flex-col">
+                                <span className="font-normal text-foreground-title">
+                                  {optionState.highlightedLabel}
                                 </span>
-                              )}
+                                {option.description && (
+                                  <span className="text-xs text-foreground-muted mt-0.5">
+                                    {optionState.highlightedDescription}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             {isSelected && (
                               <CheckIcon

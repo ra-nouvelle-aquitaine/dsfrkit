@@ -1,3 +1,4 @@
+import { RiSchoolLineIcon } from '@dsfrkit/icons'
 import {
   Autocomplete,
   type AutocompleteSingleProps,
@@ -83,10 +84,16 @@ Conforme aux recommandations d'ergonomie et d'accessibilité du Système de Desi
       description: 'Surligne la portion de texte correspondant à la recherche.',
       table: { category: 'Filtrage', defaultValue: { summary: 'true' } },
     },
+    renderOptionStart: {
+      control: false,
+      description:
+        'Élément décoratif placé avant le libellé (icône, avatar) dans le rendu par défaut, qui conserve description, surlignage et coche. Reçoit `(option, état)`. Voir la story `OptionStart`.',
+      table: { category: 'Rendu' },
+    },
     renderOption: {
       control: false,
       description:
-        "Fonction de rendu personnalisée d'une suggestion. Voir la story `CustomOptionRender`.",
+        "Fonction de rendu personnalisée d'une suggestion. Remplace toute la ligne ; pour seulement ajouter une icône, préférer `renderOptionStart`. Voir la story `CustomOptionRender`.",
       table: { category: 'Rendu' },
     },
     onSearchChange: {
@@ -473,7 +480,7 @@ export const Highlighting: Story = {
     docs: {
       description: {
         story:
-          "Le texte correspondant à la recherche est surligné dans les suggestions (activé par défaut via `highlightMatches`). La correspondance est insensible aux accents et à la casse, tout en conservant l'orthographe d'origine.",
+          "Le texte correspondant à la recherche est surligné dans les suggestions (activé par défaut via `highlightMatches`). La correspondance est insensible aux accents et à la casse, tout en conservant l'orthographe d'origine. La description (seconde ligne) est surlignée de la même façon.",
       },
     },
   },
@@ -623,6 +630,63 @@ function PeoplePicker() {
       await userEvent.click(input)
       await userEvent.click(page.getByText('Grace Hopper'))
       await expect(canvas.getByText('Grace Hopper')).toBeInTheDocument()
+    })
+  },
+}
+
+const schools = [
+  { value: '0330000A', label: 'Lycée Victor Hugo', description: '0330000A · Bordeaux' },
+  { value: '0860000B', label: 'Lycée Victor Hugo', description: '0860000B · Poitiers' },
+  { value: '0640000C', label: 'Lycée Louis Barthou', description: '0640000C · Pau' },
+  { value: '0870000D', label: 'Collège Léonard Limosin', description: '0870000D · Limoges' },
+]
+
+export const OptionStart: SingleStory = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "La prop `renderOptionStart` ajoute une icône ou un avatar avant le libellé sans quitter le rendu par défaut : la seconde ligne (`description`), le surlignage et la coche de sélection sont conservés. L'élément est décoratif et masqué aux technologies d'assistance. Ici, deux établissements homonymes se distinguent par leur seconde ligne.",
+      },
+      source: {
+        code: `<Autocomplete
+  label="Établissement"
+  hint="Nom, commune ou numéro UAI"
+  options={schools}
+  renderOptionStart={() => <RiSchoolLineIcon className="h-5 w-5 text-primary" />}
+/>
+
+// Avatar dérivé de l'option
+<Autocomplete
+  label="Personne"
+  options={people}
+  renderOptionStart={(option) => (
+    <Avatar size="sm">
+      <AvatarFallback autoColor>{initials(option.label)}</AvatarFallback>
+    </Avatar>
+  )}
+/>`,
+      },
+    },
+  },
+  args: {
+    label: 'Établissement',
+    hint: 'Nom, commune ou numéro UAI',
+    placeholder: 'Essayez « hugo » ou « poitiers »...',
+    options: schools,
+    renderOptionStart: () => <RiSchoolLineIcon className="h-5 w-5 text-primary" />,
+  },
+  play: async ({ canvasElement, userEvent, step }) => {
+    const canvas = within(canvasElement)
+    const page = within(document.body)
+    const input = canvas.getByRole('combobox')
+
+    await step('search by town and check the highlighted description', async () => {
+      await userEvent.click(input)
+      await userEvent.type(input, 'poitiers')
+      const option = await page.findByRole('option', { name: /Victor Hugo/ })
+      await expect(option.querySelector('mark')).toHaveTextContent('Poitiers')
+      await expect(option.querySelector('[aria-hidden="true"] svg')).toBeInTheDocument()
     })
   },
 }

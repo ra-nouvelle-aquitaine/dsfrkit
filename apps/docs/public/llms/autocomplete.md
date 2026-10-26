@@ -70,6 +70,8 @@ export interface AutocompleteOptionRenderState {
   query: string
   /** Libellé prêt à l'emploi, avec la portion recherchée surlignée (selon `highlightMatches`) */
   highlightedLabel: React.ReactNode
+  /** Description surlignée comme le libellé ; `undefined` si l'option n'a pas de description */
+  highlightedDescription?: React.ReactNode
 }
 
 export type AutocompleteProps = AutocompleteSingleProps | AutocompleteMultipleProps

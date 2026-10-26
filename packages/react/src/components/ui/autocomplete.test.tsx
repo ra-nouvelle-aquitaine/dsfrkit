@@ -530,6 +530,19 @@ describe('Component: Autocomplete (DSFR)', () => {
       expect(document.querySelector('mark')).not.toBeInTheDocument()
       expect(screen.getByText('Canada')).toBeInTheDocument()
     })
+
+    it('should also highlight the matching part of the description', async () => {
+      const user = userEvent.setup()
+      render(<Autocomplete label="Pays" options={defaultOptions} />)
+
+      await user.click(screen.getByRole('combobox'))
+      await user.type(screen.getByRole('combobox'), 'amerique')
+
+      // Seule la description de Canada correspond : elle porte le surlignage
+      const mark = document.querySelector('mark')
+      expect(mark).toHaveTextContent('Amérique')
+      expect(screen.getByRole('option', { name: /Canada/ })).toContainElement(mark as HTMLElement)
+    })
   })
 
   describe('multiple selection', () => {
@@ -690,6 +703,104 @@ describe('Component: Autocomplete (DSFR)', () => {
 
       expect(screen.getByTestId('opt-ada')).toHaveTextContent('Ada Lovelace ✓')
       expect(screen.getByTestId('opt-alan')).not.toHaveTextContent('✓')
+    })
+
+    it('should pass the highlighted description to renderOption', async () => {
+      const user = userEvent.setup()
+      render(
+        <Autocomplete
+          label="Pays"
+          options={defaultOptions}
+          renderOption={(option, { highlightedDescription }) => (
+            <div data-testid={`opt-${option.value}`}>{highlightedDescription}</div>
+          )}
+        />
+      )
+
+      await user.click(screen.getByRole('combobox'))
+      await user.type(screen.getByRole('combobox'), 'nord')
+
+      expect(screen.getByTestId('opt-ca').querySelector('mark')).toHaveTextContent('Nord')
+    })
+  })
+
+  describe('option start element', () => {
+    const people: AutocompleteOption[] = [
+      { value: 'ada', label: 'Ada Lovelace', description: 'ada@example.org', initials: 'AL' },
+      { value: 'alan', label: 'Alan Turing', description: 'alan@example.org', initials: 'AT' },
+    ]
+
+    it('should render the start element while keeping the default label, description and check', async () => {
+      const user = userEvent.setup()
+      render(
+        <Autocomplete
+          label="Personne"
+          options={people}
+          defaultValue="ada"
+          renderOptionStart={(option) => (
+            <span data-testid={`start-${option.value}`}>{String(option.initials)}</span>
+          )}
+        />
+      )
+
+      await user.click(screen.getByRole('combobox'))
+
+      const option = screen.getByRole('option', { name: /Ada Lovelace/ })
+      expect(within(option).getByTestId('start-ada')).toHaveTextContent('AL')
+      expect(option).toHaveTextContent('ada@example.org')
+      // Coche de sélection du rendu par défaut (seule icône de la ligne)
+      expect(option.querySelectorAll('svg')).toHaveLength(1)
+    })
+
+    it('should keep the highlighting next to the start element', async () => {
+      const user = userEvent.setup()
+      render(
+        <Autocomplete
+          label="Personne"
+          options={people}
+          renderOptionStart={(option) => <span>{String(option.initials)}</span>}
+        />
+      )
+
+      await user.click(screen.getByRole('combobox'))
+      await user.type(screen.getByRole('combobox'), 'turing')
+
+      const option = screen.getByRole('option', { name: /Alan Turing/ })
+      expect(option.querySelector('mark')).toHaveTextContent('Turing')
+    })
+
+    it('should hide the start element from assistive technologies', async () => {
+      const user = userEvent.setup()
+      render(
+        <Autocomplete
+          label="Personne"
+          options={people}
+          renderOptionStart={(option) => <span>{String(option.initials)}</span>}
+        />
+      )
+
+      await user.click(screen.getByRole('combobox'))
+
+      const start = screen.getByText('AL')
+      expect(start.closest('[aria-hidden="true"]')).toBeInTheDocument()
+      // Le nom accessible de l'option ne reprend pas les initiales décoratives
+      expect(screen.getByRole('option', { name: /^Ada Lovelace/ })).toBeInTheDocument()
+    })
+
+    it('should ignore renderOptionStart when renderOption is provided', async () => {
+      const user = userEvent.setup()
+      render(
+        <Autocomplete
+          label="Personne"
+          options={people}
+          renderOptionStart={() => <span>départ</span>}
+          renderOption={(option) => <span>{option.label}</span>}
+        />
+      )
+
+      await user.click(screen.getByRole('combobox'))
+
+      expect(screen.queryByText('départ')).not.toBeInTheDocument()
     })
   })
 })
