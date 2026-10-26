@@ -54,41 +54,64 @@ export interface ModalContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
     VariantProps<typeof modalContentVariants> {}
 
+/**
+ * Une modale rendue conditionnellement (`{open && <Modal open>}`) est démontée d'un
+ * bloc à la fermeture : Radix n'a plus de déclencheur où rendre le focus, qui
+ * retombe sur `<body>` (WCAG 2.4.3). On mémorise l'élément focalisé à l'ouverture
+ * et on le refocalise si le focus est perdu au démontage.
+ */
+function useRestoreFocusOnUnmount() {
+  React.useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    return () => {
+      window.setTimeout(() => {
+        const active = document.activeElement
+        if ((!active || active === document.body) && previous?.isConnected) {
+          previous.focus({ preventScroll: true })
+        }
+      }, 0)
+    }
+  }, [])
+}
+
 const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   ModalContentProps
->(({ className, children, size, ...props }, ref) => (
-  <ModalPortal>
-    <ModalOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      aria-modal="true"
-      className={cn(modalContentVariants({ size, className }))}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="absolute right-4 top-2 sm:top-4 flex items-center gap-2 text-sm text-primary hover:text-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-muted">
-        <span>Fermer</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-4 w-4"
-          aria-hidden="true"
-        >
-          <path d="M18 6 6 18" />
-          <path d="m6 6 12 12" />
-        </svg>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </ModalPortal>
-))
+>(({ className, children, size, ...props }, ref) => {
+  useRestoreFocusOnUnmount()
+  return (
+    <ModalPortal>
+      <ModalOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        aria-modal="true"
+        className={cn(modalContentVariants({ size, className }))}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close className="absolute right-4 top-2 sm:top-4 flex items-center gap-2 text-sm text-primary hover:text-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-muted">
+          <span>Fermer</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-4 w-4"
+            aria-hidden="true"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </ModalPortal>
+  )
+})
 ModalContent.displayName = DialogPrimitive.Content.displayName
 
 const ModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

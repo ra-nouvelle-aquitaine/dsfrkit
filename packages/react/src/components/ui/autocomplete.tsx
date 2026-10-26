@@ -111,6 +111,14 @@ interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 
    * Non appelé quand la recherche est vide ou que `minSearchLength` n'est pas atteint.
    */
   filterOption?: (option: AutocompleteOption, state: AutocompleteOptionFilterState) => boolean
+  /**
+   * Ouvre la liste dès que le champ reçoit le focus. Désactivé par défaut : la liste
+   * s'ouvre à la saisie, au clic ou aux flèches, comme le recommande le motif combobox
+   * de l'APG (une liste ouverte au focus masque les champs suivants et bavarde au clavier).
+   */
+  openOnFocus?: boolean
+  /** Hauteur maximale de la liste des suggestions (CSS), 300 px par défaut. */
+  listMaxHeight?: string
 }
 
 export interface AutocompleteSingleProps extends AutocompleteBaseProps {
@@ -261,6 +269,8 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     renderOptionStart,
     renderOption,
     filterOption,
+    openOnFocus = false,
+    listMaxHeight,
     label,
     hint,
     error,
@@ -523,6 +533,13 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
 
   // Gestion des touches spécifiques (Escape, Backspace, Enter)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Liste fermée : les flèches l'ouvrent (motif combobox de l'APG).
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !open) {
+      e.preventDefault()
+      setOpen(true)
+      return
+    }
+
     if (e.key === 'Escape') {
       setOpen(false)
       setQuery('')
@@ -571,11 +588,9 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     : []
 
   return (
-    <Command
-      label={label}
-      className="overflow-visible bg-transparent border-0"
-      shouldFilter={false}
-    >
+    // Pas de `label` sur Command : cmdk ajouterait un second <label for> au champ,
+    // déjà nommé par celui de l'Input (nom accessible doublé « Pays Pays »).
+    <Command className="overflow-visible bg-transparent border-0" shouldFilter={false}>
       <Popover open={open} onOpenChange={setOpen}>
         <div ref={rootRef} className="relative w-full">
           {name ? (
@@ -602,7 +617,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
             }}
             onFocus={() => {
               setQuery('')
-              setOpen(true)
+              if (openOnFocus) setOpen(true)
             }}
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
@@ -661,6 +676,12 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
               }
               position="end"
               {...inputProps}
+              // cmdk annonce une liste toujours ouverte et référence le contenu du popover,
+              // absent du DOM liste fermée : l'état ARIA suit ici l'ouverture réelle.
+              aria-expanded={open}
+              {...(open ? {} : { 'aria-controls': undefined })}
+              // Le libellé est porté par <label for> : cmdk viserait son propre libellé, vide.
+              aria-labelledby={inputProps['aria-labelledby']}
             />
           </CommandPrimitive.Input>
 
@@ -687,6 +708,11 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
           className="w-[var(--radix-popover-trigger-width)] overflow-hidden border border-border bg-background-overlap p-0 elevation-overlap"
           align="start"
           sideOffset={0}
+          style={
+            listMaxHeight
+              ? ({ '--autocomplete-list-max-height': listMaxHeight } as React.CSSProperties)
+              : undefined
+          }
           onOpenAutoFocus={(e) => e.preventDefault()}
           onCloseAutoFocus={(e) => e.preventDefault()}
           onInteractOutside={(event) => {
@@ -707,7 +733,13 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
             }
           }}
         >
-          <CommandList className={cn('max-h-[300px] overflow-y-auto', nativeScrollbarClasses)}>
+          {/* cmdk impose son propre style à la liste : la hauteur passe par une variable CSS. */}
+          <CommandList
+            className={cn(
+              'max-h-[var(--autocomplete-list-max-height,300px)] overflow-y-auto',
+              nativeScrollbarClasses
+            )}
+          >
             {loading ? (
               <div className="p-4 text-center text-sm text-foreground-muted flex items-center justify-center gap-2">
                 <svg

@@ -32,6 +32,11 @@ const TableContext = React.createContext<TableContextValue>({ striped: false, no
 interface TableProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Légende du tableau (obligatoire pour l'accessibilité DSFR) */
   caption?: string
+  /**
+   * Masque visuellement la légende, toujours lue par les technologies d'assistance
+   * (fr-table--no-caption) : quand un titre de section la précède déjà.
+   */
+  captionHidden?: boolean
   /** Affiche des lignes alternées (fr-table--bordered) */
   striped?: boolean
   /** Tableau sans bordures latérales */
@@ -45,6 +50,7 @@ const Table = React.forwardRef<HTMLDivElement, TableProps>(
     {
       className,
       caption,
+      captionHidden = false,
       striped = false,
       noBorder = false,
       tableProps,
@@ -63,7 +69,11 @@ const Table = React.forwardRef<HTMLDivElement, TableProps>(
       <TableContext.Provider value={contextValue}>
         <div
           ref={ref}
-          className={cn('fr-table relative w-full overflow-auto', className)}
+          className={cn(
+            'fr-table relative w-full overflow-auto',
+            captionHidden && 'fr-table--no-caption',
+            className
+          )}
           {...props}
         >
           <table
@@ -74,7 +84,12 @@ const Table = React.forwardRef<HTMLDivElement, TableProps>(
             {...resolvedTableProps}
           >
             {caption && (
-              <caption className="caption-top text-left text-h4 font-bold text-foreground-title mb-4">
+              <caption
+                className={cn(
+                  'caption-top text-left text-h4 font-bold text-foreground-title mb-4',
+                  captionHidden && 'sr-only'
+                )}
+              >
                 {caption}
               </caption>
             )}

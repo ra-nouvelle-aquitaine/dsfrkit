@@ -29,6 +29,11 @@ const meta = {
         "Le titre générique ou la description lue par les lecteurs d'écran attachée au tableau.",
       defaultValue: 'Liste des agents',
     },
+    captionHidden: {
+      control: 'boolean',
+      description:
+        "Masque visuellement la légende (fr-table--no-caption), toujours lue par les lecteurs d'écran : à utiliser quand un titre de section la précède déjà.",
+    },
     striped: {
       control: 'boolean',
       description: 'Applique un fond gris alterné sur une ligne sur deux (zebra striping).',
