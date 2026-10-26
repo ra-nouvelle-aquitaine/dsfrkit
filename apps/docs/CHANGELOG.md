@@ -1,3 +1,14 @@
+# [v1.6.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.5.0...docs@1.6.0) (2026-10-26)
+
+## ♿ Accessibilité
+- [`385027d`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/385027d)  autocomplete, modale et tableau : focus et état aria fiables 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.5.0
+
 # [v1.5.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.4.2...docs@1.5.0) (2026-10-26)
 
 ## ✨ Nouvelles fonctionnalités
