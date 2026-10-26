@@ -36,7 +36,7 @@ describe('Component: Autocomplete (DSFR)', () => {
     expect(screen.getByPlaceholderText('Rechercher...')).toBeInTheDocument()
   })
 
-  it('should open the suggestions dropdown on focus', async () => {
+  it('should open the suggestions dropdown on click', async () => {
     const user = userEvent.setup()
     render(<Autocomplete label="Pays" options={defaultOptions} />)
 
@@ -45,11 +45,72 @@ describe('Component: Autocomplete (DSFR)', () => {
     // Dropdown initially closed
     expect(screen.queryByText('France')).not.toBeInTheDocument()
 
-    // Focus opens dropdown
+    // Click opens dropdown
     await user.click(input)
     expect(screen.getByText('France')).toBeInTheDocument()
     expect(screen.getByText('Belgique')).toBeInTheDocument()
     expect(screen.getByText('Canada')).toBeInTheDocument()
+  })
+
+  it('keeps the list closed when the field only receives focus (APG combobox)', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} />)
+
+    await user.tab()
+    const input = screen.getByRole('combobox')
+    expect(input).toHaveFocus()
+    expect(screen.queryByText('France')).not.toBeInTheDocument()
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+    expect(input).not.toHaveAttribute('aria-controls')
+  })
+
+  it('opens the list with the arrow keys, closes it with Escape', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} />)
+
+    await user.tab()
+    await user.keyboard('{ArrowDown}')
+    const input = screen.getByRole('combobox')
+    expect(screen.getByText('France')).toBeInTheDocument()
+    expect(input).toHaveAttribute('aria-expanded', 'true')
+    expect(input.getAttribute('aria-controls')).toBeTruthy()
+
+    await user.keyboard('{Escape}')
+    expect(screen.queryByText('France')).not.toBeInTheDocument()
+    expect(input).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('opens the list on typing after a keyboard focus', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} />)
+
+    await user.tab()
+    await user.keyboard('Bel')
+    expect(screen.getAllByRole('option')).toHaveLength(1)
+  })
+
+  it('opens on focus when openOnFocus is set', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} openOnFocus />)
+
+    await user.tab()
+    expect(screen.getByText('France')).toBeInTheDocument()
+  })
+
+  it('names the field by its label only, and applies listMaxHeight', async () => {
+    const user = userEvent.setup()
+    render(<Autocomplete label="Pays" options={defaultOptions} listMaxHeight="12rem" />)
+
+    const input = screen.getByRole('combobox', { name: 'Pays' })
+    expect(input).not.toHaveAttribute('aria-labelledby')
+    await user.click(input)
+    const list = document.querySelector('[cmdk-list]') as HTMLElement
+    expect(list.className).toContain('max-h-[var(--autocomplete-list-max-height,300px)]')
+    expect(
+      list
+        .closest<HTMLElement>('[style*="--autocomplete-list-max-height"]')
+        ?.style.getPropertyValue('--autocomplete-list-max-height')
+    ).toBe('12rem')
   })
 
   it('should keep the suggestions dropdown open after the initial click', async () => {

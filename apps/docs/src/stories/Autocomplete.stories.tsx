@@ -73,6 +73,17 @@ Conforme aux recommandations d'ergonomie et d'accessibilité du Système de Desi
       description: "Message affiché tant que `minSearchLength` n'est pas atteint.",
       table: { category: 'Filtrage' },
     },
+    openOnFocus: {
+      control: 'boolean',
+      description:
+        "Ouvre la liste dès que le champ reçoit le focus. Désactivé par défaut : la liste s'ouvre à la saisie, au clic ou aux flèches (motif combobox de l'APG).",
+      table: { category: 'Comportement', defaultValue: { summary: 'false' } },
+    },
+    listMaxHeight: {
+      control: 'text',
+      description: 'Hauteur maximale de la liste des suggestions (valeur CSS).',
+      table: { category: 'Apparence', defaultValue: { summary: '300px' } },
+    },
     filterOption: {
       control: false,
       description:
