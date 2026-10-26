@@ -1,3 +1,9 @@
+# [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.3.2...@dsfrkit/react@1.4.0) (2026-10-26)
+
+## ✨ Nouvelles fonctionnalités
+- [`cc01bdd`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/cc01bdd)  ajoute le composant DatePicker pour les dates et les plages 
+- [`b320924`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/b320924)  autocomplete: renderOptionStart et surlignage de la description
+
 # [v1.3.2](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.3.1...@dsfrkit/react@1.3.2) (2026-09-14)
 
 ## 🐛 Corrections de bugs
