@@ -1,3 +1,14 @@
+# [v1.7.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.6.0...docs@1.7.0) (2026-10-29)
+
+## ✨ Nouvelles fonctionnalités
+- [`3ab938a`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/3ab938a)  autocomplete : élément personnalisé en tête des tags de la sélection multiple 
+
+
+
+### Dependencies
+
+* **@dsfrkit/react:** upgraded to 1.6.0
+
 # [v1.6.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.5.0...docs@1.6.0) (2026-10-26)
 
 ## ♿ Accessibilité
