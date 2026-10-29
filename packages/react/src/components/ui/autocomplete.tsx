@@ -97,6 +97,12 @@ interface AutocompleteBaseProps extends Omit<InputProps, 'value' | 'onChange' | 
     state: AutocompleteOptionRenderState
   ) => React.ReactNode
   /**
+   * Ajoute un élément avant le libellé de chaque tag de la sélection (mode `multiple`) :
+   * avatar, icône, pastille de couleur... Décoratif, il est masqué aux technologies d'assistance.
+   * Les options retirées de `options` gardent leur tag, sans élément.
+   */
+  renderTagStart?: (option: AutocompleteOption) => React.ReactNode
+  /**
    * Personnalise le rendu d'une ligne de suggestion (image, avatar, case à cocher...).
    * Remplace entièrement le contenu par défaut de la ligne ; le second argument fournit
    * l'état utile (`selected`, `query`, `highlightedLabel`, `highlightedDescription`).
@@ -267,6 +273,7 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
     name,
     highlightMatches = true,
     renderOptionStart,
+    renderTagStart,
     renderOption,
     filterOption,
     openOnFocus = false,
@@ -581,10 +588,15 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
 
   // Tags affichés en mode multiple (libellé résolu depuis les options)
   const selectedTags = isMultiple
-    ? activeSelection.map((value) => ({
-        value,
-        label: options.find((opt) => opt.value === value)?.label ?? value,
-      }))
+    ? activeSelection.map((value) => {
+        const option = options.find((opt) => opt.value === value)
+        const start = option ? renderTagStart?.(option) : null
+        return {
+          value,
+          label: option?.label ?? value,
+          start: start != null && typeof start !== 'boolean' && start !== '' ? start : null,
+        }
+      })
     : []
 
   return (
@@ -694,6 +706,13 @@ const Autocomplete = React.forwardRef<HTMLInputElement, AutocompleteProps>((rawP
                   variant="blue-france"
                   dismissible
                   onDismiss={() => removeValue(tag.value)}
+                  icon={
+                    tag.start ? (
+                      <span aria-hidden="true" className="flex items-center">
+                        {tag.start}
+                      </span>
+                    ) : undefined
+                  }
                 >
                   {tag.label}
                 </Tag>

@@ -864,4 +864,47 @@ describe('Component: Autocomplete (DSFR)', () => {
       expect(screen.queryByText('départ')).not.toBeInTheDocument()
     })
   })
+
+  describe('tag start element', () => {
+    const people: AutocompleteOption[] = [
+      { value: 'ada', label: 'Ada Lovelace', initials: 'AL' },
+      { value: 'alan', label: 'Alan Turing', initials: 'AT' },
+    ]
+
+    it('should render the start element in each tag, hidden from assistive technologies', () => {
+      render(
+        <Autocomplete
+          multiple
+          label="Personnes"
+          options={people}
+          defaultValue={['ada', 'alan']}
+          renderTagStart={(option) => (
+            <span data-testid={`tag-start-${option.value}`}>{String(option.initials)}</span>
+          )}
+        />
+      )
+
+      const start = screen.getByTestId('tag-start-ada')
+      expect(start).toHaveTextContent('AL')
+      expect(start.closest('[aria-hidden="true"]')).toBeInTheDocument()
+      expect(screen.getByTestId('tag-start-alan')).toHaveTextContent('AT')
+      // Le bouton de suppression garde un nom fondé sur le seul libellé
+      expect(screen.getByRole('button', { name: 'Supprimer Ada Lovelace' })).toBeInTheDocument()
+    })
+
+    it('should keep the tag of a value missing from the options, without start element', () => {
+      render(
+        <Autocomplete
+          multiple
+          label="Personnes"
+          options={people}
+          defaultValue={['inconnu']}
+          renderTagStart={() => <span data-testid="tag-start">X</span>}
+        />
+      )
+
+      expect(screen.getByText('inconnu')).toBeInTheDocument()
+      expect(screen.queryByTestId('tag-start')).not.toBeInTheDocument()
+    })
+  })
 })

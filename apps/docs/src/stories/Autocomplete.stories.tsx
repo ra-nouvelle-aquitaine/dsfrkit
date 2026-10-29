@@ -101,6 +101,12 @@ Conforme aux recommandations d'ergonomie et d'accessibilité du Système de Desi
         'Élément décoratif placé avant le libellé (icône, avatar) dans le rendu par défaut, qui conserve description, surlignage et coche. Reçoit `(option, état)`. Voir la story `OptionStart`.',
       table: { category: 'Rendu' },
     },
+    renderTagStart: {
+      control: false,
+      description:
+        "Mode `multiple` : élément décoratif placé avant le libellé de chaque tag de la sélection (avatar, icône, pastille). Reçoit l'option. Voir la story `CustomOptionRender`.",
+      table: { category: 'Rendu' },
+    },
     renderOption: {
       control: false,
       description:
@@ -533,7 +539,7 @@ export const CustomOptionRender: Story = {
     docs: {
       description: {
         story:
-          "La prop `renderOption` permet de personnaliser entièrement le rendu d'une ligne : avatar, image, e-mail, case à cocher... Les options peuvent porter des données libres (ici `email` et `color`). L'état `selected` est fourni pour afficher un indicateur (ici une case à cocher).",
+          "La prop `renderOption` permet de personnaliser entièrement le rendu d'une ligne : avatar, image, e-mail, case à cocher... Les options peuvent porter des données libres (ici `email` et `color`). L'état `selected` est fourni pour afficher un indicateur (ici une case à cocher). En mode `multiple`, `renderTagStart` reprend l'avatar dans les tags de la sélection.",
       },
       // Storybook ne sait pas sérialiser une fonction passée en prop (`renderOption`)
       // et l'afficherait comme `() => {}`. On fournit donc un extrait de code manuel.
@@ -583,6 +589,12 @@ function PeoplePicker() {
           </span>
         </div>
       )}
+      // Même avatar, en plus petit, dans les tags de la sélection
+      renderTagStart={(option) => (
+        <Avatar size="sm" className="h-5 w-5 text-[0.625rem]">
+          <AvatarFallback autoColor>{initials(option.label)}</AvatarFallback>
+        </Avatar>
+      )}
     />
   )
 }`,
@@ -621,6 +633,11 @@ function PeoplePicker() {
                 <span className="text-xs text-foreground-muted">{String(option.email)}</span>
               </span>
             </div>
+          )}
+          renderTagStart={(option) => (
+            <Avatar size="sm" className="h-5 w-5 text-[0.625rem]">
+              <AvatarFallback autoColor>{initials(option.label)}</AvatarFallback>
+            </Avatar>
           )}
         />
         <Text className="text-sm">
