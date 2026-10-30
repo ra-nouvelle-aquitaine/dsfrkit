@@ -2,6 +2,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 import { cn } from '../../lib/utils'
+import { buttonVariants } from './button'
 
 /**
  * Composant Modal (Dialog) DSFR
@@ -89,9 +90,17 @@ const ModalContent = React.forwardRef<
         {...props}
       >
         {children}
-        {/* Un fond de bouton tertiaire sans contour : un titre long ou un contenu qui défile passe
-            dessous sans que les deux textes se chevauchent, et le survol se voit comme sur le DSFR */}
-        <DialogPrimitive.Close className="absolute right-2 top-2 z-10 flex items-center gap-2 bg-background-lifted px-3 py-1 text-sm text-primary hover:bg-muted active:bg-background-contrast focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none sm:right-4 sm:top-4">
+        {/*
+          Bouton tertiaire sans contour, au fond de la modale : un titre long passe dessous
+          sans que les textes se chevauchent. Le survol et l'appui prennent les variantes
+          du même fond, visibles en clair comme en sombre (#1e1e1e partout ailleurs).
+        */}
+        <DialogPrimitive.Close
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'sm' }),
+            'absolute right-2 top-2 z-10 bg-inherit hover:bg-background-lifted-hover active:bg-background-lifted-active sm:right-4 sm:top-4'
+          )}
+        >
           <span>Fermer</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
