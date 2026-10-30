@@ -89,7 +89,9 @@ const ModalContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="absolute right-4 top-2 sm:top-4 flex items-center gap-2 text-sm text-primary hover:text-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-muted">
+        {/* Un fond de bouton tertiaire sans contour : un titre long ou un contenu qui défile passe
+            dessous sans que les deux textes se chevauchent, et le survol se voit comme sur le DSFR */}
+        <DialogPrimitive.Close className="absolute right-2 top-2 z-10 flex items-center gap-2 bg-background-lifted px-3 py-1 text-sm text-primary hover:bg-muted active:bg-background-contrast focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none sm:right-4 sm:top-4">
           <span>Fermer</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
