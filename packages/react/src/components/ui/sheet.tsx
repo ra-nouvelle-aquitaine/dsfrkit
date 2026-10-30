@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
 
 import { cn } from '../../lib/utils'
+import { buttonVariants } from './button'
 
 const Sheet = SheetPrimitive.Root
 
@@ -60,11 +61,15 @@ const SheetContent = React.forwardRef<
     <SheetOverlay />
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
       {children}
+      {/* Même bouton que la modale : un fond, et un survol visible en clair comme en sombre */}
       <SheetPrimitive.Close
-        className="absolute right-4 top-4 flex items-center gap-1 text-foreground-muted ring-offset-background transition-opacity hover:text-foreground hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-background-contrast"
+        className={cn(
+          buttonVariants({ variant: 'ghost', size: 'sm' }),
+          'absolute right-2 top-2 z-10 bg-inherit hover:bg-background-lifted-hover active:bg-background-lifted-active sm:right-4 sm:top-4'
+        )}
         aria-label="Fermer"
       >
-        <span className="text-sm">Fermer</span>
+        <span>Fermer</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
