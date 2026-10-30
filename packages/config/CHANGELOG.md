@@ -1,3 +1,11 @@
+# [v1.4.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.4.0...@dsfrkit/config@1.4.1) (2026-10-30)
+
+
+
+### Dependencies
+
+* **@dsfrkit/tokens:** upgraded to 1.5.0
+
 # [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/config@1.3.0...@dsfrkit/config@1.4.0) (2026-09-14)
 
 ## ♿ Accessibilité
