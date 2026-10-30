@@ -1,3 +1,9 @@
+# [v1.6.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.6.0...@dsfrkit/react@1.6.1) (2026-10-30)
+
+## 🐛 Corrections de bugs
+- [`46cd7e9`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/46cd7e9)  modale : le bouton « Fermer » a un fond et un survol visibles 
+- [`7511eac`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/7511eac)  modale, volet : survol du bouton « Fermer » visible en thème sombre
+
 # [v1.6.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/react@1.5.0...@dsfrkit/react@1.6.0) (2026-10-29)
 
 ## ✨ Nouvelles fonctionnalités
