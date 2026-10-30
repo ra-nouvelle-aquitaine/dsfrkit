@@ -1,3 +1,8 @@
+# [v1.5.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.4.0...@dsfrkit/tokens@1.5.0) (2026-10-30)
+
+## ✨ Nouvelles fonctionnalités
+- [`7235bbc`](https://github.com/ra-nouvelle-aquitaine/dsfrkit/commit/7235bbc)  tokens : fond surélevé au survol et à l&#x27;appui
+
 # [v1.4.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/@dsfrkit/tokens@1.3.0...@dsfrkit/tokens@1.4.0) (2026-09-14)
 
 ## 💄 Interface & style
