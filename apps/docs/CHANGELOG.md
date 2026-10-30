@@ -1,3 +1,13 @@
+# [v1.7.1](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.7.0...docs@1.7.1) (2026-10-30)
+
+
+
+### Dependencies
+
+* **@dsfrkit/config:** upgraded to 1.4.1
+* **@dsfrkit/react:** upgraded to 1.6.1
+* **@dsfrkit/tokens:** upgraded to 1.5.0
+
 # [v1.7.0](https://github.com/ra-nouvelle-aquitaine/dsfrkit/compare/docs@1.6.0...docs@1.7.0) (2026-10-29)
 
 ## ✨ Nouvelles fonctionnalités
